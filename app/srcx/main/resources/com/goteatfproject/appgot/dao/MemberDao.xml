@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goteatfproject.appgot.dao.MemberDao">
+
+  <!-- 자바 객체의 프로퍼티와 컬럼 이름을 연결한다. -->
+  <resultMap type="member" id="memberMap">
+    <id column="mno" property="no"/>
+    <result column="name" property="name"/>
+    <result column="id" property="id"/>
+    <result column="createdate" property="createDate"/>
+<!--    <result column="cdt" property="createDate"/>-->
+  </resultMap>
+  
+  <insert id="insert" parameterType="member">
+   insert into member (id, pwd, name, nick, birth, tel, gender, createdate, post, addr, interest)
+    values(#{id}, sha2(#{password},256), #{name}, #{nick}, #{birth}, #{tel}, #{gender}, now(),
+    #{post}, #{address}, #{interest})
+  </insert>
+
+<!--  <select id="findByNo" resultMap="memberMap">-->
+<!--    select -->
+<!--      mno,-->
+<!--      name,-->
+<!--      email,-->
+<!--      cdt-->
+<!--    from -->
+<!--      app_member -->
+<!--    where -->
+<!--      mno=#{value}-->
+<!--  </select>-->
+  
+  <select id="findAll" resultMap="memberMap">
+    select 
+      mno,
+      name,
+      id      <!-- TODO email -> id 수정  -->
+    from 
+      member
+    order by 
+      name
+  </select>
+
+  <select id="findByEmailPassword" resultMap="memberMap">
+    select
+      mno,
+      name,
+      id,
+      createdate
+    from
+      member
+    where
+      id=#{id} and pwd=sha2(#{password},256)
+  </select>
+  
+ <update id="update" parameterType="Member">
+    update member set 
+      id=#{id}, 
+      name=#{name}, 
+      pwd=sha2(#{password},256) 
+    where 
+      mno=#{no}
+  </update>
+
+
+ <delete id="delete">
+   delete from member
+   where mno=#{value}
+ </delete>
+
+</mapper>

@@ -1,0 +1,328 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EAT-F by Chunderella</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+        crossorigin="anonymous">
+  
+        <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+  <link href="/css/style.css" rel="stylesheet">
+
+
+<style>
+
+</style>
+
+
+</head>
+<body>
+<!-------------------------------구분선-------------------------->
+<div class="b-example-divider"></div>
+<!------------------------------header------------------------------>
+<header class="p-3 mb-3 bg-white border-bottom fixed-top">
+  <div class="container">
+    <div
+        class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a class="navbar-brand" th:href="@{/}">
+        <img src="/images/logo.png" alt="Eat-f" width="100" height="88">
+      </a>
+      <!-------------------------------구분선-------------------------->
+      <div class="col-2"></div>
+
+      <form class="col-12 col-lg-4 mb-3 mb-lg-0 me-lg-4" role="search">
+        <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+      </form>
+     
+      <!-------------------------------구분선-------------------------->
+      <div class="col-2"></div>
+
+      <div th:if="${session.loginMember == null}" class="d-grid me-lg-4 gap-2">
+        <button type="button" onclick="location.href='/auth/login'" class="btn btn-secondary" data-bs-toggle="button">로그인</button>
+      </div>
+
+      <div th:if="${session.loginMember != null}" class="d-grid me-lg-4 gap-2">
+        <button type="button" onclick="location.href='/auth/logout'" class="btn btn-secondary" data-bs-toggle="button">로그아웃</button>
+      </div>
+
+      <div class="dropdown text-end me-lg-4">
+        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
+           data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="../static/images/mypage.png" alt="mdo" width="32" height="32" class="rounded-circle">
+        </a>
+
+        <ul class="dropdown-menu text-small ">
+          <li th:if="${session.loginMember != null}"><a class="dropdown-item" href="#">New project...</a></li>
+          <li th:if="${session.loginMember != null}"><a class="dropdown-item" href="#">Settings</a></li>
+          <li th:if="${session.loginMember != null}"><a class="dropdown-item" href="#">Profile</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li th:if="${session.loginMember == null}"><a class="dropdown-item" th:href="@{/auth/login}">Sign in</a></li>
+          <li th:if="${session.loginMember != null}"><a class="dropdown-item" th:href="@{/auth/logout}">Sign out</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+<!-------------------------------구분선-------------------------->
+<div class="line-3"></div>
+<div class="line-3"></div>
+<!------------------------------nav------------------------------>
+<nav class="navbar navbar-expand-lg border-bottom bg-light" aria-label="Tenth navbar example">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarsExample08" aria-controls="navbarsExample08"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-md-center " id="navbarsExample08">
+      <ul class="navbar-nav fw-bold text-dark ">
+        <li class="nav-item p-1">
+          <a class="nav-link" aria-current="page" th:href="@{/board/partyList}">파티게시판</a>
+        </li>
+        <li class="nav-item p-1">
+          <a class="nav-link" th:href="@{/feed/list}">피드게시판</a>
+        </li>
+        <li class="nav-item p-1">
+          <a class="nav-link" href="#">이벤트게시판</a>
+        </li>
+        <li class="nav-item dropdown p-1">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
+             aria-expanded="false">고객센터</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" th:href="@{/notice/list}">공지사항</a></li>
+            <li><a class="dropdown-item" th:href="@{/notice/myPage}">마이페이지</a></li>
+            <li><a class="dropdown-item" th:href="@{/notice/noticeOne}">1:1 문의</a></li>
+            <li><a class="dropdown-item" href="#">자주 묻는 질문</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-------------------------------구분선-------------------------->
+<div class="a-example-divider"></div>
+
+<!-------------------------------구분선-------------------------->
+<div class ="container bg-light rounded-3"> 
+    <div class="line-2"></div>
+<!-------------------------------파티게시판 상세-------------------------->
+<div id = partytitle>
+  <div class="container text-center border bg-light rounded-3">
+    <div class="line-2"></div>
+    <div class="container text-start bg-white">
+        <div class="line-2"></div>
+        <div class="row row-cols-2">
+<!-------------------------------1줄------------------------->
+            <div class="col-10">점심파티>한식>가까운맛집</div>
+          <div class="col-2">공백</div>
+<!-------------------------------2줄------------------------->          
+          <div class="col-8"><b>[점심파티] 볶음밥 먹으러가죠</b></div>
+          <div class="col-4">
+            <div class="row row-cols-3">
+            <div class="col-4">참가인원(#/#)</div>
+            <div class="col-4">댓글 #개</div>
+            <div class="col-4">좋아요 #개</div>
+            </div>
+          </div>
+<!-------------------------------3줄-------------------------> 
+        <div class="col">
+            <div class="row row-cols-3">        
+                <div class="col">프로필이미지</div>
+                <div class="col">닉네임입니다최대</div>
+                <div class="col">[우수회원]</div>
+            </div>
+        </div>    
+        <div class="col"></div> 
+      <!-------------------------------3줄-------------------------> 
+        </div>
+    </div>
+        <div class="line-2"></div>
+    </div><!--------컨테이너아우터--------->
+</div><!--------아이디--------->
+
+<!-------------------------------파티게시판 상세-------------------------->
+<div id = partycontent>
+    <div class="container text-center border bg-light rounded-3">
+      <div class="line-2"></div>
+      <div class="container text-start bg-white">
+          <div class="line-2"></div>
+          <div class="row border-bottom">
+            <div class="col">
+                내용<br>
+                이미지<br>
+                내용<br>
+                내용<br>
+                내용<br>
+                내용<br>
+                내용<br>
+                내용<br>
+                내용<br>
+                내용<br>
+                내용<br>
+            </div>
+          </div>
+          <div class="row text-center">
+            <div class="line-2"></div>
+            <div class="col">(하트)좋아요(숫자) </div>
+                <div class="col">댓글(숫자)</div>
+                    <div class="col">3</div>
+                        <div class="col">공유 | 신고</div>
+                        <div class="line-2"></div>
+                    </div>
+             </div>
+        <div class="line-2"></div>
+    </div>
+</div>
+
+<!-------------------------------파티게시판 리플-------------------------->
+
+<div id = "partyreply">
+    <div class="container text-center border bg-light rounded-3">
+      <div class="line-2"></div>
+        <div class="container text-start bg-white">
+        <div class="line-2"></div>
+        <div class="row">
+          <div class="col-1">
+            
+            <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
+           data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="../static/images/mypage.png" alt="mdo" width="32" height="32" class="rounded-circle">
+        </a>
+          </div>
+          <div class="col-2">마라샹궈맛있어</div>
+        </div>
+        <div class="line-2"></div>
+        <div class="row border align-self-center">
+            
+            <div class="col-8 ">
+                오늘 진짜 야무지게 먹었습니다 ㅎㅎ<br>
+                오늘 진짜 야무지게 먹었습니다 ㅎㅎ<br>
+                오늘 진짜 야무지게 먹었습니다 ㅎㅎ<br>
+            </div>
+            <div class="col-2">2022-12-17 13:00:00</div>
+            <div class="col-2">
+                <button class="btn btn-primary" type="submit">댓글신고</button>
+            </div>
+        </div>
+        </div>
+
+        <div class="container text-start bg-white">
+            <div class="line-2"></div>
+            <div class="row">
+              <div class="col-1">
+                
+                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
+               data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="../static/images/mypage.png" alt="mdo" width="32" height="32" class="rounded-circle">
+            </a>
+              </div>
+              <div class="col-2">전주식당vip</div>
+            </div>
+            <div class="line-2"></div>
+            <div class="row border align-self-center">
+                
+                <div class="col-8 ">
+                    전주식당이 믹스커피라면 금문도는 TOP죠<br>
+                    전주식당이 믹스커피라면 금문도는 TOP죠<br>
+                    전주식당이 믹스커피라면 금문도는 TOP죠<br>
+                </div>
+                <div class="col-2">2022-12-17 13:00:00</div>
+                <div class="col-2">
+                    <button class="btn btn-primary" type="submit">댓글신고</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="line-2"></div>
+             </div>
+      <div class="line-2"></div>
+         </div>
+
+<!-------------------------------파티게시판 리플-------------------------->
+<div id = partyreply>
+    <div class="container text-center border bg-warning rounded-3">
+      <div class="line-2"></div>
+      <div class="container text-start bg-white">
+        <div class="line-2"></div>
+        
+        <div class="row">
+          <div class="col-1">
+            
+            <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
+           data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="/images/mypage.png" alt="mdo" width="32" height="32" class="rounded-circle">
+        </a>
+          </div>
+          <div class="col-2">마라샹궈맛있어</div>
+        </div>
+        <div class="line-2"></div>
+        <div class="row">
+            <div class="col-10">
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                    <label for="floatingTextarea2">댓글을 입력하세요</label>
+                  </div>
+            </div>
+            <div class="col-2 align-items-center align-self-center">
+                <button class="btn btn-primary me-md-2" type="submit">댓글입력</button>
+            </div>
+        </div>
+        <div class="line-2"></div>
+        </div>
+      <div class="line-2"></div>
+  </div>
+</div>
+
+    </div>
+
+
+
+
+<!-------------------------------구분선-------------------------->
+<div class="c-example-divider"></div>
+<!-------------------------------구분선-------------------------->
+<div class="c-example-divider"></div>
+<!------------------------------footer------------------------------>
+<footer class="py-3 my-4">
+  <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+    <li class="nav-item"><a th:href="@{/}" class="nav-link px-2 text-muted">Home</a></li>
+    <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+    <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
+    <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+    <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+  </ul>
+  <p class="text-center text-muted">© 2022 Chunderella Corp & TwoAppleteam. All Rights Reserved.</p>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+
+
+<script>
+<!-- jquery링크 -->
+
+
+  // $("#").click(function(){
+  //   $(location).attr("href", "주소")
+  // })
+
+
+</script>
+
+</body>
+</html>
+
+
+

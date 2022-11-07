@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goteatfproject.appgot.dao.PartyDao">
+
+  <!-- 자바 객체의 프로퍼티와 컬럼 이름을 연결한다. -->
+  <resultMap type="party" id="partyMap">
+    <id column="pno" property="no"/>
+    <result column="cont" property="content"/>
+    <result column="loc" property="location"/>
+    <result column="addr" property="address"/>
+    <result column="viewcnt" property="viewCnt"/>
+    <result column="img" property="image"/>
+    <result column="public" property="pub"/>
+    <result column="createdate" property="createDate"/>
+
+    <!-- 조인 결과에서 같은 게시글에 대해 한 개의 회원 데이터를 담을 경우 -->
+<!--        <collection property="writer" ofType="User">-->
+<!--          <id column="mno" property="no"/>-->
+<!--          <result column="nick" property="nick"/>-->
+<!--        </collection>-->
+
+    <!--    &lt;!&ndash; 조인 결과에서 같은 게시글에 대해 여러 개의 첨부 파일 데이터를 담을 경우 &ndash;&gt;-->
+    <!--    <collection property="attachedFiles" ofType="attachedFile">-->
+    <!--      <id column="bfno" property="no"/>-->
+    <!--      <result column="filepath" property="filepath"/>-->
+    <!--    </collection>-->
+
+  </resultMap>
+
+  <!--  <resultMap type="attachedFile" id="attachedFileMap">-->
+  <!--    <id column="bfno" property="no"/>-->
+  <!--    <result column="filepath" property="filepath"/>-->
+  <!--    <result column="bno" property="boardNo"/>-->
+  <!--  </resultMap>-->
+
+
+  <select id="findAll" resultMap="partyMap">
+<!--      select-->
+<!--    p.title,-->
+<!--    p.meal,-->
+<!--    p.limit,-->
+<!--    p.nick,-->
+<!--    p.age,-->
+<!--    p.gender,-->
+<!--    p.max,-->
+<!--    p.viewcnt,-->
+<!--    p.img,-->
+<!--    p.createdate-->
+<!--      from-->
+<!--    party p-->
+    select
+    p.title,
+    p.meal,
+    p.`limit`,
+    p.nick,
+    p.age,
+    p.gender,
+    p.max,
+    p.viewcnt,
+    p.img,
+    p.createdate
+    from
+    party p
+    join member m on m.mno = p.mno
+<!--    where pno = 1-->
+  </select>
+
+  <!--  <select id="findByNo" resultMap="partyMap">-->
+  <!--    select-->
+  <!--    p.pno,-->
+  <!--    m.mno,-->
+  <!--    p.meal,-->
+  <!--    p.food,-->
+  <!--    p.title,-->
+  <!--    p.cont,-->
+  <!--    m.nick,-->
+  <!--    p.gender,-->
+  <!--    p.max,-->
+  <!--    p.time,-->
+  <!--    p.age,-->
+  <!--    p.limit,-->
+  <!--    p.loc,-->
+  <!--    p.addr,-->
+  <!--    p.viewcnt,-->
+  <!--    p.img,-->
+  <!--    p.createdate-->
+  <!--    from-->
+  <!--    party p-->
+  <!--    join member m on p.mno = m.mno-->
+  <!--    order by-->
+  <!--    pno desc-->
+  <!--  </select>-->
+
+  <!--  <select id="findFilesByBoard" resultMap="attachedFileMap">-->
+  <!--    select-->
+  <!--    bfno,-->
+  <!--    filepath,-->
+  <!--    bno-->
+  <!--    from-->
+  <!--    app_board_file-->
+  <!--    where-->
+  <!--    bno = #{value}-->
+  <!--  </select>-->
+
+  <!--  <insert id="insert" parameterType="party"-->
+  <!--          useGeneratedKeys="true" keyColumn="pno" keyProperty="no">-->
+  <!--    insert into party(title,cont,mno)-->
+  <!--    values(#{title},#{content},#{writer.no})-->
+  <!--  </insert>-->
+
+  <!--  <update id="update" parameterType="party">-->
+  <!--    update party set-->
+  <!--    title=#{title},-->
+  <!--    cont=#{content}-->
+  <!--    where pno=#{no}-->
+  <!--  </update>-->
+
+  <!--  <delete id="delete">-->
+  <!--    delete from party-->
+  <!--    where pno=#{value}-->
+  <!--  </delete>-->
+
+  <!--  <delete id="deleteByMember">-->
+  <!--    delete from party-->
+  <!--    where pno=#{value}-->
+  <!--  </delete>-->
+
+  <!--  <insert id="insertFiles" parameterType="board">-->
+  <!--    insert into app_board_file(filepath,bno)-->
+  <!--    values-->
+  <!--    <foreach collection="attachedFiles" item="file" separator=",">-->
+  <!--      (#{file.filepath},#{no})-->
+  <!--    </foreach>-->
+  <!--  </insert>-->
+
+  <!--  <delete id="deleteFiles">-->
+  <!--    delete from app_board_file-->
+  <!--    where bno=#{value}-->
+  <!--  </delete>-->
+
+  <!--  <delete id="deleteFilesByMemberBoards">-->
+  <!--    delete from app_board_file-->
+  <!--    where bno in (select bno from app_board where mno = #{value})-->
+  <!--  </delete>-->
+
+  <!--  <delete id="deleteFile">-->
+  <!--    delete from app_board_file-->
+  <!--    where bfno=#{value}-->
+  <!--  </delete>-->
+
+  <!--  <select id="findFileByNo" resultMap="attachedFileMap">-->
+  <!--    select-->
+  <!--    bfno,-->
+  <!--    filepath,-->
+  <!--    bno-->
+  <!--    from-->
+  <!--    app_board_file-->
+  <!--    where-->
+  <!--    bfno = #{value}-->
+  <!--  </select>-->
+
+</mapper>
+
+
+

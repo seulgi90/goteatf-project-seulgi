@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goteatfproject.appgot.dao.PartyDao">
+
+  <!-- 자바 객체의 프로퍼티와 컬럼 이름을 연결한다. -->
+  <resultMap type="party" id="partyMap">
+    <id column="pno" property="no"/>
+    <result column="cont" property="content"/>
+    <result column="loc" property="location"/>
+    <result column="addr" property="address"/>
+    <result column="viewcnt" property="viewCnt"/>
+    <result column="img" property="image"/>
+    <result column="public" property="pub"/>
+    <result column="createdate" property="createDate"/>
+
+
+  </resultMap>
+
+
+  <select id="findAll" resultMap="partyMap">
+
+    select
+	    p.title,
+	    p.viewcnt,
+	    p.createdate 
+    from
+	    party p
+	     join member m on m.mno = p.mno
+
+  </select>
+
+
+
+</mapper>
+
+
+
