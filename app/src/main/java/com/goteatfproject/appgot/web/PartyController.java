@@ -38,15 +38,23 @@ public class PartyController {
     this.sc = sc;
   }
 
-  //  @GetMapping("/list")
-  //  public String list() {
-  //    return "board/boardList";
+  // 파티 리스트
+  //  @GetMapping("list")
+  //  public String partyList(Model model) throws Exception {
+  //    model.addAttribute("parties", partyService.list());
+  //    System.out.println(model.getAttribute("parties"));
+  //    return "party/partyList";
   //  }
 
-  // 파티 리스트
   @GetMapping("list")
-  public String partyList(Model model) throws Exception {
-    model.addAttribute("parties", partyService.list());
+  public String partyList(Model model, String meal, String food) throws Exception {
+    //    if(meal.length() == 0) { // 파라미터의 값이 없으면 = > 전체 리스트 출력
+    //      meal = null;
+    //    } // xml if 조건문 설정
+    model.addAttribute("parties", partyService.list2(meal, food));
+    model.addAttribute("meal", meal);
+    model.addAttribute("food", food);
+    //        System.out.println(model.getAttribute("parties"));
     return "party/partyList";
   }
 
