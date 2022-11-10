@@ -25,7 +25,7 @@ public class LoginController {
   @GetMapping("/login")
   public String login(@CookieValue(name="id", defaultValue = "") String id, Model model, HttpSession session) throws Exception {
 
-//    session.setAttribute("loginMember", 1);
+    //    session.setAttribute("loginMember", 1);
 
     model.addAttribute("id", id);
     return "auth/login"; // TODO login 다시 복구
@@ -43,7 +43,7 @@ public class LoginController {
 
     Member member = memberService.get(id, password);
 
-    System.out.println("password = " + password);
+    System.out.println("password = " + password); // 로그인 시 비밀번호 확인
     //    System.out.println("userpassword = " + user.getPassword());
 
     if (member != null) {

@@ -12,7 +12,9 @@
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
   <link href="/css/board/boardstyle.css" rel="stylesheet">
-</head>
+  <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+<!--   <script src="/js/partyList.js"></script>
+ --></head>
 
 <body>
 
@@ -115,55 +117,62 @@
   <div class="container">
 
 
-    <select onchange="categoryChange(this)">
-      <option>원하는 파티를 선택해주세요</option>
-      <option value="a">점심파티</option>
-      <option value="b">저녁파티</option>
-      <option value="c">야식파티</option>
-      <option value="d">디저트파티</option>
-      <option value="e">대환장파티</option>
+    <select id="mealSelect" onchange="categoryChange()">
+      <option data-th-text="${meal}">원하는 파티를 선택해주세요</option>
+      <option value="점심">점심파티</option>
+      <option value="저녁">저녁파티</option>
+      <option value="야식">야식파티</option>
+      <option value="술">술파티</option>
+      <option value="디저트">디저트파티</option>
 
     </select>
 
-    <select id="good">
-      <option>원하는 메뉴를 골라주세요</option>
+    <select id="foodSelect" onchange="categoryChange2()">
+      <option data-th-if="${food != null}" data-th-text="${food}">원하는 종류를 선택해주세요</option>
+      <option data-th-if="${food == null}">원하는 종류를 선택해주세요</option>
+      <option value="한식">한식</option>
+      <option value="분식">분식</option>
+      <option value="중식">중식</option>
+      <option value="일식">일식</option>
+      <option value="양식">양식</option>
+      <option value="디저트">디저트</option>
+      <option value="패스트푸드">패스트푸드</option>
+      <option value="아시안">아시안</option>
+      <option value="동남아식">동남아식</option>
     </select>
-    <script>
-      function categoryChange(e) {
-        var good_a = ["한식", "분식", "동남아식", "중식", "일식", "양식"];
-        var good_b = ["한식", "분식", "동남아식", "중식", "일식", "양식"];
-        var good_c = ["한식", "분식", "동남아식", "중식", "일식", "양식"];
-        var good_e = ["한식", "분식", "동남아식", "중식", "일식", "양식"];
-        var good_e = ["한식", "분식", "동남아식", "중식", "일식", "양식"];
-        var target = document.getElementById("good");
 
-        if(e.value == "a") var d = good_a;
-        else if(e.value == "b") var d = good_b;
-        else if(e.value == "c") var d = good_c;
-        else if(e.value == "d") var d = good_e;
-        else if(e.value == "e") var d = good_f;
-
-        target.options.length = 0;
-
-        for (x in d) {
-          var opt = document.createElement("option");
-          opt.value = d[x];
-          opt.innerHTML = d[x];
-          target.appendChild(opt);
-        }
+     <script>
+      function categoryChange() {
+        let mealSelect = document.getElementById("mealSelect"); // 원하는 meal data를 가져온다
+        let mealValue = mealSelect.options[document.getElementById("mealSelect").selectedIndex].value; // 셀렉트된 선택된 값을 가져온다
+        window.location.href= "/party/list" + "?meal=" + mealValue; // 그 값을 서버에 넘겨준다 -> 파티컨트롤러로 이동
       }
-    </script>
+      
+      function categoryChange2() {
+    	    let url = location.href; // 내 현재 창의 url을 전부 가져온다
+    	    // let urlParam = location.search; // 현재 창의 url 뒤에 붙어있는 파라미터 값을 전부 가져온다
 
-    <!-------------------------------브래드-------------------------->
-    <div id="breadcrumb">
-      <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">#</a></li>
-          <li class="breadcrumb-item active" aria-current="page">#</li>
-          <li class="breadcrumb-item active" aria-current="page">#</li>
-        </ol>
-      </nav>
-    </div>
+    	    // 2차 카테고리 아이디 값을 가져온다
+          let foodSelect = document.getElementById("foodSelect");
+
+          // 그 아이디 값을 가져와서 셀렉트박스(<select id="foodSelect" onchange="categoryChange2()">) 안에서 선택한 option value 값을 가져온다 (예: 중식 선택  -> 중식)
+          let foodValue = foodSelect.options[document.getElementById("foodSelect").selectedIndex].value;
+
+          // 2차 분류부터 검사 시작
+          if(url.includes("food")){ // food 값이 들어있으면
+
+            // 예: url.substring(url.lastIndexOf("&"), length) => 중식 값을 날린 url + 새로 선택한 food 값을 연결
+            // lastIndexOf("&"), length) : &부터 url length끝까지
+            window.location.href = url.substring(url.lastIndexOf("&"), length) + "&food=" + foodValue;
+          } else if(url.includes("meal")) { // food가 선택이 안되어있는 상태 일 때 1차 카테고리 선택 후
+
+            // "/party/list" =>  1차 카테고리 선택 된 상태인  현재의 url 값을 가져온다 + 새로 선택한 food 값을 연결 => 다시 2차 카테고리를 선택하게 되면 if문 2차 분류 검사로 다시 돌아간다
+        	  //window.location.href = "/party/list" + urlParam + "&food=" + foodValue;
+            
+        	  window.location.href = url + "&food=" + foodValue;
+          }
+        }
+    </script>
 
     <!-------------------------------버튼-------------------------->
 
@@ -188,10 +197,10 @@
                 <div class="card">
 
                   <!--                  <div class="card-header bg-transparent border-secondary" th:text="${party.meal}"><span class="badge bg-warning">New</span></h1> </div>-->
-                  <div class="card-header bg-transparent border-secondary" th:text="'[' + ${party.meal} + '파티]'"><span class="badge bg-warning" th:text="${party.no}">New</span></div>
+                  <div class="card-header bg-transparent border-secondary" th:text="'[' + ${party.meal} + '파티][' + ${party.food} + ']'"><span class="badge bg-warning" th:text="${party.no}">New</span></div>
                   <!--              <div class="card-header bg-transparent border-secondary"><span class="badge bg-warning">New</span></h1> </div>-->
                   <!--                  <img src="/images/1.jpg" class="card-img-top" alt="...">-->
-                  <a th:href="@{detail(no=${party.no})}"><img src="/images/1.jpg " class="card-img-top"></a>
+                  <a th:href="@{detail(no=${party.no})}"><img id="thumbNail" src="" class="card-img-top"></a>
                   <div class="card-body text-small">
                     <a th:href="@{detail(no=${party.no})}"><h5 class="card-title" th:text="${party.title}"></h5></a>
                     <p class="card-text"></p>
@@ -252,19 +261,40 @@
     <!-------------------------------구분선-------------------------->
     <div class="line-3"></div>
     <!-------------------------------페이지-------------------------->
-    <nav aria-label="Page navigation example">
+<!--    <nav aria-label="Page navigation example">-->
+<!--      <ul class="pagination justify-content-center">-->
+<!--        <li class="page-item disabled">-->
+<!--          <a class="page-link">이전</a>-->
+<!--        </li>-->
+<!--        <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+<!--        <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+<!--        <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+<!--        <li class="page-item">-->
+<!--          <a class="page-link" href="#">다음</a>-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--    </nav>-->
+
+<!--     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-          <a class="page-link">이전</a>
+        <li class="page-item disabled" th:if="${pageMaker.prev}">
+          <a class="page-link"
+             th:href="@{list(pageMaker.startPage-1)}" aria-label="Previous">
+            <span aria-hidden="true">이전페이지</span>
+          </a>
         </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-          <a class="page-link" href="#">다음</a>
+        <th:block th:each="pageNum: ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+          <li class="page-item">
+            <a class="page-link" th:href="@{list(page=${pageNum})}"><i th:text="${pageNum}"></i></a>
+          </li>
+        </th:block>
+        <li class="page-item" th:if="${pageMaker.next && pageMaker.endPage >0}">
+          <a class="page-link" th:href="@{list(page=${pageMaker.endPage+1})}" aria-label="Next">
+            <span aria-hidden="true">다음페이지</span>
+          </a>
         </li>
       </ul>
-    </nav>
+    </nav> -->
     <!-------------------------------구분선-------------------------->
     <div class="line-3"></div>
     <!------------------------------footer------------------------------>
@@ -288,8 +318,36 @@
         crossorigin="anonymous"></script>
 
     <!-- 버튼 디테일 링크 jquery -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+      let a = [[${parties}]];
+      let thumbnail = "";
+      console.log(a);
+      for(let i=0; i<a.length; i++) {
+        console.log(a[i]);
+        console.log(a[i].title);
+        console.log(a[i].attachedFiles);
+        console.log("a[i].attachedFiles[0].filepath=" + a[i].attachedFiles[0].filepath);
+      }
+<!--      for(let i=0; i< a.length; i++){-->
+<!--        console.log(a[i]);-->
+<!--        console.log(a[i].title);--> 
+
+
+<!--        for(let j=0; j< a[i].attachedFiles; j++){-->
+<!--           console.log(a[i].attachedFiles[j]);-->
+<!--           console.log(a[i].attachedFiles[0]);-->
+<!--           console.log(a[i].attachedFiles[0].filepath);-->
+<!--           thumbnail = (a[i].attachedFiles[j].filepath);-->
+<!--           console.log(thumbnail);-->
+<!--           $("#thumbNail").attr("src","/party/files/" + thumbnail);-->
+<!--        }-->
+<!--      }-->
+
+      /*]]>*/
+  </script>
+
 
 </body>
 </html>
-
 

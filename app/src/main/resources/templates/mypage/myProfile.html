@@ -83,7 +83,7 @@
     <div class="collapse navbar-collapse justify-content-md-center " id="navbarsExample08">
       <ul class="navbar-nav fw-bold text-dark ">
         <li class="nav-item p-1">
-          <a class="nav-link" aria-current="page" th:href="@{/board/partyList}">파티게시판</a>
+          <a class="nav-link" aria-current="page" th:href="@{/party/list}">파티게시판</a>
         </li>
         <li class="nav-item p-1">
           <a class="nav-link" href="#">피드게시판</a>
@@ -135,27 +135,31 @@
     <div class="container-fluid">
       <h2 class="mt-4">개인 정보 수정</h2>
 
-     
-  
-      <!-- data 출력 테스트용  -->
-   <!--     <table class="table table-hover">
-        <thead>
-        <tr>
-          <th scope="col">번호</th>
-          <th scope="col">이름</th>
-          <th scope="col">아이디(이메일)</th>
-        </tr>
-        </thead>
-        <tbody class="table-group-divider">
-          <tr th:each="member : ${members}">
-          <th scope="row" th:text="${member.no}"></th>
-          <td th:text="${member.name}"></td>
-          <td th:text="${member.id}"></td>
-        </tr>
-        </tbody>
-      </table> -->
-      <!-- data 출력 테스트용 끝 -->
-
+       <form action="update">
+        <table>
+          <tr>
+            <th>번호</th>
+            <td><input name='no' type='number' data-th-value="${member.no}" readonly></td>
+          </tr>
+          <tr>
+            <th>이름</th>
+            <td><input name='name' type='text' data-th-value="${member.name}"></td>
+          </tr>
+          <tr>
+            <th>아이디</th>
+            <td><input name='email' type='text' data-th-value="${member.id}"></td>
+          </tr>
+          <tr>
+            <th>패스워드</th>
+            <td><input name='password' type='password'></td>
+          </tr>
+          <tr>
+            <th>패스워드 확인</th>
+            <td><input name='epasswordCheck' type='password'></td>
+          </tr>
+        </table>
+        <button type="submit">회원 정보 수정</button>
+      </form>
 
       <!--  테이블 부트스트랩 end   -->
     </div>

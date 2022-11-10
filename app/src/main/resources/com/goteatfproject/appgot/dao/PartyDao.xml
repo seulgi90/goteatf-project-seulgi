@@ -4,28 +4,11 @@
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.goteatfproject.appgot.dao.PartyDao">
 
-  <!-- SQL 문에 값 삽입하기 : in-parameter 지정하기
-      => parameterType에 지정된 객체의 프로퍼티 명을 사용하여 값을 삽입한다.
-         예) #{프로퍼티명}
-      => paramterType이 primitive/String/wrapper class 인 경우 아무 이름을 적어도 된다.
-         예) #{아무이름}
-      => parameterType이 Map 객체인 경우는 Map에 저장된 값의 key를 적는다.
-         예) #{key}
-      => parameterType에 지정할 수 있는 타입:
-      int      => _int
-      Integer  => int
-      String   => string
-      Map      => map
-      HashMap  => hashmap
-      Board    => board -->
 
- <!-- 자바 객체의 프로퍼티와 컬럼 이름을 연결한다. -->
-  <!-- type : 자바 객체의 클래스명 또는 별명
-       id : 연결 정보를 가리키는 식별자. SQL문을 설정할 때 사용.-->
-  <!-- 컬럼 이름과 자바 객체의 프로퍼티 이름이 같을 경우 생략 가능 -->
   <resultMap type="party" id="partyMap">
     <id column="pno" property="no"/>
     <result column="meal" property="meal"/>
+    <result column="food" property="food"/>
     <result column="title" property="title"/>
 <!--    <result column="nick" property="nick"/>-->
     <result column="cont" property="content"/>
@@ -96,7 +79,7 @@
     p.title,
     p.meal,
     p.lit,
-<!--    p.nick,-->
+    p.nick,
     p.age,
     p.gender,
     p.max,
@@ -108,6 +91,38 @@
     from
     party p
     join member m on m.mno = p.mno
+    order by
+    pno desc
+  </select>
+  
+    <select id="findAll2" resultMap="partyMap">
+      select
+      p.pno,
+      p.title,
+      p.meal,
+      p.lit,
+      p.age,
+      p.gender,
+      p.max,
+      p.viewcnt,
+      p.img,
+      p.createdate,
+      p.food,
+      m.mno,
+      m.nick,
+      pf.path
+      from
+      party p
+      join member m on m.mno = p.mno
+      left outer join party_file pf on p.pno = pf.pno
+<!--meal = all일 경우 if문 실행안되면서 전체 컬럼 값 출력 -->
+    <if test="meal != 'all'">
+    where p.meal = #{meal}
+    </if>
+    <if test="food != null">
+      and p.food = #{food}
+    </if>
+    group by pno
     order by
     pno desc
   </select>
@@ -146,12 +161,12 @@
 <!-- 파일첨부관련 -->
 
   <insert id="insertFiles" parameterType="party">
-    insert into party_file(path, pno, filename, savename)
+    insert into party_file(path, pno)
     <!--      insert into party_file(path, pno)-->
     values
     <!--  여러 파일 들어가면 첨부파일 , 사용해서 구분-->
     <foreach collection="attachedFiles" item="file" separator=",">
-      (#{file.filepath}, #{no}, #{file.fileName}, #{file.saveName})
+      (#{file.filepath}, #{no})
       <!--        (#{file.filepath}, #{no})-->
     </foreach>
   </insert>

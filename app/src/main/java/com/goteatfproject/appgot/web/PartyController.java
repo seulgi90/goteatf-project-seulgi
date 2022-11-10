@@ -23,6 +23,7 @@ import com.goteatfproject.appgot.service.PartyService;
 import com.goteatfproject.appgot.vo.AttachedFile;
 import com.goteatfproject.appgot.vo.Member;
 import com.goteatfproject.appgot.vo.Party;
+import net.coobird.thumbnailator.Thumbnails;
 
 @Controller
 @RequestMapping("/party/")
@@ -48,13 +49,10 @@ public class PartyController {
 
   @GetMapping("list")
   public String partyList(Model model, String meal, String food) throws Exception {
-    //    if(meal.length() == 0) { // 파라미터의 값이 없으면 = > 전체 리스트 출력
-    //      meal = null;
-    //    } // xml if 조건문 설정
     model.addAttribute("parties", partyService.list2(meal, food));
     model.addAttribute("meal", meal);
     model.addAttribute("food", food);
-    //        System.out.println(model.getAttribute("parties"));
+    System.out.println("model.getAttribute(\"parties\") = " + model.getAttribute("parties"));
     return "party/partyList";
   }
 
@@ -91,6 +89,7 @@ public class PartyController {
       String filename = UUID.randomUUID().toString();
       part.write(dirPath + "/" + filename);
       attachedFiles.add(new AttachedFile(filename));
+
     }
     return attachedFiles;
   }
@@ -113,8 +112,23 @@ public class PartyController {
       String filename = UUID.randomUUID().toString();
       part.transferTo(new File(dirPath + "/" + filename));
       attachedFiles.add(new AttachedFile(filename));
+
+
+      File saveFile = new File(dirPath, filename);
+
+      File thumbnailFile = new File(dirPath + "s_" + filename);
+
+      Thumbnails.of(saveFile)
+      .size(100, 100)
+      .toFile(thumbnailFile);
+
     }
     return attachedFiles;
+  }
+
+  private void size(int i, int j) {
+    // TODO Auto-generated method stub
+
   }
 
   // 파티 게시물 상세보기
@@ -127,6 +141,7 @@ public class PartyController {
     }
     Map map = new HashMap();
     map.put("party", party);
+    System.out.println("map.get(\"party\") = " + map.get("party"));
     return map;
   }
 

@@ -11,6 +11,7 @@
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
   <link href="/css/style.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
 </head>
 <body>
 <!-------------------------------구분선-------------------------->
@@ -78,7 +79,7 @@
     <div class="collapse navbar-collapse justify-content-md-center " id="navbarsExample08">
       <ul class="navbar-nav fw-bold text-dark ">
         <li class="nav-item p-1">
-          <a class="nav-link" aria-current="page" th:href="@{/party/list}">파티게시판</a>
+          <a class="nav-link" aria-current="page" th:href="@{/party/list?meal=all}">파티게시판</a>
         </li>
         <li class="nav-item p-1">
           <a class="nav-link" th:href="@{/feed/list}">피드게시판</a>
@@ -155,11 +156,9 @@
           <a class="btn btn-primary" data-bs-toggle="collapse" href="#multiCollapseExample3"
              role="button" aria-expanded="false" aria-controls="multiCollapseExample3">야식파티</a>
           <a class="btn btn-primary" data-bs-toggle="collapse" href="#multiCollapseExample4"
-             role="button" aria-expanded="false" aria-controls="multiCollapseExample4">디저트파티</a>
+             role="button" aria-expanded="false" aria-controls="multiCollapseExample4">술파티</a>
           <a class="btn btn-primary" data-bs-toggle="collapse" href="#multiCollapseExample5"
-             role="button" aria-expanded="false" aria-controls="multiCollapseExample5">알콜파티</a>
-          <a class="btn btn-primary" data-bs-toggle="collapse" href="#multiCollapseExample6"
-             role="button" aria-expanded="false" aria-controls="multiCollapseExample6">대환장파티</a>
+             role="button" aria-expanded="false" aria-controls="multiCollapseExample5">디저트파티</a>
         </p>
         <div class="row">
           <div class="col">
@@ -177,8 +176,19 @@
           <div class="col">
             <div class="collapse multi-collapse" id="multiCollapseExample1">
               <div class="card card-body">
-
                 점심파티만 보기
+                <!-- <select id="mealSelect" onchange="categoryChange()">
+                  <option value="점심">점심파티</option>
+                </select>
+
+                <script>
+                function categoryChange() {
+                  let mealSelect = document.getElementById("mealSelect"); // 원하는 meal data를 가져온다
+                  let mealValue = mealSelect.options[document.getElementById("mealSelect").selectedIndex].value; // 셀렉트된 선택된 값을 가져온다
+                  window.location.href= "/party/list" + "?meal=" + mealValue; // 그 값을 서버에 넘겨준다 -> 파티컨트롤러로 이동
+                }
+                </script> -->
+
 
               </div>
             </div>

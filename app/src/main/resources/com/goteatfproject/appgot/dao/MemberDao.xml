@@ -20,7 +20,7 @@
 <!--    #{post}, #{addr}, #{interest}, 0)-->
 
     insert into member (id, pwd, name, nick, birth, tel, gender, createddate, post,
-    address, interest)
+    addr, interest)
     values(#{id}, sha2(#{password},256), #{name}, #{nick}, #{birth}, #{tel}, #{gender}, now(),
     #{post}, #{address}, #{interest})
 
@@ -33,17 +33,16 @@
 <!--    now(), '30123', '세종시', '피자', 0)-->
   </insert>
 
-<!--  <select id="findByNo" resultMap="memberMap">--><!-- findbyno 회원상세정보 -->
-<!--    select -->
-<!--      mno,-->
-<!--      name,-->
-<!--      email,-->
-<!--      cdt-->
-<!--    from -->
-<!--      app_member -->
-<!--    where -->
-<!--      mno=#{value}-->
-<!--  </select>-->
+  <select id="findByNo" resultMap="memberMap">
+   select
+     mno,
+     name,
+     id
+   from
+     member
+   where
+     mno=#{value}
+ </select> 
   
   <select id="findAll" resultMap="memberMap">
     select 
