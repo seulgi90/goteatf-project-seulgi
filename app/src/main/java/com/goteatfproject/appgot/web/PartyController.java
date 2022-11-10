@@ -67,9 +67,36 @@ public class PartyController {
   public String partyAdd(Party party, HttpSession session,
       @RequestParam("files") MultipartFile[] files) throws Exception {
 
-    party.setAttachedFiles(saveAttachedFiles(files));
-    party.setWriter((Member) session.getAttribute("loginMember"));
+    // 첨부 파일을 가져오기 위한 리스트 생성
+    List<AttachedFile> attachedFiles = new ArrayList<>(); 
 
+    // 첨부파일리스트 객체에서 파일경로를 가져와서 정하기위한 변수
+    String filePath ="";
+
+    party.setWriter((Member) session.getAttribute("loginMember"));
+    
+    // 첨부파일을 받아온다:  @RequestParam("files") MultipartFile[] files (배열로 던져준다)
+    party.setAttachedFiles(saveAttachedFiles(files));
+    
+    //  party의 첨부파일들을 전부 다 콘솔에 출력
+    System.out.println("party.getAttachedFiles() = " + party.getAttachedFiles());
+
+    // List<AttachedFile> attachedFiles 변수에 다시 첨부파일을 전부 담는다? 첫번쨰 파일을 꺼내 오기위해서
+    attachedFiles = party.getAttachedFiles();
+  
+    for (AttachedFile attachedFile : attachedFiles) {
+      // 첨부파일의 경로를 다 가져와서 출력
+      System.out.println("attachedFile.getFilepath() = " + attachedFile.getFilepath());
+      
+      // 이 조건을 사용하여 FilePath에 첨부 파일을 들어있으면, for 문 종료되면서 첫번째 파일이 filePath에 저장된다
+      if (filePath != null) {
+        filePath =attachedFile.getFilepath();
+      }
+      break;
+    }
+    // add가 실행 될 때, 첫번째 파일이 Thumbnail 객체에 저장된다
+    party.setThumbnail(filePath);
+    
     System.out.println("filename = " + Arrays.toString(files));
     System.out.println("filename2 = " + files);
 

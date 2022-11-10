@@ -200,7 +200,11 @@
                   <div class="card-header bg-transparent border-secondary" th:text="'[' + ${party.meal} + '파티][' + ${party.food} + ']'"><span class="badge bg-warning" th:text="${party.no}">New</span></div>
                   <!--              <div class="card-header bg-transparent border-secondary"><span class="badge bg-warning">New</span></h1> </div>-->
                   <!--                  <img src="/images/1.jpg" class="card-img-top" alt="...">-->
-                  <a th:href="@{detail(no=${party.no})}"><img id="thumbNail" src="" class="card-img-top"></a>
+                  <!--   th:src="${party.thumbnail} : 썸네일 주소가 담긴다
+                         th:src="@{/party/files/{path}(path=${party.thumnail})}"
+                                : /party/files/ -> 이미지가 담긴 경로
+                                : {path} 변수에 (path=${party.thumnail}) DB에 저장된 첨부파일 uuid로 변환된 이름을 가져온다 -->
+                  <a th:href="@{detail(no=${party.no})}"><img id="thumbNail" th:src="@{/party/files/{path}(path=${party.thumbnail})}" class="card-img-top"></a>
                   <div class="card-body text-small">
                     <a th:href="@{detail(no=${party.no})}"><h5 class="card-title" th:text="${party.title}"></h5></a>
                     <p class="card-text"></p>
@@ -318,34 +322,6 @@
         crossorigin="anonymous"></script>
 
     <!-- 버튼 디테일 링크 jquery -->
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-      let a = [[${parties}]];
-      let thumbnail = "";
-      console.log(a);
-      for(let i=0; i<a.length; i++) {
-        console.log(a[i]);
-        console.log(a[i].title);
-        console.log(a[i].attachedFiles);
-        console.log("a[i].attachedFiles[0].filepath=" + a[i].attachedFiles[0].filepath);
-      }
-<!--      for(let i=0; i< a.length; i++){-->
-<!--        console.log(a[i]);-->
-<!--        console.log(a[i].title);--> 
-
-
-<!--        for(let j=0; j< a[i].attachedFiles; j++){-->
-<!--           console.log(a[i].attachedFiles[j]);-->
-<!--           console.log(a[i].attachedFiles[0]);-->
-<!--           console.log(a[i].attachedFiles[0].filepath);-->
-<!--           thumbnail = (a[i].attachedFiles[j].filepath);-->
-<!--           console.log(thumbnail);-->
-<!--           $("#thumbNail").attr("src","/party/files/" + thumbnail);-->
-<!--        }-->
-<!--      }-->
-
-      /*]]>*/
-  </script>
 
 
 </body>

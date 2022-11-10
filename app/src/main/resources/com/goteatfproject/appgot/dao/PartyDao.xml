@@ -20,6 +20,7 @@
     <result column="age" property="age"/>
     <result column="img" property="image"/>
     <result column="createdate" property="createDate"/>
+    <result column="thumbnail"  property="thumbnail"/>
     <!-- select 결과에서 mno와 name이 있으면 mno와 name을 담을 user객체를 만들어서
           그 user객체에다가 mno값은 no에 name값은 name프러퍼티에 담은 다음에 그 member 객체를
           party객체의 writer필드에 담는다. -->
@@ -61,9 +62,9 @@
 <!--      insert into party(title,cont,mno)-->
 <!--      values(#{title},#{content},#{writer.no})-->
       insert into party(mno, meal, food, title, cont, gender, max, time, age,
-      lit, loc, post, addr, viewcnt, createdate)
+      lit, loc, post, addr, viewcnt, createdate, thumbnail)
       values(#{writer.no}, #{meal}, #{food}, #{title}, #{content}, #{gender}, #{max},
-      #{time}, #{age}, #{limit}, #{location}, '', #{address}, 0, now())
+      #{time}, #{age}, #{limit}, #{location}, '', #{address}, 0, now(), #{thumbnail})
     </insert>
 
 
@@ -107,6 +108,7 @@
       p.viewcnt,
       p.img,
       p.createdate,
+      p.thumbnail,
       p.food,
       m.mno,
       m.nick,
@@ -122,6 +124,7 @@
     <if test="food != null">
       and p.food = #{food}
     </if>
+<!-- 회원번호를 기준으로 그룹으로 묶어서 첨부파일을 한개만 나오게 하기 위함-->
     group by pno
     order by
     pno desc
