@@ -23,7 +23,6 @@ import com.goteatfproject.appgot.service.PartyService;
 import com.goteatfproject.appgot.vo.AttachedFile;
 import com.goteatfproject.appgot.vo.Member;
 import com.goteatfproject.appgot.vo.Party;
-import net.coobird.thumbnailator.Thumbnails;
 
 @Controller
 @RequestMapping("/party/")
@@ -66,42 +65,61 @@ public class PartyController {
   @PostMapping("add")
   public String partyAdd(Party party, HttpSession session,
       @RequestParam("files") MultipartFile[] files) throws Exception {
-
-    // 첨부 파일을 가져오기 위한 리스트 생성
-    List<AttachedFile> attachedFiles = new ArrayList<>(); 
-
-    // 첨부파일리스트 객체에서 파일경로를 가져와서 정하기위한 변수
-    String filePath ="";
-
-    party.setWriter((Member) session.getAttribute("loginMember"));
-    
-    // 첨부파일을 받아온다:  @RequestParam("files") MultipartFile[] files (배열로 던져준다)
-    party.setAttachedFiles(saveAttachedFiles(files));
-    
-    //  party의 첨부파일들을 전부 다 콘솔에 출력
-    System.out.println("party.getAttachedFiles() = " + party.getAttachedFiles());
-
-    // List<AttachedFile> attachedFiles 변수에 다시 첨부파일을 전부 담는다? 첫번쨰 파일을 꺼내 오기위해서
-    attachedFiles = party.getAttachedFiles();
   
-    for (AttachedFile attachedFile : attachedFiles) {
-      // 첨부파일의 경로를 다 가져와서 출력
-      System.out.println("attachedFile.getFilepath() = " + attachedFile.getFilepath());
-      
-      // 이 조건을 사용하여 FilePath에 첨부 파일을 들어있으면, for 문 종료되면서 첫번째 파일이 filePath에 저장된다
-      if (filePath != null) {
-        filePath =attachedFile.getFilepath();
-      }
-      break;
+    // thumbnail default 파일 설정
+    party.setThumbnail("logo.png");
+  
+    party.setWriter((Member) session.getAttribute("loginMember"));
+    party.setAttachedFiles(saveAttachedFiles(files));
+  
+    // 첨부파일 사이즈가 0 보다 크면 첨부파일 첫번째의 Filepath값 가져와서 thumbnail로 설정
+    if (party.getAttachedFiles().size() > 0) {
+      List<AttachedFile> attachedFiles = new ArrayList<>();
+      attachedFiles = party.getAttachedFiles();
+      party.setThumbnail(attachedFiles.get(0).getFilepath());
     }
-    // add가 실행 될 때, 첫번째 파일이 Thumbnail 객체에 저장된다
-    party.setThumbnail(filePath);
-    
+  
     System.out.println("filename = " + Arrays.toString(files));
     System.out.println("filename2 = " + files);
-
+  
     partyService.add(party);
     return "redirect:list";
+
+//    // 첨부 파일을 가져오기 위한 리스트 생성
+//    List<AttachedFile> attachedFiles = new ArrayList<>();
+//
+//    // 첨부파일리스트 객체에서 파일경로를 가져와서 정하기위한 변수
+//    String filePath ="";
+//
+//    party.setWriter((Member) session.getAttribute("loginMember"));
+//
+//    // 첨부파일을 받아온다:  @RequestParam("files") MultipartFile[] files (배열로 던져준다)
+//    party.setAttachedFiles(saveAttachedFiles(files));
+//
+//    //  party의 첨부파일들을 전부 다 콘솔에 출력
+//    System.out.println("party.getAttachedFiles() = " + party.getAttachedFiles());
+//
+//    // List<AttachedFile> attachedFiles 변수에 다시 첨부파일을 전부 담는다? 첫번쨰 파일을 꺼내 오기위해서
+//    attachedFiles = party.getAttachedFiles();
+//
+//    for (AttachedFile attachedFile : attachedFiles) {
+//      // 첨부파일의 경로를 다 가져와서 출력
+//      System.out.println("attachedFile.getFilepath() = " + attachedFile.getFilepath());
+//
+//      // 이 조건을 사용하여 FilePath에 첨부 파일을 들어있으면, for 문 종료되면서 첫번째 파일이 filePath에 저장된다
+//      if (filePath != null) {
+//        filePath =attachedFile.getFilepath();
+//      }
+//      break;
+//    }
+//    // add가 실행 될 때, 첫번째 파일이 Thumbnail 객체에 저장된다
+//    party.setThumbnail(filePath);
+//
+//    System.out.println("filename = " + Arrays.toString(files));
+//    System.out.println("filename2 = " + files);
+//
+//    partyService.add(party);
+//    return "redirect:list";
   }
 
   private List<AttachedFile> saveAttachedFiles(Part[] files)
@@ -141,22 +159,11 @@ public class PartyController {
       attachedFiles.add(new AttachedFile(filename));
 
 
-      File saveFile = new File(dirPath, filename);
-
-      File thumbnailFile = new File(dirPath + "s_" + filename);
-
-      Thumbnails.of(saveFile)
-      .size(100, 100)
-      .toFile(thumbnailFile);
-
     }
     return attachedFiles;
   }
 
-  private void size(int i, int j) {
-    // TODO Auto-generated method stub
 
-  }
 
   // 파티 게시물 상세보기
   @GetMapping("detail")
