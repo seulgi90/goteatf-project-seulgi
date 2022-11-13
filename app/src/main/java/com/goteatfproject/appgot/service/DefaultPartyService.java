@@ -1,8 +1,10 @@
 package com.goteatfproject.appgot.service;
 
+import com.goteatfproject.appgot.dao.BoardDao;
 import com.goteatfproject.appgot.dao.PartyDao;
 import com.goteatfproject.appgot.vo.AttachedFile;
 import com.goteatfproject.appgot.vo.Criteria;
+import com.goteatfproject.appgot.vo.Board;
 import com.goteatfproject.appgot.vo.Party;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ public class DefaultPartyService implements PartyService {
 
   @Autowired
   PartyDao partyDao;
+  
+  @Autowired
+  BoardDao boardDao;
 
   @Transactional
   public void add(Party party) throws Exception {
@@ -83,7 +88,12 @@ public class DefaultPartyService implements PartyService {
 //  public void insertComment(Comment comment) throws Exception {
 //    partyDao.insertComment(comment);
 //  }
-
-
-
+  
+  
+  // 어드민 페이지 : 이벤트+피드+파티 게시글 조회
+  @Override
+  public List<Board> listAll() throws Exception {
+    System.out.println("newBoardDao = " + boardDao.findAll());
+    return boardDao.findAll();
+  }
 }

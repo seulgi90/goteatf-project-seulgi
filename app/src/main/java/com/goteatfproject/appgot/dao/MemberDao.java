@@ -27,4 +27,22 @@ public interface MemberDao {
 
   // 유저 번호로 유저 프로필 조회 기능
   Member profileByNo(int no);
+  
+  // admin/main 페이지: 전체회원 limit 10;
+  List<Member> findByMember();
+  
+  // admin/main 페이지: 신규회원 limit 10;
+  List<Member> findByNewMember();
+  
+  // 관리자페이지 회원 상세정보
+  Member findByMemberDetail(int no);
+  
+  // 관리자페이지 회원리스트 정보검색
+  List<Member> searchMember(String keyword);
+  
+  // 마이페이지 현재 패스워드 확인
+  int currentPasswordCheck(@Param("no") int no, @Param("password") String password);
+  
+  // 마이페이지 회원정보 수정
+  int update(Member member);
 }

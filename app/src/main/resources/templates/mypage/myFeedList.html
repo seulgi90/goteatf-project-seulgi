@@ -113,7 +113,9 @@
 <div class="d-flex" id="wrapper">
   <!-- Sidebar-->
   <div class="border-end bg-white" id="sidebar-wrapper">
-    <div class="sidebar-heading border-bottom bg-light">마이페이지</div>
+    <div class="sidebar-heading border-bottom bg-light">
+      <a th:href="@{/my/main}" style="text-decoration-line: none; color: inherit;">마이페이지</a>
+    </div>
     <div class="list-group list-group-flush">
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myProfile}">개인 정보 수정</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myPartyList}">파티게시물 관리</a>

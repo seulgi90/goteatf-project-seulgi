@@ -113,12 +113,15 @@
 <div class="d-flex" id="wrapper">
   <!-- Sidebar-->
   <div class="border-end bg-white" id="sidebar-wrapper">
-    <div class="sidebar-heading border-bottom bg-light">관리자페이지</div>
+    <div class="sidebar-heading border-bottom bg-light">
+      <a th:href="@{/admin/main}" style="text-decoration-line: none; color: inherit;">관리자페이지</a>
+    </div>
     <div class="list-group list-group-flush">
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/}">사이트 바로가기</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminPartyList}">파티게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminFeedList}">피드게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">이벤트게시물 관리</a>
+      <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminMemberList}">회원 관리</a>
     </div>
   </div>
   <!-- Page content wrapper-->
@@ -128,11 +131,12 @@
 
       <!--  테이블 부트스트랩   -->
 
+      <!-- 전체회원 -->
       <div class="container">
         <div class="row">
           <div class="col-4">
             <table class="table">
-              <button type="button" class="btn btn-primary position-relative">
+              <button type="button" class="btn btn-primary position-relative" id="memberBtn">
                 전체회원
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                 th:each="member : ${members}"
@@ -149,7 +153,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr th:each="member : ${members}">
+              <tr th:each="member : ${memberLists}">
                 <th scope="row" th:text="${member.no}"></th>
                 <td th:text="${member.id}"></td>
                 <td th:text="${member.name}"></td>
@@ -160,13 +164,14 @@
 
           </div>
           <div class="col-1"></div>
-  
+
+
+          <!-- 신규회원 -->
           <div class="col-4">
             <table class="table">
-              <button type="button" class="btn btn-primary position-relative">
+              <button type="button" class="btn btn-primary position-relative" id="memberBtn2">
                 신규회원
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-          22+
+<!--                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">-->
           <span class="visually-hidden">unread messages</span>
         </span>
               </button>
@@ -179,36 +184,25 @@
               </tr>
               </thead>
               <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>admin@test.com</td>
-                <td>king</td>
-                <td>@Gimpo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
+              <tr th:each="newMember : ${newMemberLists}">
+                <th scope="row" th:text="${newMember.no}"></th>
+                <td th:text="${newMember.id}"></td>
+                <td th:text="${newMember.name}"></td>
+                <td th:text="${newMember.address}"></td>
               </tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
-  
-  
+
+      <!-- 파티 +  피드 + 이벤트 신규 게시글 limit:15 -->
       <div class="container">
         <div class="row">
           <div class="col-8">
             <table class="table">
               <button type="button" class="btn btn-primary position-relative">
-                신규게시물
+                신규 파티게시글
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   22+
             <span class="visually-hidden">unread messages</span>
@@ -216,30 +210,18 @@
               </button>
               <thead>
               <tr>
-                <th scope="col">no</th>
+                <th scope="col" style="">tname</th>
                 <th scope="col">title</th>
-                <th scope="col">id</th>
                 <th scope="col">content</th>
+                <th scope="col">date</th>
               </tr>
               </thead>
               <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>[점심파티] 점심짬뽕 드실분?</td>
-                <td>전주식당MD</td>
-                <td>"오늘 얼큰하게 차돌짬뽕 먹으러 갈까요?</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>[점심파티] 점심짬뽕 드실분?</td>
-                <td>전주식당MD</td>
-                <td>"오늘 얼큰하게 차돌짬뽕 먹으러 갈까요?</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>[점심파티] 점심짬뽕 드실분?</td>
-                <td>전주식당MD</td>
-                <td>"오늘 얼큰하게 차돌짬뽕 먹으러 갈까요?</td>
+              <tr th:each="board : ${boards}">
+                <td th:text="${board.tableName}"></td>
+                <td th:text="${board.title}"></td>
+                <td th:text="${board.cont}"></td>
+                <td th:text="${board.date}"></td>
               </tr>
               </tbody>
             </table>
@@ -263,5 +245,17 @@
 <!-- Core theme JS--> <!-- noticeList 왼쪽 사이드바 --> <!-- TODO 추가 - 6-->
 <script src="/js/notice/notice.js"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.1.js"
+        integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+        crossorigin="anonymous"></script>
+<script>
+  $("#memberBtn").click(function()  {
+    window.location.href = "/admin/adminMemberList";
+  });
+
+  $("#memberBtn2").click(function() {
+    window.location.href = "/admin/adminMemberList";
+  })
+</script>
 </body>
 </html>

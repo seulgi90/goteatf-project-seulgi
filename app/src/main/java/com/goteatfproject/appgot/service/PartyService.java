@@ -2,6 +2,7 @@ package com.goteatfproject.appgot.service;
 
 import com.goteatfproject.appgot.vo.AttachedFile;
 import com.goteatfproject.appgot.vo.Criteria;
+import com.goteatfproject.appgot.vo.Board;
 import com.goteatfproject.appgot.vo.Party;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,8 @@ public interface PartyService {
   boolean deleteAttachedFile(int fileNo) throws Exception;
 
   // 테스트
-//  public void insertComment(Comment comment) throws Exception;
-
-
+  //  public void insertComment(Comment comment) throws Exception;
+  
+  // 어드민 페이지 : 이벤트+피드+파티 게시글 조회
+  List<Board> listAll() throws Exception;
 }

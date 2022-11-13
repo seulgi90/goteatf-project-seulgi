@@ -23,54 +23,60 @@
     #{post}, #{address}, #{subAddr}, #{interest})
   </insert>
 
-<!--  <select id="findByNo" resultMap="memberMap">--><!-- findbyno 회원상세정보 -->
-<!--    select -->
-<!--      mno,-->
-<!--      name,-->
-<!--      email,-->
-<!--      cdt-->
-<!--    from -->
-<!--      app_member -->
-<!--    where -->
-<!--      mno=#{value}-->
-<!--  </select>-->
-  
-  <select id="findAll" resultMap="memberMap">
-    select 
-      mno,
-      name,
-      id      <!-- TODO email -> id 수정  -->
-    from 
-      member
-    order by 
-      mno
-  </select>
-
-  <select id="findByEmailPassword" resultMap="memberMap">
+  <!-- 회원상세정보 -->
+  <select id="findByNo" resultMap="memberMap">
     select
       mno,
       name,
       id,
+      nick,
       createddate
     from
       member
     where
-      id=#{id} and pwd=sha2(#{password},256)
+      mno=#{value}
   </select>
-  
-<!--  <update id="update" parameterType="Member">-->
-<!--    update app_member set -->
-<!--      name=#{name}, -->
-<!--      email=#{email}, -->
-<!--      pwd=sha2(#{password},256) -->
-<!--    where -->
-<!--      mno=#{no}-->
-<!--  </update>-->
-<!--  -->
-<!--  <delete id="delete">-->
-<!--    delete from app_member -->
-<!--    where mno=#{value}-->
-<!--  </delete>-->
+
+  <select id="findAll" resultMap="memberMap">
+    select
+    mno,
+    name,
+    id      <!-- TODO email -> id 수정  -->
+    from
+    member
+    order by
+    mno
+  </select>
+
+
+  <select id="findByEmailPassword" resultMap="memberMap">
+    select
+    mno,
+    name,
+    id,
+    createddate
+    from
+    member
+    where
+    id=#{id} and pwd=sha2(#{password},256)
+  </select>
+
+
+  <!-- 마이페이지 회원 정보 수정 -->
+  <update id="update" parameterType="Member">
+    update member set
+      name=#{name},
+      id=#{id},
+      nick=#{nick},
+      pwd=sha2(#{password},256)
+    where
+      mno=#{no}
+  </update>
+  <!--  -->
+  <!--  <delete id="delete">-->
+  <!--    delete from app_member -->
+  <!--    where mno=#{value}-->
+  <!--  </delete>-->
 
   <!--  밑에서부턴 피드에서 필요해서 사용하는 쿼리  -->
 
@@ -115,6 +121,78 @@
     thumbnail
     from member
     where nick=#{nick}
+  </select>
+
+
+  <!-- 관리자페이지 전체회원 limit 10 -->
+  <select id="findByMember" resultMap="memberMap">
+    select
+    mno,
+    name,
+    id,
+    addr
+    from member
+    order by
+    mno
+    limit 10;
+  </select>
+
+  <!-- 관리자페이지 신규회원 limit 10; -->
+  <select id="findByNewMember" resultMap="memberMap">
+    select
+    mno,
+    name,
+    id,
+    addr
+    from member
+    order by
+    mno desc
+    limit 10;
+  </select>
+
+  <!-- 관리자페이지 회원 상세정보 -->
+  <select id="findByMemberDetail" resultMap="memberMap">
+    select
+      mno,
+      id,
+      name,
+      nick,
+      birth,
+      tel,
+      gender,
+      createddate,
+      addr,
+      subaddr,
+      interest,
+      outstate,
+      outdate
+    from member
+      where mno=#{value};
+  </select>
+
+  <!-- 관리자페이지 회원 검색기능 추가 -->
+  <select id="searchMember" resultMap="memberMap">
+    select
+      mno,
+      name,
+      id
+    from  member
+    <!--  keyword=all 아니면 if문 실행 안됨  -->
+    <if test="keyword != null">
+    where
+      name like concat("%", #{keyword}, "%")
+      or id like concat("%", #{keyword}, "%")
+    </if>
+      order by
+    mno
+  </select>
+
+  <!-- 마이페이지 현재 패스워드 확인 -->
+  <select id="currentPasswordCheck" resultType="Integer">
+    select
+      count(*)
+    from member
+      where mno=#{no} and pwd=sha2(#{password},256);
   </select>
 
 </mapper>
