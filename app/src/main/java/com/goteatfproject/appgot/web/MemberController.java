@@ -1,16 +1,15 @@
 package com.goteatfproject.appgot.web;
 
-import java.util.Map;
+import com.goteatfproject.appgot.service.MemberService;
+import com.goteatfproject.appgot.vo.Member;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.goteatfproject.appgot.service.MemberService;
-import com.goteatfproject.appgot.vo.Member;
 
 @Controller
-@RequestMapping("/register")
+@RequestMapping("/member")
 public class MemberController {
 
   MemberService memberService;
@@ -22,13 +21,8 @@ public class MemberController {
 
   @GetMapping ("/add")
   public String add() throws Exception {
-    return "member/form";
+    return "member/memberForm";
   }
-
-  //  @PostMapping("/save")
-  //  public String save(User user) throws Exception {
-  //    return "memberInfo";
-  //  }
 
   @PostMapping("/add")
   public String add(Member member) throws Exception {
@@ -39,26 +33,16 @@ public class MemberController {
   @GetMapping("/list")
   public String list(Model model) throws Exception {
     model.addAttribute("members", memberService.list());
-    return "member/list";
+    return "member/memberList";
   }
 
-  @GetMapping("detail")
-  public void detail(int no, Map map) throws Exception {
-    Member member = memberService.get(no);
-
-    if (member == null) {
-      throw new Exception("해당 번호의 회원이 없습니다.");
-    }
-
-    map.put("member", member);
-  }
-
-  @PostMapping("update")
-  public String update(Member member) throws Exception {
-    if (!memberService.update(member)) {
-      throw new Exception("회원 변경 오류입니다!");
-    }
-
-    return "redirect:list";
-  }
+//  @GetMapping("/list")
+//  public ModelAndView memberList() {
+//    ModelAndView mv = new ModelAndView("/member/list");
+//
+//    List<Map<String, Object>> members = memberService.list();
+//    mv.addObject("members", members);
+//
+//    return mv;
+//  }
 }
