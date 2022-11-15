@@ -10,7 +10,7 @@
     <result column="title" property="title"/>
     <result column="cont" property="content"/>
     <result column="date" property="date"/>
-    <result column="img" property="image"/>
+    <result column="thumbnail" property="thumbnail"/>
 
     <association property="writer" javaType="member">
       <id column="mno" property="no"/>
@@ -46,7 +46,7 @@
     f.title,
     f.cont,
     f.date,
-    f.img
+    f.thumbnail
     from
     feed f
     join member m on m.mno = f.mno
@@ -64,7 +64,7 @@
     f.title,
     f.cont,
     f.date,
-    f.img
+    f.thumbnail
     from
     feed f
     join member m on m.mno = f.mno
@@ -77,8 +77,8 @@
 
   <insert id="insert" parameterType="feed"
       useGeneratedKeys="true" keyColumn="fno" keyProperty="no">
-    insert into feed(title, cont, mno, date)
-    values(#{title}, #{content}, #{writer.no}, now())
+    insert into feed(title, cont, mno, date, thumbnail)
+    values(#{title}, #{content}, #{writer.no}, now(), #{thumbnail})
   </insert>
 
   <select id="randomfindAll" resultMap="feedMap">
@@ -90,7 +90,7 @@
     f.title,
     f.cont,
     f.date,
-    f.img
+    f.thumbnail
     from
     feed f
     join member m on m.mno = f.mno
@@ -102,7 +102,7 @@
     select
     mno,
     nick,
-    addr
+    addr,
     intro
     from
     member
@@ -119,7 +119,7 @@
     f.title,
     f.cont,
     f.date,
-    f.img
+    f.thumbnail
     from feed f
     join member m on m.mno = f.mno
     where f.mno in
@@ -145,7 +145,7 @@
     f.title,
     f.cont,
     f.date,
-    f.img
+    f.thumbnail
     ff.feedfileno,
     ff.path
     from

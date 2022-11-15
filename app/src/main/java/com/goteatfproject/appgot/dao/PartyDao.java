@@ -1,6 +1,7 @@
 package com.goteatfproject.appgot.dao;
 
 import com.goteatfproject.appgot.vo.AttachedFile;
+import com.goteatfproject.appgot.vo.Comment;
 import com.goteatfproject.appgot.vo.Criteria;
 import com.goteatfproject.appgot.vo.Party;
 import java.util.Map;
@@ -41,8 +42,12 @@ public interface PartyDao {
 
   int deleteFilesByMemberParties(int memberNo);
 
-  // 테스트
-//  public void insertComment(Comment comment);
+  // 댓글 테스트
+  public void insertComment(Comment comment);
+
+  public List<Comment> selectCommentList(Comment comment);
+
+  int updateComment(Comment comment);
 
 
 }

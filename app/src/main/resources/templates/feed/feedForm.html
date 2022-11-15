@@ -60,6 +60,7 @@
 
         <ul class="dropdown-menu text-small ">
           <li th:if="${session.loginMember != null}"><a class="dropdown-item" href="#">New project...</a></li>
+          <li th:if="${session.loginMember != null}"><a class="dropdown-item" th:href="@{/my/main}">마이페이지</a></li>
           <li th:if="${session.loginMember != null}"><a class="dropdown-item" href="#">설정</a></li>
           <li th:if="${session.loginMember != null}"><a class="dropdown-item" href="#">프로필</a></li>
           <li>
@@ -78,41 +79,7 @@
 <div class="line-3"></div>
 <div class="line-3"></div>
 <!------------------------------nav------------------------------>
-<nav class="navbar navbar-expand-lg border-bottom bg-light" aria-label="Tenth navbar example">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarsExample08" aria-controls="navbarsExample08"
-            aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse justify-content-md-center " id="navbarsExample08">
-      <ul class="navbar-nav fw-bold text-dark ">
-        <li class="nav-item p-1">
-          <a class="nav-link" aria-current="page" th:href="@{/party/list?meal=all}">파티게시판</a>
-        </li>
-        <li class="nav-item p-1">
-          <a class="nav-link" th:href="@{/feed/list}">피드게시판</a>
-        </li>
-        <li class="nav-item p-1">
-          <a class="nav-link" href="#">이벤트게시판</a>
-        </li>
-        <li class="nav-item dropdown p-1">
-          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
-             aria-expanded="false">고객센터</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" th:href="@{/notice/list}">공지사항</a></li>
-            <li th:if="${session.loginMember != null}"><a class="dropdown-item" th:href="@{/my/main}">마이페이지</a></li>
-            <li><a class="dropdown-item" th:href="@{/notice/noticeOne}">1:1 문의</a></li>
-            <li><a class="dropdown-item" href="#">자주 묻는 질문</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-
+<div th:replace="/common/nav.html :: fragment-nav"></div>
 <!-------------------------------구분선-------------------------->
 <div class="line-3"></div>
 <!------------------------------header------------------------------>
@@ -122,37 +89,39 @@
 
 
 <div class="container align-items-start border rounded">
-<!--<form action='add' method="post" enctype="multipart/form-data">-->
-<form data-th-action="@{/feed/add}" method="post" enctype="multipart/form-data">
-  <div class="line-3"></div>
+  <form action='add' method="post" enctype="multipart/form-data">
+    <div class="line-3"></div>
 
-  <div class="mb-3">
-    <label for="exampleFormControlInput1" class="form-label">제목</label>
-    <input name="title" type="textar" class="form-control" id="exampleFormControlInput1" placeholder="제목을 입력하세요">
-  </div>
-  <div class="mb-3">
-<!--    <label for="textarea" class="form-label">내용</label>-->
-    <label for="exampleFormControlTextarea1" class="form-label">내용</label>
-    <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="내용을 입력하세요"></textarea>
-  </div>
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label">제목</label>
+      <input name="title" type="textar" class="form-control" id="exampleFormControlInput1" placeholder="제목을 입력하세요">
+    </div>
+    <div class="mb-3">
+      <label for="textarea" class="form-label">내용</label>
+      <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="내용을 입력하세요"></textarea>
+    </div>
 
-  <div class="mb-3">
-    <label for="formFile" class="form-label">대표 이미지</label>
-    <input name="files" class="form-control" type="file" id="formFile" multiple>
-  </div>
+    <div class="mb-3">
+      <label for="formFile" class="form-label">대표 이미지</label>
+      <input name="files" class="form-control" type="file" id="formFile">
+    </div>
 
 
-  <button type="submit">등록하기</button>
-  <a href='/feed/list'>목록</a>
+    <button type="submit">등록하기</button>
+    <a href='/feed/list'>목록</a>
 
-  <div class="line-3"></div>
+    <div class="line-3"></div>
 
-</form>
+  </form>
 </div>
 
 
 
-
+<script>
+  $(document).ready(function() {
+    $('textarea').summernote({height: 200});
+  });
+</script>
 
 
 
@@ -162,13 +131,10 @@
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
         crossorigin="anonymous">
 
-</script>
 
-<!--<script>-->
-<!--  $(document).ready(function() {-->
-<!--    $('textarea').summernote({height: 200});-->
-<!--  });-->
-<!--</script>-->
+
+
+</script>
 
 </body>
 </html>

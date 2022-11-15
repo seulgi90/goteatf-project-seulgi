@@ -1,11 +1,8 @@
 package com.goteatfproject.appgot.web;
 
 import com.goteatfproject.appgot.service.VolunteerService;
-import com.goteatfproject.appgot.vo.AttachedFile;
-import com.goteatfproject.appgot.vo.Criteria;
-import com.goteatfproject.appgot.vo.PageMaker;
-import com.goteatfproject.appgot.vo.Party;
-import com.goteatfproject.appgot.vo.Member;
+import com.goteatfproject.appgot.vo.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,11 +17,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import com.goteatfproject.appgot.service.PartyService;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -255,15 +249,66 @@ public class PartyController {
   }
 
   // 테스트
-//  @PostMapping("comment")
-//  public String inseertComment(@RequestParam("no") int no,
-//      @RequestParam("contnet") String content) throws Exception {
-//    Comment comment = new Comment();
-//    comment.setContent(content);
-////    comment.setPartyPage(no);
-//    partyService.insertComment(comment);
-//    String redirect_url = "redirect:party/detail?no=" + no;
-//    return redirect_url;
-//  }
+// 댓글 작성 테스트
+  // cont 컬럼 null 허용이라 ""도 들어감, not null로 변경예정
+  @PostMapping("comment")
+  public String insertComment(@RequestParam("no") int no,
+      @RequestParam("commentCont") String commentCont, HttpSession session) throws Exception {
+
+    Comment comment = new Comment();
+    comment.setWriter((Member) session.getAttribute("loginMember"));
+    comment.setCommentCont(commentCont);
+    comment.setPartyNo(no);
+    partyService.insertComment(comment);
+    return "redirect:detail?no=" + no;
+  }
+
+  // 댓글 출력 테스트
+  @GetMapping("getCommentList")
+  @ResponseBody
+  private List<Comment> getCommentList(@RequestParam("pno") int pno, Model model, HttpSession session) throws Exception {
+
+    System.out.println("pno = " + pno);
+    Object loginMember = session.getAttribute("loginMember");
+//    System.out.println("loginMember = " + loginMember.getNo());
+
+    model.addAttribute("loginMember", loginMember);
+    System.out.println("modelLoginMember = " + model.getAttribute("loginMember"));
+    Comment comment = new Comment();
+
+    comment.setPartyNo(pno);
+
+    model.addAttribute("comment", partyService.getCommentList(comment));
+    System.out.println("model2 = " + model.getAttribute("comment"));
+    return partyService.getCommentList(comment);
+  }
+
+  @PostMapping("updateComment")
+  @ResponseBody
+  public String updateComment(@RequestBody Comment comment, HttpSession session) throws  Exception {
+    System.out.println("comment1 = " + comment.getPartyReplyNo());
+    System.out.println("comment2 = " + comment.getMemberNo());
+
+    comment.setWriter((Member) session.getAttribute("loginMember"));
+
+    // prno, mno로 수정 체크
+    checkOwner2(session, comment);
+
+    if (!partyService.updateComment(comment)) {
+      throw new Exception("댓글을 변경할 수 없습니다.");
+    }
+    return "1";
+  }
+
+  private void checkOwner2(HttpSession session, Comment comment) throws Exception {
+    Member loginMember = (Member) session.getAttribute("loginMember");
+    // 개인이해메모
+    // getWriter().getNo() != loginMember.getNo() // 로그인 멤버no 꺼내서 party에 있는 Member writer 이용해서 일치여부 확인
+    // 방향 ----->
+    // 넘어온 댓글 멤버번호 != 세션 멤버번호
+    if (comment.getMemberNo() != loginMember.getNo()) {
+      throw new Exception("댓글 작성자가 아닙니다.");
+    }
+  }
 
 }

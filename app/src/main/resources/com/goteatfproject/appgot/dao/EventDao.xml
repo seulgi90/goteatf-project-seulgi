@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goteatfproject.appgot.dao.EventDao">
+
+  <resultMap type="event" id="eventMap">
+  <id column="eno" property="no"/>
+  <result column="title" property="title"/>
+  <result column="cont" property="content"/>
+  <result column="date" property="date"/>
+  <result column="loc" property="location"/>
+  <result column="post" property="post"/>
+  <result column="addr" property="address"/>
+  <result column="viewcnt" property="viewCnt"/>
+  <result column="pub" property="pub"/>
+  <result column="createdate" property="createDate"/>
+  <result column="thumbnail"  property="thumbnail"/>
+
+  <association property="writer" javaType="member">
+    <id column="mno" property="no"/>
+    <result column="nick" property="nick"/>
+  </association>
+
+  <collection property="attachedFiles" ofType="attachedFile">
+    <id column="efileno" property="no"/>
+    <result column="path" property="filepath"/>
+    <result column="filename" property="fileName"/>
+    <result column="savename" property="saveName"/>
+  </collection>
+
+  </resultMap>
+
+  <resultMap type="attachedFile" id="attachedFileMap">
+    <id column="efileno" property="no"/>
+    <result column="path" property="filepath"/>
+    <result column="filename" property="fileName"/>
+    <result column="savename" property="saveName"/>
+    <result column="eno" property="eventNo"/>
+
+  </resultMap>
+
+
+  <insert id="insert" parameterType="event"
+          useGeneratedKeys="true" keyColumn="eno" keyProperty="no">
+
+
+<!--    insert into party(mno, meal, food, title, cont, gender, max, time, age,-->
+<!--    lit, loc, post, addr, viewcnt, createdate, thumbnail)-->
+<!--    values(#{writer.no}, #{meal}, #{food}, #{title}, #{content}, #{gender}, #{max},-->
+<!--    #{time}, #{age}, #{limit}, #{location}, '', #{address}, 0, now(), #{thumbnail})-->
+
+
+    insert into event(mno, title, cont, date, loc, addr, createdate, thumbnail)
+    VALUES
+    (#{writer.no}, #{title}, #{content},  #{date},  #{location},    #{address},  now(), #{thumbnail} )
+  </insert>
+
+
+
+
+
+  <!--페이징 목록-->
+
+  <select id="selectEventList" resultMap="eventMap" parameterType="hashmap">
+    <![CDATA[
+  select
+  e.eno,
+  m.mno,
+  e.title,
+  e.cont,
+  e.date,
+  e.loc,
+  e.addr,
+  e.viewcnt,
+  e.pub,
+  e.createdate,
+  e.thumbnail
+
+  from event e
+
+  join member m on e.mno = m.mno
+   order by
+      eno desc
+      LIMIT #{pageStart}, #{perPageNum}
+      ]]>
+
+  </select>
+
+  <select id="findByNo" resultMap="eventMap">
+    select
+    e.eno,
+    e.title,
+    e.viewcnt,
+    e.createdate,
+    m.nick,
+    m.mno,
+    ef.efileno,
+    ef.path
+    from
+    event e
+    join member m on m.mno = e.mno
+    left outer join event_file ef on e.eno = ef.eno
+    where
+    e.eno = #{value}
+  </select>
+
+  <update id="update" parameterType="event">
+    update event set
+    title = #{title},
+    cont = #{content}
+    where
+    eno = #{no}
+  </update>
+
+  <delete id="delete">
+    delete from event
+    where eno = #{value}
+  </delete>
+
+
+
+
+
+
+
+  <insert id="insertFiles" parameterType="event">
+    insert into event_file(path, eno, filename, savename)
+    <!--      insert into party_file(path, pno)-->
+    values
+    <!--  여러 파일 들어가면 첨부파일 , 사용해서 구분-->
+    <foreach collection="attachedFiles" item="file" separator=",">
+      (#{file.filepath}, #{no}, #{file.fileName}, #{file.saveName})
+      <!--        (#{file.filepath}, #{no})-->
+    </foreach>
+  </insert>
+
+  <select id="findFileByNo" resultMap="attachedFileMap">
+    select
+    efileno,
+    path,
+   eno
+    from
+    event_file
+    where
+    efileno = #{value}
+  </select>
+
+  <select id="findFilesByEvent" resultMap="attachedFileMap">
+    select
+    efileno,
+    path,
+    eno
+    from
+    event_file
+    where
+    eno = #{value}
+  </select>
+
+  <delete id="deleteFile">
+    delete from event_file
+    where efileno = #{value}
+  </delete>
+
+  <delete id="deleteFiles">
+    delete from event_file
+    where eno = #{value}
+  </delete>
+
+  <delete id="deleteFilesByMemberEvents">
+    delete from event_file
+    where eno in (select eno from event where mno = #{value})
+  </delete>
+
+
+</mapper>
+
+
+

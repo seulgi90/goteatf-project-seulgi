@@ -2,10 +2,8 @@ package com.goteatfproject.appgot.service;
 
 import com.goteatfproject.appgot.dao.BoardDao;
 import com.goteatfproject.appgot.dao.PartyDao;
-import com.goteatfproject.appgot.vo.AttachedFile;
-import com.goteatfproject.appgot.vo.Criteria;
-import com.goteatfproject.appgot.vo.Board;
-import com.goteatfproject.appgot.vo.Party;
+import com.goteatfproject.appgot.vo.*;
+
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -83,17 +81,28 @@ public class DefaultPartyService implements PartyService {
   public boolean deleteAttachedFile(int fileNo) throws Exception {
     return partyDao.deleteFile(fileNo) > 0;
   }
-
-//  @Override
-//  public void insertComment(Comment comment) throws Exception {
-//    partyDao.insertComment(comment);
-//  }
   
-  
-  // 어드민 페이지 : 이벤트+피드+파티 게시글 조회
+  // 관리자페이지 이벤트+피드+파티 게시글 조회
   @Override
   public List<Board> listAll() throws Exception {
     System.out.println("newBoardDao = " + boardDao.findAll());
     return boardDao.findAll();
+  }
+
+  // 댓글 테스트
+  @Override
+  public void insertComment(Comment comment) throws Exception {
+    partyDao.insertComment(comment);
+  }
+
+  @Override
+  public List<Comment> getCommentList(Comment comment) throws Exception {
+    return partyDao.selectCommentList(comment);
+  }
+
+  @Override
+  public boolean updateComment(Comment comment) throws Exception {
+
+    return partyDao.updateComment(comment) != 0; // 넘어오는 값이 0이 아니면 true, 0이면 false
   }
 }

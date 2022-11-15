@@ -3,14 +3,11 @@ package com.goteatfproject.appgot.web;
 import com.goteatfproject.appgot.service.FeedService;
 import com.goteatfproject.appgot.service.FollowerService;
 import com.goteatfproject.appgot.service.MemberService;
-import com.goteatfproject.appgot.vo.Feed;
-import com.goteatfproject.appgot.vo.FeedAttachedFile;
-import com.goteatfproject.appgot.vo.Follower;
-import com.goteatfproject.appgot.vo.Member;
+import com.goteatfproject.appgot.vo.*;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.*;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.Part;
@@ -21,9 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,6 +42,38 @@ public class FeedController {
     this.followerService = followerService;
     this.memberService = memberService;
   }
+
+  //  @PostMapping("/personal")
+//  public String follow(int no, Model model, HttpSession session) throws Exception {
+//
+//    Object object = session.getAttribute("loginMember");
+//    Member follow = (Member)object;
+//    Member following = memberService.profileByNo(no);
+//
+//    Follower follower = new Follower();
+//    follower.setFollow(follow.getNo());
+//    follower.setFollowing(following.getNo());
+//
+//    followerService.follow(follower);
+//
+//    return "feed/personal";
+//  }
+//
+//  @PostMapping("/personal")
+//  public String unfollow(int no, Model model, HttpSession session) throws Exception {
+//
+//    Object object = session.getAttribute("loginMember");
+//    Member follow = (Member)object;
+//    Member following = memberService.profileByNo(no);
+//
+//    Follower follower = new Follower();
+//    follower.setFollow(follow.getNo());
+//    follower.setFollowing(following.getNo());
+//
+//    followerService.unfollow(follower);
+//
+//    return "feed/personal";
+//  }
 
   @GetMapping("/personal")
   public String personalList(String nick, Model model, HttpSession session) throws Exception {
@@ -91,6 +118,28 @@ public class FeedController {
 
   }
 
+  @GetMapping("/personal-ajax")
+  public String personalajax(int followNo, Model model, HttpSession session) throws Exception {
+    System.out.println(followNo);
+    Object object = session.getAttribute("loginMember");
+    Member follow = (Member)object;
+    Member following = memberService.profileByNo(followNo);
+
+    Follower follower = new Follower();
+    follower.setFollow(follow.getNo());
+    follower.setFollowing(following.getNo());
+
+    if(followerService.isFollow(follower) == 1) {
+      followerService.unfollow(follower);
+    } else {
+      followerService.follow(follower);
+    }
+    model.addAttribute("member", following);
+    model.addAttribute("member", follow);
+
+    return "feed/feedPersonal";
+  }
+
   @GetMapping("/list")
   public String list(Model model, HttpSession session) throws Exception {
 
@@ -100,6 +149,7 @@ public class FeedController {
     if(loginMember != null) {
       List<Follower> followList = followerService.selectFollowList(loginMember.getNo());
       model.addAttribute("follows", followList);
+      model.addAttribute("members", memberService.randomList());
     } else {
       model.addAttribute("members", memberService.randomList());
     }
@@ -120,20 +170,30 @@ public class FeedController {
   }
 
   @GetMapping("/form")
-  public void form() throws Exception {
-  }
+    public String form() throws Exception {
+      return "feed/feedForm";
+    }
+
 
   @PostMapping("/add")
   public String feedAdd(Feed feed, HttpSession session,
       @RequestParam("files") MultipartFile[] files) throws Exception {
 
+    // thumbnail default 파일 설정 TODO 추가1
+    feed.setThumbnail("logo.png");
+
     feed.setFeedAttachedFiles(saveFeedAttachedFiles(files));
     feed.setWriter((Member) session.getAttribute("loginMember"));
 
-//    List<FeedAttachedFile> feedAttachedFiles = new ArrayList<>();
-//    feedAttachedFiles = feed.getFeedAttachedFiles();
-//    feed.setImage(feedAttachedFiles.);
+    // 첨부파일 사이즈가 0 보다 크면 첨부파일 첫번째의 Filepath값 가져와서 thumbnail로 설정 TODO 추가2
+    if (feed.getFeedAttachedFiles().size() > 0) {
+      List<FeedAttachedFile> feedAttachedFiles = new ArrayList<>();
+      feedAttachedFiles = feed.getFeedAttachedFiles();
+      feed.setThumbnail(feedAttachedFiles.get(0).getFilepath());
+    }
 
+    System.out.println("filename = " + Arrays.toString(files));
+    System.out.println("filename2 = " + files);
     feedService.add(feed);
     return "redirect:list";
   }
@@ -164,6 +224,10 @@ public class FeedController {
         continue;
       }
 
+      System.out.println("filename3 = " + Arrays.toString(files));
+      System.out.println("filename4 = " + files);
+      System.out.println("dirPath = " + dirPath);
+
       String filename = UUID.randomUUID().toString();
       part.transferTo(new File(dirPath + "/" + filename));
       feedAttachedFiles.add(new FeedAttachedFile(filename));
@@ -171,7 +235,7 @@ public class FeedController {
     return feedAttachedFiles;
   }
 
-  // 파티 게시물 상세보기
+  // 피드 게시물 상세보기
   @GetMapping("detail")
   public Map detail(int no) throws Exception {
 
@@ -185,7 +249,7 @@ public class FeedController {
     return map;
   }
 
-  // 파티 게시물 수정
+  // 피드 게시물 수정
   @PostMapping("update")
   public String update(Feed feed, HttpSession session,
       Part[] files) throws Exception {
@@ -245,5 +309,4 @@ public class FeedController {
     }
     return "redirect:detail?no=" + feed.getNo();
   }
-
 }

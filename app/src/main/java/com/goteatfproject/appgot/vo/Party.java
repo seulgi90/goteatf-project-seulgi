@@ -43,6 +43,8 @@ public class Party {
 
   private List<AttachedFile> attachedFiles;
 
+  private Comment commentList;
+
   public List<AttachedFile> getAttachedFiles() {
     return attachedFiles;
   }

@@ -58,6 +58,10 @@ public class LoginController {
     }
 
     response.addCookie(cookie);
+    
+    if (id.equals("admin@test.com")){
+      return "redirect:/admin/main";
+    }
 
     return "redirect:/";
   }

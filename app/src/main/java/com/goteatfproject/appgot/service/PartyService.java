@@ -1,9 +1,7 @@
 package com.goteatfproject.appgot.service;
 
-import com.goteatfproject.appgot.vo.AttachedFile;
-import com.goteatfproject.appgot.vo.Criteria;
-import com.goteatfproject.appgot.vo.Board;
-import com.goteatfproject.appgot.vo.Party;
+import com.goteatfproject.appgot.vo.*;
+
 import java.util.List;
 import java.util.Map;
 
@@ -23,9 +21,15 @@ public interface PartyService {
   AttachedFile getAttachedFile(int fileNo) throws Exception;
   boolean deleteAttachedFile(int fileNo) throws Exception;
 
-  // 테스트
-  //  public void insertComment(Comment comment) throws Exception;
+
   
-  // 어드민 페이지 : 이벤트+피드+파티 게시글 조회
+  // 관리자 페이지 이벤트+피드+파티 게시글 조회
   List<Board> listAll() throws Exception;
+
+  // 댓글 테스트
+  public void insertComment(Comment comment) throws Exception;
+
+  public List<Comment> getCommentList(Comment comment) throws Exception;
+
+  boolean updateComment(Comment comment) throws Exception;
 }

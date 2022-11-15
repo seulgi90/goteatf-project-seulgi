@@ -5,6 +5,7 @@ import com.goteatfproject.appgot.vo.Member;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DefaultMemberService implements MemberService {
@@ -44,6 +45,35 @@ public class DefaultMemberService implements MemberService {
   public Member profileByNick(String nick) throws Exception {
     return memberDao.profileByNick(nick);
   }
+
+  // 마이페이지 현재 패스워드 확인
+ @Override
+  public int getCurrentPasswordCheck(int no, String password) {
+    return memberDao.currentPasswordCheck(no, password);
+  }
+
+  // 마이페이지 회원정보 수정
+  @Override
+  public boolean update(Member member) throws Exception {
+    return memberDao.update(member) > 0;
+  }
+
+  // 마이페이지 회원 삭제
+  @Transactional
+  @Override
+  public boolean delete(int no) throws Exception {
+    return memberDao.delete(no) > 0; 
+  }
+
+  // 마이페이지 회원 정보 프로필 사진 수정
+  public boolean updateProfile(Member member) throws Exception {
+    return memberDao.updateProfile(member) > 0;
+  }
+
+  // 마이페이지 회원 정보 자기소개 수정
+  public boolean updateIntro(Member member) throws Exception {
+    return memberDao.updateIntro(member) > 0;
+  }
   
   // 관리자페이지 전체회원 limit 10;
   @Override
@@ -68,16 +98,5 @@ public class DefaultMemberService implements MemberService {
   public List<Member> getSearchMember(String keyword) {
     return memberDao.searchMember(keyword);
   }
-  
-  // 마이페이지 현재 패스워드 확인
-  @Override
-  public int getCurrentPasswordCheck(int no, String password) {
-    return memberDao.currentPasswordCheck(no, password);
-  }
-  
-  // 마이페이지 회원정보 수정
-  @Override
-  public boolean update(Member member) throws Exception {
-    return memberDao.update(member) > 0;
-  }
+
 }

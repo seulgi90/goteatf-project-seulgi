@@ -34,8 +34,8 @@ public class AdminController {
   // 관리자페이지 - 메인
   @GetMapping("/main")
   public String admin(Model model) throws Exception {
-//    model.addAttribute("parties", partyService.list());
-//    model.addAttribute("feeds", feedService.list());
+  model.addAttribute("parties", partyService.list());
+    model.addAttribute("feeds", feedService.list());
     model.addAttribute("members", memberService.list());
     model.addAttribute("memberLists", memberService.MemberList());
     model.addAttribute("newMemberLists", memberService.NewMemberList());
@@ -52,6 +52,7 @@ public class AdminController {
   //    return "admin/adminPartyList";
   //  }
   
+  // 페이징 관리자페이지 파티게시글 관리
   @GetMapping("/adminPartyList")
   public ModelAndView adminPartyList(Criteria cri) throws Exception {
     

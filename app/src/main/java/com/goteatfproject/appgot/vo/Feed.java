@@ -13,7 +13,7 @@ public class Feed {
   private String title;
   private String content;
   private Date date;
-  private String image;
+  private String thumbnail;
 
   private Member writer;
 
