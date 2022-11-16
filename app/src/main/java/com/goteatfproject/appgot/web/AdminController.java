@@ -101,4 +101,5 @@ public class AdminController {
     model.addAttribute("member", memberService.getMemberDetail(no));
     return "admin/adminMemberDetail";
   }
+  
 }
