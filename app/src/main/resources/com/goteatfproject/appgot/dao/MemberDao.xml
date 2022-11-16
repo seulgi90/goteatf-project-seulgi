@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goteatfproject.appgot.dao.MemberDao">
+
+  <!-- 자바 객체의 프로퍼티와 컬럼 이름을 연결한다. -->
+  <resultMap type="member" id="memberMap">
+    <id column="mno" property="no"/>
+    <result column="name" property="name"/>
+    <result column="id" property="id"/>
+    <result column="createddate" property="createdDate"/>
+    <result column="nick" property="nick"/>
+    <result column="intro" property="intro"/>
+    <result column="thumbnail" property="thumbnail"/>
+    <result column="birth" property="birth"/>
+    <result column="addr" property="address"/>
+    <result column="intro" property="intro"/>
+  </resultMap>
+
+
+  <insert id="insert" useGeneratedKeys="true" parameterType="member">
+    insert into member (id, pwd, name, nick, birth, tel, gender, createddate, post,
+    addr, subaddr, interest, intro, thumbnail)
+    values(#{id}, sha2(#{password},256), #{name}, #{nick}, #{birth}, #{tel}, #{gender}, now(),
+    #{post}, #{address}, #{subAddr}, #{interest}, #{intro}, 'jj.png') <!-- jj.png 마이프로필 기본 이미지 -->
+  </insert>
+
+  <!-- 회원상세정보 -->
+  <select id="findByNo" resultMap="memberMap">
+    select
+    mno,
+    name,
+    id,
+    nick,
+    intro,
+    thumbnail,
+    createddate
+    from
+    member
+    where
+    mno=#{value}
+  </select>
+
+  <select id="findAll" resultMap="memberMap">
+    select
+    mno,
+    name,
+    id      <!-- TODO email -> id 수정  -->
+    from
+    member
+    order by
+    mno
+  </select>
+
+  <!--   로그인 +  탈퇴 ( outstate = 0 회원 활성화 / outstate = 1 회원 비활성화)-->
+  <select id="findByEmailPassword" resultMap="memberMap">
+    select
+    mno,
+    name,
+    id,
+    createddate
+    from
+    member
+    where
+    id=#{id} and pwd=sha2(#{password},256)
+    and outstate=0
+  </select>
+
+
+  <!-- 마이페이지 개인 정보 수정 -->
+  <update id="update" parameterType="Member">
+    update member set
+    name=#{name},
+    id=#{id},
+    nick=#{nick},
+    pwd=sha2(#{password},256)
+    where
+    mno=#{no}
+  </update>
+
+  <!-- 마이페이지 개인 정보 프로필 사진 수정  -->
+  <update id="updateProfile" parameterType="Member">
+    update member set
+    thumbnail=#{thumbnail}
+    where
+    mno=#{no}
+  </update>
+
+  <!-- 마이페이지 개인 정보 자기소개 수정  -->
+  <update id="updateIntro" parameterType="Member">
+    update member set
+    intro=#{intro}
+    where
+    mno=#{no}
+  </update>
+
+  <!--  밑에서부턴 피드에서 필요해서 사용하는 쿼리  -->
+
+  <!-- 랜덤 유저 리스트 조회 (팔로우 박스) -->
+  <select id="userList" resultMap="memberMap">
+    select
+    mno,
+    nick,
+    intro,
+    thumbnail
+    from member
+    order by rand()
+    Limit 20
+  </select>
+
+  <!--  회원 번호로 유저의 정보 조회  -->
+  <select id="profileByNo" resultMap="memberMap">
+    select
+    mno,
+    id,
+    nick,
+    birth,
+    gender,
+    interest,
+    intro,
+    thumbnail
+    from member
+    where mno=#{mno}
+  </select>
+
+  <!--  회원 닉네임으로 유저의 정보 조회  -->
+  <select id="profileByNick" resultMap="memberMap">
+    select
+    mno,
+    id,
+    nick,
+    addr,
+    birth,
+    gender,
+    interest,
+    intro,
+    thumbnail
+    from member
+    where nick=#{nick}
+  </select>
+
+
+  <!-- 관리자페이지 전체회원 limit 10 -->
+  <select id="findByMember" resultMap="memberMap">
+    select
+    mno,
+    name,
+    id,
+    addr
+    from member
+    order by
+    mno
+    limit 10;
+  </select>
+
+  <!-- 관리자페이지 신규회원 limit 10; -->
+  <select id="findByNewMember" resultMap="memberMap">
+    select
+    mno,
+    name,
+    id,
+    addr
+    from member
+    order by
+    mno desc
+    limit 10;
+  </select>
+
+  <!-- 관리자페이지 회원 상세정보 -->
+  <select id="findByMemberDetail" resultMap="memberMap">
+    select
+    mno,
+    id,
+    name,
+    nick,
+    birth,
+    tel,
+    gender,
+    createddate,
+    addr,
+    subaddr,
+    interest,
+    outstate,
+    outdate
+    from member
+    where mno=#{value};
+  </select>
+
+  <!-- 관리자페이지 회원 검색기능 추가 -->
+  <select id="searchMember" resultMap="memberMap">
+    select
+    mno,
+    name,
+    id
+    from  member
+    <!--  keyword=all 아니면 if문 실행 안됨  -->
+    <if test="keyword != null">
+      where
+      name like concat("%", #{keyword}, "%")
+      or id like concat("%", #{keyword}, "%")
+    </if>
+    order by
+    mno
+  </select>
+
+  <!-- 마이페이지 현재 패스워드 확인 -->
+  <select id="currentPasswordCheck" resultType="Integer">
+    select
+    count(*)
+    from member
+    where mno=#{no} and pwd=sha2(#{password},256);
+  </select>
+
+    <!--  마이페이지 개인 정보 수정 회원 탈퇴-->
+  <update id="delete" parameterType="member">
+    update member set
+    outstate = true,
+    outdate = now()
+    where mno=#{value};
+  </update>
+
+</mapper>

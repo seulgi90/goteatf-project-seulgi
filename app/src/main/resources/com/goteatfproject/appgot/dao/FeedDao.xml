@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goteatfproject.appgot.dao.FeedDao">
+
+  <!-- 자바 객체의 프로퍼티와 컬럼 이름을 연결한다. -->
+  <resultMap type="feed" id="feedMap">
+    <id column="fno" property="no"/>
+    <result column="title" property="title"/>
+    <result column="cont" property="content"/>
+    <result column="date" property="date"/>
+    <result column="thumbnail" property="thumbnail"/>
+
+    <association property="writer" javaType="member">
+      <id column="mno" property="no"/>
+      <result column="id" property="id"/>
+      <result column="addr" property="address"/>
+      <result column="nick" property="nick"/>
+      <result column="intro" property="intro"/>
+    </association>
+
+    <collection property="feedAttachedFiles" ofType="feedAttachedFile">
+      <id column="feedfileno" property="no"/>
+      <result column="path" property="filepath"/>
+      <result column="filename" property="fileName"/>
+      <result column="savename" property="saveName"/>
+    </collection>
+  </resultMap>
+
+  <resultMap type="feedAttachedFile" id="feedAttachedFileMap">
+    <id column="feedfileno" property="no"/>
+    <result column="path" property="filepath"/>
+    <result column="filename" property="fileName"/>
+    <result column="savename" property="saveName"/>
+    <result column="fno" property="feedNo"/>
+  </resultMap>
+
+
+  <select id="findAll" resultMap="feedMap">
+    select
+    f.fno,
+    m.mno,
+    m.nick,
+    m.addr,
+    f.title,
+    f.cont,
+    f.date,
+    f.thumbnail
+    from
+    feed f
+    join member m on m.mno = f.mno
+
+  </select>
+
+<!--   페이징 리스트-->
+  <select id="selectFeedList" resultMap="feedMap" parameterType="hashmap">
+    <![CDATA[
+      select
+    f.fno,
+    m.mno,
+    m.nick,
+    m.addr,
+    f.title,
+    f.cont,
+    f.date,
+    f.thumbnail
+    from
+    feed f
+    join member m on m.mno = f.mno
+      order by
+      fno desc
+      LIMIT #{pageStart}, #{perPageNum}
+      ]]>
+  </select>
+
+
+  <insert id="insert" parameterType="feed"
+      useGeneratedKeys="true" keyColumn="fno" keyProperty="no">
+    insert into feed(title, cont, mno, date, thumbnail)
+    values(#{title}, #{content}, #{writer.no}, now(), #{thumbnail})
+  </insert>
+
+  <select id="randomfindAll" resultMap="feedMap">
+    select
+    f.fno,
+    m.mno,
+    m.nick,
+    m.addr,
+    f.title,
+    f.cont,
+    f.date,
+    f.thumbnail
+    from
+    feed f
+    join member m on m.mno = f.mno
+    order by rand()
+    Limit 15
+  </select>
+
+  <select id="simpleProfile" resultMap="feedMap">
+    select
+    mno,
+    nick,
+    addr,
+    intro
+    from
+    member
+    where mno=#{writer.no}
+  </select>
+
+  <!--   내가 팔로우한 유저의 게시물 조회 쿼리문   -->
+  <select id="followFindAll" resultMap="feedMap">
+    select
+    f.fno,
+    m.mno,
+    m.nick,
+    m.addr,
+    f.title,
+    f.cont,
+    f.date,
+    f.thumbnail
+    from feed f
+    join member m on m.mno = f.mno
+    where f.mno in
+    (select following from follower
+    where follow=#{writer.no})
+  </select>
+
+  <!--  아이디로 유저 번호를 조회해서 그번호로 게시물 모두 조회 쿼리문  -->
+  <select id="selectListByNick" resultMap="feedMap">
+    select *
+    from feed f
+    join member m on m.mno=f.mno
+    where m.nick=#{nick}
+    order by f.fno desc
+  </select>
+
+  <select id="findByNo" resultMap="feedMap">
+    select
+    f.fno,
+    m.mno,
+    m.nick,
+    m.addr,
+    f.title,
+    f.cont,
+    f.date,
+    f.thumbnail
+    ff.feedfileno,
+    ff.path
+    from
+    feed f
+    join member m on m.mno = f.mno
+    left outer join feed_file ff on f.fno = ff.fno
+    where
+    f.fno = #{value}
+  </select>
+
+  <update id="update" parameterType="feed">
+    update feed set
+    title = #{title},
+    cont = #{content}
+    where
+    fno = #{no}
+  </update>
+
+  <delete id="delete">
+    delete from feed
+    where fno = #{value}
+  </delete>
+
+  <!-- 첨부파일 관련 -->
+
+  <insert id="insertFiles" parameterType="feed">
+    insert into feed_file(path, fno, filename, savename)
+    <!--      insert into party_file(path, pno)-->
+    values
+    <!--  여러 파일 들어가면 첨부파일 , 사용해서 구분-->
+    <foreach collection="feedAttachedFiles" item="file" separator=",">
+      (#{file.filepath}, #{no}, #{file.fileName}, #{file.saveName})
+      <!--        (#{file.filepath}, #{no})-->
+    </foreach>
+  </insert>
+
+  <select id="findFileByNo" resultMap="feedAttachedFileMap">
+    select
+    feedfileno,
+    path,
+    fno
+    from
+    feed_file
+    where
+    feedfileno = #{value}
+  </select>
+
+  <select id="findFilesByParty" resultMap="feedAttachedFileMap">
+    select
+    feedfileno,
+    path,
+    fno
+    from
+    feed_file
+    where
+    fno = #{value}
+  </select>
+
+  <delete id="deleteFile">
+    delete from feed_file
+    where feedfileno = #{value}
+  </delete>
+
+  <delete id="deleteFiles">
+    delete from feed_file
+    where fno = #{value}
+  </delete>
+
+  <delete id="deleteFilesByMemberBoards">
+    delete from feed_file
+    where fno in (select fno from feed where mno = #{value})
+  </delete>
+</mapper>
+
+
+
