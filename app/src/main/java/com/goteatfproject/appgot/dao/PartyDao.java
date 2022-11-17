@@ -53,4 +53,7 @@ public interface PartyDao {
   
   // 마이페이지 파티게시글 본인 작성 글 상세보기
   Party findByMyPartyListDetail(int no);
+  
+  // 관리자페이지 파티게시글 비활성화
+  int partyBlock(int no);
 }

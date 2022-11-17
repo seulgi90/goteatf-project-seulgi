@@ -95,6 +95,12 @@ public class DefaultPartyService implements PartyService {
     return boardDao.findAll();
   }
 
+  // 관리자 페이지 이벤트+피드+파티 오늘 등록된 게시글 개수
+  @Override
+  public List<Board> newBoardCount() throws Exception {
+    return boardDao.newBoardCount();
+  }
+
   // 댓글 테스트
   @Override
   public void insertComment(Comment comment) throws Exception {
@@ -111,17 +117,22 @@ public class DefaultPartyService implements PartyService {
 
     return partyDao.updateComment(comment) != 0; // 넘어오는 값이 0이 아니면 true, 0이면 false
   }
-  
+
   // 마이페이지 파티게시글 본인 글 리스트
   @Override
   public List<Map<String, Object>> selectPartyListByNo(Map<String, Object> map) {
     return partyDao.selectPartyListByNo(map);
   }
-  
+
   // 마이페이지 파티게시글 본인 작성 글 상세보기
   @Override
   public Party getMyPartyListDetail(int no) throws Exception {
     return partyDao.findByMyPartyListDetail(no);
   }
-  
+
+  // 관리자페이지 파티게시글 비활성화
+  @Override
+  public boolean partyBlock(int no) throws Exception {
+    return partyDao.partyBlock(no) > 0;
+  }
 }

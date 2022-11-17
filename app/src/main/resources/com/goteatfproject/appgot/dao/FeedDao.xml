@@ -53,7 +53,7 @@
 
   </select>
 
-<!--   페이징 리스트-->
+<!--   페이징 리스트 -->
   <select id="selectFeedList" resultMap="feedMap" parameterType="hashmap">
     <![CDATA[
       select
@@ -218,6 +218,29 @@
     delete from feed_file
     where fno in (select fno from feed where mno = #{value})
   </delete>
+  
+    <!-- 마이페이지 피드게시글 본인 작성 글 리스트 -->
+   <select id="selectFeedListByNo" resultMap="feedMap" parameterType="hashmap">
+    <![CDATA[
+    select
+	    f.fno,
+	    m.mno,
+	    m.nick,
+	    m.addr,
+	    f.title,
+	    f.cont,
+	    f.date,
+	    f.thumbnail
+    from
+      feed f
+    join member m on m.mno = f.mno
+    where f.mno=#{memberNo}
+    order by
+      fno desc
+    LIMIT #{cri.pageStart}, #{cri.perPageNum}
+    ]]>
+  </select>
+  
 </mapper>
 
 

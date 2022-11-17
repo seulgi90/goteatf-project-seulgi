@@ -1,13 +1,11 @@
 package com.goteatfproject.appgot.dao;
 
+import java.util.List;
+import java.util.Map;
+import org.apache.ibatis.annotations.Mapper;
 import com.goteatfproject.appgot.vo.Criteria;
 import com.goteatfproject.appgot.vo.Feed;
 import com.goteatfproject.appgot.vo.FeedAttachedFile;
-import com.goteatfproject.appgot.vo.Party;
-import java.util.Map;
-import org.apache.ibatis.annotations.Mapper;
-
-import java.util.List;
 
 @Mapper
 
@@ -43,4 +41,7 @@ public interface FeedDao {
   int deleteFiles(int feedNo);
 
   int deleteFilesByMemberFeeds(int memberNo);
+
+  // 마이페이지-피드게시글 관리
+  List<Map<String, Object>> selectFeedListByNo(Map<String, Object> map);
 }

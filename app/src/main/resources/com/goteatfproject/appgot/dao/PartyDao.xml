@@ -160,7 +160,7 @@
     pno desc
   </select>
 
-  <!-- 페이징 -->
+  <!-- 페이징 / 비활성화 된 게시글 출력 불가(where p.pub = false) -->
     <select id="selectPartyList" resultMap="partyMap" parameterType="hashmap">
       <![CDATA[
       select
@@ -179,65 +179,31 @@
       from
       party p
       join member m on m.mno = p.mno
+      where p.pub = false
       order by
       pno desc
       LIMIT #{pageStart}, #{perPageNum}
       ]]>
     </select>
     
-    <!-- 마이페이지 파티 게시물 본인 글 조회 -->
-    <select id="selectPartyListByNo" resultMap="partyMap" parameterType="hashmap">
-      <![CDATA[
-      select
-      p.pno,
-      p.title,
-      p.meal,
-      p.lit,
-      p.age,
-      p.gender,
-      p.max,
-      p.viewcnt,
-      p.thumbnail,
-      p.createdate,
-      m.mno,
-      m.nick
-      from
-      party p
-      join member m on m.mno = p.mno
-      where p.mno=#{memberNumber}
-      order by
-      pno desc
-      LIMIT #{cri.pageStart}, #{cri.perPageNum}
-      ]]>
-    </select>
 
-  <!-- 마이페이지 파티게시글 본인 작성 글 상세보기 -->
-  <select id="findByMyPartyListDetail" resultMap="partyMap">
-    select
-    p.pno,
-    p.title,
-    p.viewcnt,
-    p.createdate,
-    m.nick,
-    m.mno,
-    pf.pfileno,
-    pf.path
-    from
-    party p
-    join member m on m.mno = p.mno
-    left outer join party_file pf on p.pno = pf.pno
-    where
-    p.pno = #{value}
-  </select>
 
     <select id="findByNo" resultMap="partyMap">
       select
       p.pno,
       p.title,
       p.viewcnt,
+      p.time,
+      p.meal,
+      p.food,
+      p.cont,
       p.createdate,
       m.nick,
       m.mno,
+      p.age,
+      p.gender,
+      p.addr,
+      p.loc,
       pf.pfileno,
       pf.path
       from
@@ -341,6 +307,64 @@
     prno = #{partyReplyNo}
     and
     mno = #{writer.no}
+  </update>
+
+      <!-- 마이페이지 파티 게시물 본인 글 조회 -->
+    <select id="selectPartyListByNo" resultMap="partyMap" parameterType="hashmap">
+      <![CDATA[
+      select
+      p.pno,
+      p.title,
+      p.meal,
+      p.lit,
+      p.age,
+      p.gender,
+      p.max,
+      p.viewcnt,
+      p.thumbnail,
+      p.createdate,
+      m.mno,
+      m.nick
+      from
+      party p
+      join member m on m.mno = p.mno
+      where p.mno=#{memberNo}
+      order by
+      pno desc
+      LIMIT #{cri.pageStart}, #{cri.perPageNum}
+      ]]>
+    </select>
+
+  <!-- 마이페이지 파티게시글 본인 작성 글 상세보기 -->
+  <select id="findByMyPartyListDetail" resultMap="partyMap">
+    select
+    p.pno,
+    p.title,
+    p.meal,
+    p.food,
+    p.cont,
+    p.viewcnt,
+    p.createdate,
+    p.age,
+    p.gender,
+    p.addr,
+    p.loc,
+    m.nick,
+    m.mno,
+    pf.pfileno,
+    pf.path
+    from
+    party p
+    join member m on m.mno = p.mno
+    left outer join party_file pf on p.pno = pf.pno
+    where
+    p.pno = #{value}
+  </select>
+
+  <!--관리자페이지 파티게시글 비활성화 (1: 비활성화)-->
+  <update id="partyBlock" parameterType="party">
+    update party set pub = true
+    where pno = #{no}
   </update>
 
 </mapper>

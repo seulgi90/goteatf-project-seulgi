@@ -1,12 +1,10 @@
 package com.goteatfproject.appgot.service;
 
+import java.util.List;
+import java.util.Map;
 import com.goteatfproject.appgot.vo.Criteria;
 import com.goteatfproject.appgot.vo.Feed;
 import com.goteatfproject.appgot.vo.FeedAttachedFile;
-import com.goteatfproject.appgot.vo.Party;
-
-import java.util.List;
-import java.util.Map;
 
 public interface FeedService {
 
@@ -24,4 +22,7 @@ public interface FeedService {
   boolean delete(int no) throws Exception;
   FeedAttachedFile getFeedAttachedFile(int fileNo) throws Exception;
   boolean deleteFeedAttachedFile(int fileNo) throws Exception;
+
+  // 마이페이지 피드게시글 본인 작성 글 리스트
+  List<Map<String, Object>> selectFeedListByNo(Map<String, Object> map);
 }

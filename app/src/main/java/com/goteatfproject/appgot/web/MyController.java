@@ -68,7 +68,7 @@ public class MyController {
 
     Map<String, Object> map = new HashMap<>();
     map.put("cri", cri);
-    map.put("memberNumber", loginMember.getNo());
+    map.put("memberNo", loginMember.getNo());
 
 
     List<Map<String, Object>> myPartyList = partyService.selectPartyListByNo(map);
@@ -84,15 +84,21 @@ public class MyController {
 
   // 마이페이지-피드게시글 관리
   @GetMapping("/myFeedList")
-  public ModelAndView myFeedList(Criteria cri) throws Exception {
+  public ModelAndView myFeedList(Criteria cri, HttpSession session) throws Exception {
+
+    Member loginMember = (Member) session.getAttribute("loginMember");
 
     ModelAndView mv = new ModelAndView();
 
     PageMaker pageMaker = new PageMaker();
     pageMaker.setCri(cri);
-    pageMaker.setTotalCount(50);
+    pageMaker.setTotalCount(10);
 
-    List<Map<String, Object>> myFeedList = feedService.selectFeedList(cri);
+    Map<String, Object> map = new HashMap<>();
+    map.put("cri", cri);
+    map.put("memberNo", loginMember.getNo());
+
+    List<Map<String, Object>> myFeedList = feedService.selectFeedListByNo(map);
     mv.addObject("myFeedList", myFeedList);
     mv.addObject("pageMaker", pageMaker);
 
@@ -180,9 +186,9 @@ public class MyController {
   // 마이페이지 파티게시글 본인 작성 글 상세보기
   @GetMapping("/myPartyListDetail")
   public String myPartyListDetail(Model model, HttpSession session, int no) throws Exception {
-    
+
     Member loginMember = (Member) session.getAttribute("loginMember");
-    
+
 
     if (loginMember != null) {
       model.addAttribute("party", partyService.getMyPartyListDetail(no));

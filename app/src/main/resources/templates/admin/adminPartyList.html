@@ -54,26 +54,27 @@
       <h2 class="mt-4">파티게시물 관리</h2>
 
       <!--  테이블 부트스트랩   -->
+      <form action="partyBlocks" method="post">
       <table class="table table-hover">
         <thead>
         <tr>
           <th scope="col">번호</th>
           <th scope="col">제목</th>
-          <th scope="col">내용</th>
           <th scope="col">작성일</th>
           <th scope="col">조회수</th>
         </tr>
         </thead>
-        <tbody class="table-group-divider">
-        <tr th:each="adminPartylist : ${adminPartyLists}">
-          <th scope="row" th:text="${adminPartylist.no}"></th>
-          <td th:text="${adminPartylist.title}"></td>
-          <td th:text="${adminPartylist.content}"></td>
-          <td th:text="${adminPartylist.createDate}"></td>
-          <td th:text="${adminPartylist.viewCnt}"></td>
+        <tbody class="table-group-divider" id="checkedBlock">
+        <tr th:each="adminPartyList : ${adminPartyLists}">
+          <th scope="row"><input type="checkbox" name="selectBlock" th:value="${adminPartyList.no}" th:text="${adminPartyList.no}"></th>
+          <td><a href="" th:href="@{/admin/adminPartyListDetail(no=${adminPartyList.no})}" th:text="${adminPartyList.title}"></a></td>
+          <td th:text="${adminPartyList.createDate}"></td>
+          <td th:text="${adminPartyList.viewCnt}"></td>
         </tr>
         </tbody>
       </table>
+        <button type="button" value="비활성화" onclick="partyBlock()">비활성화</button>
+      </form>
 
       <!--  테이블 부트스트랩 end   -->
     </div>
@@ -114,6 +115,40 @@
 
 <!-- Core theme JS--> <!-- noticeList 왼쪽 사이드바 --> <!-- TODO 추가 - 6-->
 <script src="/js/notice/notice.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
+<!-- 파티게시물 체크박스 비활성화 -->
+<script>
+let checkedValue = [];
+
+// 비활성화 버튼 클릭시 partyBlock() 함수 실행
+function partyBlock(){
+    // $("#checkedBlock").find('input:checked') 체크박스의 checked 된 태그를 찾는다
+	  $("#checkedBlock").find('input:checked').each(function(index){
+	    // this = index (선택 된 태그)
+		  if($(this).is(":checked")==true){
+			  console.log($(this).val());
+			  checkedValue.push($(this).val());
+		  }
+		});
+	  
+	  console.log(checkedValue);
+	  partyBlockAjax();
+}
+
+function partyBlockAjax() {
+	$.ajax({
+	 type: "POST",
+	 url: "/admin/partyBlocks",
+	 data: {"checkedValue": checkedValue},
+	 success: function(result) {
+		 console.log(result);
+	 }
+	})
+}
+
+
+</script>
+<!-- 파티게시물 체크박스 비활성화 end -->
 </body>
 </html>

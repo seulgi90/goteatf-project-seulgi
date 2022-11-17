@@ -74,8 +74,8 @@
 <!--        <tr th:each="feed : ${feeds}">-->
         <tr th:each="feed : ${myFeedList}">
           <th scope="row" th:text="${feed.no}"></th>
-          <td th:text="${feed.title}"></td>
-          <td th:text="${feed.content}"></td>
+          <td><a href="" th:href="@{/my/myFeedListDetail(no=${feed.no})}" th:text="${feed.title}"></a></td>
+          <td th:text="${feed.date}"></td>
         </tr>
         </tbody>
       </table>

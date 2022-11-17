@@ -39,46 +39,77 @@
 <div class="a-example-divider"></div>
 <!---------------------------- 상세보기 ------------------------------>
 <form th:action="@{/party/update}" method="post" enctype="multipart/form-data">
-<table border='1'>
-  <input name="no" type="number" value="1" th:value="${party.no}" readonly hidden/>
-  <tr>
-    <th>제목</th><td><input name='title' type='text'
-                          value='제목'
-                          th:value="${party.title}"
-                          size='60'></td>
-  </tr>
-  <tr>
-    <th>내용</th><td><textarea id='content' name='content'></textarea></td>
-  </tr>
-  <tr>
-    <th>조회수</th><td th:text="${party.viewCnt}"></td>
-  </tr>
-  <tr>
-    <th>작성자</th><td th:text="${party.writer.nick}"></td>
-  </tr>
-  <tr>
-    <th>등록일</th><td th:date="${party.createDate}"></td>
-  </tr>
-<!------------ 파일첨부 ------------>
-  <tr>
-    <th>첨부파일</th>
-    <td>
-      <ul>
-        <li data-th-each="file : ${party.attachedFiles}">
-            <!-- {path} = path=${file.filepath} -->
-          <a href=""
-             data-th-href="@{files/{path}(path=${file.filepath})}"
-             data-th-text="${file.filepath}">test.gif</a>
-          [<a href="fileDelete?no=1"
-              data-th-href="@{fileDelete(no=${file.no})}">파일삭제</a>]
-        </li>
-      </ul>
-      파일 추가: <input name='files' type="file" multiple>
-    </td>
-  </tr>
-  <!------------ 파일첨부 end------------>
-</table>
+  <div class="container border rounded">
 
+    <!--1줄-->
+    <div class="row p-3">
+      <div class="col-2"  th:text="'[' + ${party.meal} + '파티]'">
+      </div>
+      <div class="col-2" th:text="'[' + ${party.food} + ']'">
+      </div>
+      <div class="col-2">
+      </div>
+      <div class="col-2" th:text="'(3' + '/' + ${party.max} + ')'">
+      </div>
+
+      <div class="col-2">
+        파티참여
+      </div>
+      <div class="col-2">
+  <input name="no" type="number" value="1" th:value="${party.no}" readonly hidden/>
+</div>
+</div>
+
+<!--2줄-->
+<div class="row p-3">
+  <div class="col"  th:text="${party.title}">
+  </div>
+</div>
+
+<!--3줄-->
+<div class="row p-3 border-bottom">
+  <div class="col-2" th:text="${party.writer.nick}">
+  </div>
+  <div class="col-2" th:text=" '조회수:' + ${party.viewCnt}">
+  </div>
+  <div class="col-2" th:text=" '작성일:' + ${party.createDate}">
+  </div>
+
+  </div>
+
+  <!--4줄-->
+  <div class="row p-3 border-bottom">
+    <div class="col">
+      <textarea id='content' name='content' th:text="${party.content}"></textarea>
+    </div>
+  </div>
+  <!--5줄-->
+  <div class="row p-3">
+    <div class="col">
+      참여조건
+    </div>
+  </div>
+  <!--6줄-->
+  <div class="row p-3">
+    <div class="col-3" th:text="'성별 : ' + '[' + ${party.gender} + ']'">
+    </div>
+    <div class="col-3" th:text="'연령대 : ' + '[' + ${party.age} + '대]'">
+    </div>
+  </div>
+  <!--7줄-->
+  <div class="row p-3">
+    <div class="col" th:text="'[' + ${#dates.createNowForTimeZone(party.time)} + '시]'">
+    </div>
+  </div>
+
+  <!--8줄-->
+  <div class="row p-3">
+    <div class="col-2"><p th:text="'장소명 : ' +'[' + ${party.location} + ']'"></p>
+    </div>
+    <div class="col-2" th:text="'주소 : ' +'[' + ${party.address} + ']'">
+    </div>
+  </div>
+</div>
   <button type="submit" class="btn btn-outline-secondary">변경</button>
   <button type="button" class="btn btn-outline-secondary"><a th:href="@{delete(no=${party.no})}">삭제</a></button>
 
@@ -89,7 +120,7 @@
 
 <!-- Comments Form TODO 댓글 1 -->
 <div class="card my-4">
-  <h5 class="card-header">Leave a Comment:</h5>
+  <h5 class="card-header">댓글</h5>
   <div class="card-body">
     <form name="comment-form" data-th-action="@{/party/comment}" method="post" autocomplete="off">
       <div class="form-group">
@@ -144,10 +175,11 @@ crossorigin="anonymous"></script>
     $('textarea[name=content]').summernote({
       toolbar:false,
       height: 600,
-      width:1200,
+      width: 600,
       minHeight : null,
       maxHeight : null,
-      disableDragAndDrop: true
+      disableDragAndDrop: true,
+      lang: "ko-KR",
     });
 
     $('textarea[name=content]').summernote('disable');

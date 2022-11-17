@@ -126,9 +126,10 @@
           <div class="col-8">
             <table class="table">
               <button type="button" class="btn btn-primary position-relative">
-                신규 파티게시글
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  22+
+              오늘 등록된 게시글
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                th:each="boardCount : ${newBoardCount}"
+                th:text="${boardCountStat.count}">
             <span class="visually-hidden">unread messages</span>
                 </span>
               </button>
