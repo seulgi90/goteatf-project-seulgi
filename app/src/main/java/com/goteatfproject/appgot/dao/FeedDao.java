@@ -44,4 +44,9 @@ public interface FeedDao {
 
   // 마이페이지-피드게시글 관리
   List<Map<String, Object>> selectFeedListByNo(Map<String, Object> map);
+
+  Feed findByMyFeedListDetail(int no);
+
+  //관리자페이지 이벤트게시글 비활성화
+  int feedBlock(int no);
 }

@@ -1,17 +1,14 @@
 package com.goteatfproject.appgot.service;
 
-import com.goteatfproject.appgot.dao.EventDao;
-import com.goteatfproject.appgot.dao.PartyDao;
-import com.goteatfproject.appgot.vo.AttachedFile;
-import com.goteatfproject.appgot.vo.Criteria;
-import com.goteatfproject.appgot.vo.Event;
-import com.goteatfproject.appgot.vo.Party;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Map;
+import com.goteatfproject.appgot.dao.EventDao;
+import com.goteatfproject.appgot.vo.AttachedFile;
+import com.goteatfproject.appgot.vo.Criteria;
+import com.goteatfproject.appgot.vo.Event;
 
 @Service
 public class DefaultEventService implements EventService {
@@ -19,6 +16,7 @@ public class DefaultEventService implements EventService {
   @Autowired
   EventDao eventDao;
 
+  @Override
   @Transactional
   public void add(Event event) throws Exception {
 
@@ -38,6 +36,7 @@ public class DefaultEventService implements EventService {
 
 
   //페이징
+  @Override
   public List<Map<String, Object>> selectEventList(Criteria cri) {
     return eventDao.selectEventList(cri);
   }
@@ -68,12 +67,33 @@ public class DefaultEventService implements EventService {
     return eventDao.delete(no) > 0;
   }
 
+  @Override
   public AttachedFile getAttachedFile(int fileNo) throws Exception {
     return eventDao.findFileByNo(fileNo);
   }
 
+  @Override
   public boolean deleteAttachedFile(int fileNo) throws Exception {
     return eventDao.deleteFile(fileNo) > 0;
+  }
+
+  // 마이페이지 본인 작성 글 리스트
+  @Override
+  public List<Map<String, Object>> selectEventList2(Map<String, Object> map) {
+    return eventDao.selectEventList2(map);
+  }
+
+  // 관리자페이지 이벤트게시글 전체 출력
+  @Override
+  public List<Map<String, Object>> selectEventList3(Criteria criteria) {
+    return eventDao.selectEventList3(criteria);
+  }
+
+  // 관리자페이지 이벤트게시글 비활성화
+  @Override
+  public boolean eventBlock(int no) {
+    return eventDao.eventBlock(no) > 0;
+
   }
 
 

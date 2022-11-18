@@ -44,7 +44,7 @@
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/}">사이트 바로가기</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminPartyList}">파티게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminFeedList}">피드게시물 관리</a>
-      <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">이벤트게시물 관리</a>
+       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminEventList}">이벤트게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminMemberList}">회원 관리</a>
     </div>
   </div>
@@ -54,27 +54,57 @@
       <h2 class="mt-4">피드게시물 관리</h2>
 
       <!--  테이블 부트스트랩   -->
+      <form action="feedBlocks" method="post">
       <table class="table table-hover">
         <thead>
         <tr>
           <th scope="col">번호</th>
           <th scope="col">제목</th>
-          <th scope="col">내용</th>
+          <th scope="col">닉네임</th>
+          <th scope="col">작성일</th>
         </tr>
         </thead>
-        <tbody class="table-group-divider">
-        <tr th:each="feed : ${feeds}">
-          <th scope="row" th:text="${feed.no}"></th>
-          <td th:text="${feed.title}"></td>
-          <td th:text="${feed.content}"></td>
+        <tbody class="table-group-divider" id="checkedBlock">
+        <tr th:each="adminFeedList : ${adminFeedLists}">
+          <th scope="row"><input type="checkbox" name="selectBlock" th:value="${adminFeedList.no}" th:text="${adminFeedList.no}"></th>
+          <td><a href="" th:href="@{/admin/admidFeedListDetail(no=${adminFeedList.no})}" th:text="${adminFeedList.title}"></a></td>
+          <td th:text="${adminFeedList.writer.nick}"></td>
+          <td th:text="${adminFeedList.date}"></td>
         </tr>
         </tbody>
       </table>
+        <button type="button" value="비활성화" onclick="feedBlock()">비활성화</button>
+      </form>
 
       <!--  테이블 부트스트랩 end   -->
     </div>
   </div>
 </div>
+
+<!-- 페이징 -->
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    <li class="page-item disabled" th:if="${pageMaker.prev}">
+      <a class="page-link"
+         th:href="@{adminFeedList(pageMaker.startPage-1)}" aria-label="Previous">
+        <span aria-hidden="true">이전페이지</span>
+      </a>
+    </li>
+    <th:block th:each="pageNum: ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+      <li class="page-item">
+        <a class="page-link" th:href="@{adminFeedList(page=${pageNum})}"><i th:text="${pageNum}"></i></a>
+      </li>
+    </th:block>
+    <li class="page-item" th:if="${pageMaker.next && pageMaker.endPage >0}">
+      <a class="page-link" th:href="@{adminFeedList(page=${pageMaker.endPage+1})}" aria-label="Next">
+        <span aria-hidden="true">다음페이지</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<!-- 페이징 end-->
 
 
 <!-------------------------------구분선-------------------------->
@@ -85,6 +115,40 @@
 
 <!-- Core theme JS--> <!-- noticeList 왼쪽 사이드바 --> <!-- TODO 추가 - 6-->
 <script src="/js/notice/notice.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
+<!-- 파티게시물 체크박스 비활성화 -->
+<script>
+let checkedValue = [];
+
+// 비활성화 버튼 클릭시 feedBlock() 함수 실행
+function feedBlock(){
+    // $("#checkedBlock").find('input:checked') 체크박스의 checked 된 태그를 찾는다
+	  $("#checkedBlock").find('input:checked').each(function(index){
+	    // this = index (선택 된 태그)
+		  if($(this).is(":checked")==true){
+			  console.log($(this).val());
+			  checkedValue.push($(this).val());
+		  }
+		});
+	  
+	  console.log(checkedValue);
+	  feedBlockAjax();
+}
+
+function feedBlockAjax() {
+	$.ajax({
+	 type: "POST",
+	 url: "/admin/feedBlocks",
+	 data: {"checkedValue": checkedValue},
+	 success: function(result) {
+		 console.log(result);
+		 window.location.href="/admin/adminFeedList"
+	 }
+	})
+}
+
+</script>
+<!-- 파티게시물 체크박스 비활성화 end -->
 </body>
 </html>

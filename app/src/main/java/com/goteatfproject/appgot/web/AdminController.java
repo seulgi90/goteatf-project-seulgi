@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import com.goteatfproject.appgot.service.EventService;
 import com.goteatfproject.appgot.service.FeedService;
 import com.goteatfproject.appgot.service.MemberService;
 import com.goteatfproject.appgot.service.PartyService;
@@ -23,15 +24,16 @@ public class AdminController {
 
   @Autowired
   MemberService memberService;
+
+  @Autowired
   PartyService partyService;
+
+  @Autowired
   FeedService feedService;
 
-  public AdminController(PartyService partyService, FeedService feedService,
-      MemberService memberService) {
-    this.partyService = partyService;
-    this.feedService = feedService;
-    this.memberService = memberService;
-  }
+  @Autowired
+  EventService eventService;
+
 
   // 관리자페이지 - 메인
   @GetMapping("/main")
@@ -45,15 +47,6 @@ public class AdminController {
     model.addAttribute("newBoardCount", partyService.newBoardCount());
     return "admin/adminMain";
   }
-
-  // 관리자페이지 - 파티게시글 관리
-  //  @GetMapping("/adminPartyList")
-  //  public String AdminPartylist(Model model) throws Exception {
-  //    model.addAttribute("parties", partyService.list());
-  //    //    model.getAttribute("parties");
-  //    //    System.out.println("parties data:" + model.getAttribute("parties")); // data 값 확인용
-  //    return "admin/adminPartyList";
-  //  }
 
   // 페이징 관리자페이지 파티게시글 관리
   @GetMapping("/adminPartyList")
@@ -86,14 +79,14 @@ public class AdminController {
     return "admin/adminPartyListDetail";
   }
 
-  // 관리자페이지 파티게시글 비활성화
+  // 관리자페이지 파티게시글 비활성화 선택
   @GetMapping("/partyBlock")
   public String partyBlock(int no) throws Exception {
     partyService.partyBlock(no);
-    return "admin/adminPartyList";
+    return "redirect:adminPartyList";
   }
 
-  // 관리자페이지 파티게시글 비활성화
+  // 관리자페이지 파티게시글 비활성화 선택
   @PostMapping("/partyBlocks")
   @ResponseBody
   public String partyBlocks(@RequestParam("checkedValue[]") int[] checkedValue) throws Exception {
@@ -107,14 +100,90 @@ public class AdminController {
     return "비활성화 성공";
   }
 
-  // 관리자페이지 - 피드게시글 관리
+  // 페이징 관리자페이지 피드게시글 관리
   @GetMapping("/adminFeedList")
-  public String adminFeedList(Model model) throws Exception {
-    model.addAttribute("adminFeedList", feedService.list());
-    //    model.getAttribute("feeds");
-    //    System.out.println("data:" + model.getAttribute("feeds"));
-    return "admin/adminFeedList";
+  public ModelAndView adminFeedList(Criteria cri) throws Exception {
+
+    ModelAndView mv = new ModelAndView();
+
+    PageMaker pageMaker = new PageMaker();
+    pageMaker.setCri(cri);
+    pageMaker.setTotalCount(50);
+
+    List<Map<String, Object>> adminFeedList = feedService.selectFeedList(cri);
+    mv.addObject("adminFeedLists", adminFeedList);
+    mv.addObject("pageMaker", pageMaker);
+
+    System.out.println("adminFeedList = " + adminFeedList);
+
+    mv.setViewName("admin/adminFeedList");
+
+    return mv;
   }
+
+  // 관리자페이지 피드게시글 비활성화 선택
+  @GetMapping("/feedBlock")
+  public String feedBlock(int no) throws Exception {
+    feedService.feedBlock(no);
+    return "redirect:adminFeedList";
+  }
+
+  // 관리자페이지 피드게시글 비활성화 선택
+  @PostMapping("/feedBlocks")
+  @ResponseBody
+  public String feedBlocks(@RequestParam("checkedValue[]") int[] checkedValue) throws Exception {
+    int valueLength = checkedValue.length;
+
+    for(int i=0; i < valueLength; i++) {
+      System.out.println(checkedValue[i]);
+      feedService.feedBlock(checkedValue[i]);
+    }
+
+    return "비활성화 성공";
+  }
+
+  // 페이징 관리자페이지 이벤트게시글 관리
+  @GetMapping("/adminEventList")
+  public ModelAndView adminEventList(Criteria cri) throws Exception {
+
+    ModelAndView mv = new ModelAndView();
+
+    PageMaker pageMaker = new PageMaker();
+    pageMaker.setCri(cri);
+    pageMaker.setTotalCount(50);
+
+    List<Map<String, Object>> adminEventList = eventService.selectEventList3(cri);
+    mv.addObject("adminEventLists", adminEventList);
+    mv.addObject("pageMaker", pageMaker);
+
+    System.out.println("adminEventList = " + adminEventList);
+
+    mv.setViewName("admin/adminEventList");
+
+    return mv;
+  }
+
+  // 관리자페이지 이벤트게시글 비활성화 선택
+  @GetMapping("/eventBlock")
+  public String eventBlock(int no) throws Exception {
+    eventService.eventBlock(no);
+    return "redirect:adminEventList";
+  }
+
+  // 관리자페이지 이벤트게시글 비활성화 선택
+  @PostMapping("/eventBlocks")
+  @ResponseBody
+  public String eventBlocks(@RequestParam("checkedValue[]") int[] checkedValue) throws Exception {
+    int valueLength = checkedValue.length;
+
+    for(int i=0; i < valueLength; i++) {
+      System.out.println(checkedValue[i]);
+      eventService.eventBlock(checkedValue[i]);
+    }
+
+    return "비활성화 성공";
+  }
+
 
   // 관리자페이지 - 회원 관리 + 검색기능 추가(keyword 파라미터로 받음)
   @GetMapping("/adminMemberList")
@@ -133,5 +202,19 @@ public class AdminController {
   public String adminMemberDetail(Model model, int no) throws Exception {
     model.addAttribute("member", memberService.getMemberDetail(no));
     return "admin/adminMemberDetail";
+  }
+
+  // 관리자페이지 회원 상세정보 비활성화 선택
+  @GetMapping("/memberBlock")
+  public String memberBlock(int no) throws Exception {
+    memberService.memberBlock(no);
+    return "redirect:adminMemberList";
+  }
+
+  //관리자페이지 회원 상세정보 활성화 선택
+  @GetMapping("/memberActive")
+  public String memberActive(int no) throws Exception {
+    memberService.memberActive(no);
+    return "redirect:adminMemberList";
   }
 }

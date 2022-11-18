@@ -41,13 +41,10 @@
         <a th:href="@{/my/main}" style="text-decoration-line: none; color: inherit;">마이페이지</a>
       </div>
       <div class="list-group list-group-flush">
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myProfile}">개인 정보
-          수정</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myPartyList}">파티게시물
-          관리</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myFeedList}">피드게시물
-          관리</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">참여내역</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myProfile}">개인 정보 수정</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myPartyList}">파티게시물 관리</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myFeedList}">피드게시물 관리</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myEventList}">이벤트게시물 관리</a>
         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">예약 내역</a>
         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">팔로우 관리</a>
         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">1:1 문의 내역</a>
@@ -97,7 +94,7 @@
               </tr>
             </table>
             <input type="hidden" id="password" name="password">
-              <button type="button" id="updateBtn">회원 정보 수정</button>
+              <button type="button" id="updateBtn">수정</button>
               <button type="button" id="deleteBtn">회원 탈퇴</button>
           </form>
           </div>
@@ -123,71 +120,79 @@
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
-    let currentPasswordCheck = false;
+  // 개인 정보 수정
+  $("#updateBtn").click(function () {
+  	let password = $("#currentPassword").val();
+  	let newPassword = $("#newPassword").val();
+  	let newPasswordCheck = $("#newPasswordCheck").val();
 
-    // 현재 패스워드 체크 비동기처리
-    $("#currentPassword").blur(function () {
-      let password = $("#currentPassword").val();
-      $.ajax({
-        type: "POST",
-        url: "/my/currentPassword",
-        data: { "password": password },
-        success: function (result) {
-          console.log(result);
-          if (result != 0) {
-            console.log("패스워드 일치");
-            currentPasswordCheck = true;
-          } else {
-            currentPasswordCheck = false;
-          }
-        },
-      });
-    });
-
-    $("#newPasswordCheck").blur(function () {
-      let newPassword = $("#newPassword").val();
-      let newPasswordCheck = $("#newPasswordCheck").val();
-      if (newPassword == newPasswordCheck) {
-        console.log("새 패스워드 일치");
+  	  // 현재 비밀번호 체크 비동기처리
+      if($("#newPassword").val() == '') {
+          if (password == "") {
+              Swal.fire({
+                      icon: 'error',
+                      title: '현재 비밀번호를 입력해주세요.',
+                    });
+            } else {
+              $.ajax({
+                type: "POST",
+                url: "/my/currentPassword",
+                data: { "password": password },
+                success: function (result) {
+                  console.log(result);
+                  if (result != 0) {
+                    console.log("비밀번호 일치");
+                    
+                    let currentPassword = $("#currentPassword").val();
+                    $("#password").attr("value", currentPassword);
+                    document.getElementById('updateForm').submit();
+                    
+                  } else {
+                    Swal.fire({
+                          icon: 'error',
+                          title: '현재 비밀번호가 일치하지 않습니다.',
+                    });
+                  }
+                },
+              });
+            }
+       // 현재 비밀번호 체크 비동기처리 end
+        
+      // 현재 비밀번호 체크 후 새 비밀번호 체크
+      } else if(newPassword == newPasswordCheck) {
+      	let newPassword = $("#newPassword").val();
+        $("#password").attr("value", newPassword);
+        document.getElementById('updateForm').submit();
       } else {
-        console.log("새 패스워드 불일치");
+      	 Swal.fire({
+               icon: 'error',
+               title: '새 비밀번호 불일치',
+             });
+         console.log("새 비밀번호 불일치");
       }
-    });
+  });
 
-    $("#updateBtn").click(function () {
-      if (currentPasswordCheck != false) {
-        if ($("#newPassword").val() == '') {
-          let currentPassword = $("#currentPassword").val();
-          $("#password").attr("value", currentPassword);
-          document.getElementById('updateForm').submit();
-        } else {
-          let newPassword = $("#newPassword").val();
-          $("#password").attr("value", newPassword);
-          document.getElementById('updateForm').submit();
-        }
-        console.log($("#password").val());
-        console.log(currentPasswordCheck);
-      } else {
+
+  // 회원 탈퇴(비활성화)
+  $("#deleteBtn").click(function () {
+    let memberNo = $("#memberNo").val();
+    if (currentPasswordCheck != false) {
+  	  $.ajax({
+  	        type: "post",
+  	        url: "/my/delete",
+  	        data: {"no": memberNo}, // 파라미터 :  파라미터 값
+  	        success: function (result) {
+  	          console.log(result);
+  	          window.location.href="/";
+  	        }
+  	      })
+    } else {
         Swal.fire({
-          icon: 'error',
-          title: '현재 비밀번호를 입력해주세요',
-<!--          text: 'Something went wrong!'-->
-        });
-      };
-    });
-
-    $("#deleteBtn").click(function () {
-      let memberNo = $("#memberNo").val();
-      $.ajax({
-        type: "post",
-        url: "/my/delete",
-        data: {"no": memberNo}, // 파라미터 :  파라미터 값
-        success: function (result) {
-          console.log(result);
-          window.location.href="/";
-        }
-      })
-    });
+            icon: 'error',
+            title: '현재 비밀번호를 입력해주세요',
+          });
+    }
+  });
 
   </script>
 </body>

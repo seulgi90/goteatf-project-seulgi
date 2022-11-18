@@ -11,6 +11,7 @@
     <result column="cont" property="content"/>
     <result column="date" property="date"/>
     <result column="thumbnail" property="thumbnail"/>
+    <result column="pub" property="pub"/>
 
     <association property="writer" javaType="member">
       <id column="mno" property="no"/>
@@ -53,21 +54,23 @@
 
   </select>
 
-<!--   페이징 리스트 -->
+<!--   페이징 리스트: 관리자페이지 리스트 출력 사용(f.pub = false 활성화) -->
   <select id="selectFeedList" resultMap="feedMap" parameterType="hashmap">
     <![CDATA[
-      select
-    f.fno,
-    m.mno,
-    m.nick,
-    m.addr,
-    f.title,
-    f.cont,
-    f.date,
-    f.thumbnail
+    select
+	    f.fno,
+	    m.mno,
+	    m.nick,
+	    m.addr,
+	    f.title,
+	    f.cont,
+	    f.date,
+	    f.thumbnail,
+	    f.pub
     from
-    feed f
+      feed f
     join member m on m.mno = f.mno
+     where f.pub = false 
       order by
       fno desc
       LIMIT #{pageStart}, #{perPageNum}
@@ -240,6 +243,29 @@
     LIMIT #{cri.pageStart}, #{cri.perPageNum}
     ]]>
   </select>
+  
+  <!-- 마이페이지 피드게시글 본인 작성 글 상세보기 -->
+  <select id="findByMyFeedListDetail" resultMap="feedMap">
+    select
+    f.fno,
+    m.mno,
+    m.nick,
+    m.addr,
+    f.title,
+    f.cont,
+    f.date,
+    f.thumbnail
+    from
+    feed f
+    join member m on m.mno = f.mno
+
+  </select>
+  
+   <!--관리자페이지 피드게시글 비활성화 (1: 비활성화)-->
+  <update id="feedBlock" parameterType="feed">
+    update feed set pub = true
+    where fno = #{no}
+  </update>
   
 </mapper>
 

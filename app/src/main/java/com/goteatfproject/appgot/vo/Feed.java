@@ -14,6 +14,7 @@ public class Feed {
   private String content;
   private Date date;
   private String thumbnail;
+  private boolean pub;
 
   private Member writer;
 

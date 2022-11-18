@@ -44,7 +44,7 @@
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/}">사이트 바로가기</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminPartyList}">파티게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminFeedList}">피드게시물 관리</a>
-      <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">이벤트게시물 관리</a>
+       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminEventList}">이벤트게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminMemberList}">회원 관리</a>
     </div>
   </div>
@@ -97,21 +97,21 @@
         </tr>
         <tr>
           <th scope="col">탈퇴여부</th>
-          <td th:text="${member.outState}"></td>
+          <td th:if="${member.outState == false}" th:text="N"></td>
+          <td th:if="${member.outState == true}" th:text="Y"></td>
         </tr>
         <tr>
           <th scope="col">탈퇴일</th>
           <td th:text="${member.outDate}"></td>
         </tr>
       </table>
+         <button type="button" class="btn btn-outline-secondary" th:if="${member.outState == false}"><a th:href="@{memberBlock(no=${member.no})}">비활성화</a></button>
+         <button type="button" class="btn btn-outline-secondary" th:if="${member.outState == true}"><a th:href="@{memberActive(no=${member.no})}">활성화</a></button>
       <!--  테이블 부트스트랩 end   -->
     </div>
   </div>
 </div>
-    <!—  테이블 부트스트랩 end   —>
-  </div>
-</div>
-</div>
+
 
 <!-- 페이징 -->
 

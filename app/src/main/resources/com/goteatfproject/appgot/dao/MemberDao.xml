@@ -16,6 +16,7 @@
     <result column="birth" property="birth"/>
     <result column="addr" property="address"/>
     <result column="intro" property="intro"/>
+    <result column="outstate" property="outState"/>
   </resultMap>
 
 
@@ -192,6 +193,8 @@
     select
     mno,
     name,
+    createddate,
+    outState,
     id
     from  member
     <!--  keyword=all 아니면 if문 실행 안됨  -->
@@ -212,12 +215,34 @@
     where mno=#{no} and pwd=sha2(#{password},256);
   </select>
 
-    <!--  마이페이지 개인 정보 수정 회원 탈퇴-->
+  <!--  마이페이지 개인 정보 수정 회원 탈퇴 -->
   <update id="delete" parameterType="member">
     update member set
     outstate = true,
     outdate = now()
     where mno=#{value};
+  </update>
+  
+  <!-- 관리자페이지 회원 비활성화 (1: 비활성화) -->
+  <update id="memberBlock" parameterType="member">
+    update
+      member
+    set
+      outstate = true,
+      outdate = now()
+    where 
+      mno = #{no}
+  </update>
+  
+  <!-- 관리자페이지 회원 활성화 (0: 비활성화) -->
+  <update id="memberActive" parameterType="member">
+    update 
+      member 
+    set 
+      outstate = false,
+      outdate = null
+    where 
+      mno = #{no}
   </update>
 
 </mapper>

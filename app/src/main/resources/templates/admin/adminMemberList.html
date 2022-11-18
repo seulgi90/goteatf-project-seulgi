@@ -44,7 +44,7 @@
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/}">사이트 바로가기</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminPartyList}">파티게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminFeedList}">피드게시물 관리</a>
-      <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">이벤트게시물 관리</a>
+       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminEventList}">이벤트게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminMemberList}">회원 관리</a>
     </div>
   </div>
@@ -58,9 +58,11 @@
       <table class="table table-hover">
         <thead>
         <tr>
-          <th scope="col">no</th>
-          <th scope="col">id</th>
-          <th scope="col">name</th>
+          <th scope="col">번호</th>
+          <th scope="col">아이디(이메일)</th>
+          <th scope="col">이름</th>
+          <th scope="col">가입일</th>
+          <th scope="col">활성화 상태</th>
         </tr>
         </thead>
         <tbody class="table-group-divider">
@@ -68,6 +70,9 @@
           <th scope="row" th:text="${member.no}"></th>
           <td><a href="" th:href="@{/admin/adminMemberDetail(no=${member.no})}" th:text="${member.id}"></a></td>
           <td th:text="${member.name}"></td>
+          <td th:text="${member.createdDate}"></td>
+          <td th:if="${member.outState == false}" th:value="${member.outState}">활성화</td>
+          <td th:if="${member.outState == true}" th:value="${member.outState}">비활성화</td>
         </tr>
         </tbody>
       </table>
@@ -115,8 +120,8 @@
         integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
         crossorigin="anonymous"></script>
 
- <!-- 회원 검색 keyword 조건 -->
 <script>
+  // 회원 검색 keyword 조건
   document.querySelector("#searchBtn").onclick = () => {
     search();
   };
@@ -129,7 +134,20 @@
     console.log(keyword);
     window.location.href = "/admin/adminMemberList?keyword=" + keyword;
   }
+  // 회원 검색 keyword 조건 end
+  
+  // 비활성화 회원의 행을 회색으로 변경
+  let tdLength = $(".table-group-divider").find("td").length;
+  
+  for(let i = 0; i < tdLength; i++){
+	   if($(".table-group-divider").find("td").eq(i).attr("value") == "true"){
+		   $(".table-group-divider").find("td").eq(i).parent().css({"background": "lightgray"});
+	   }
+  }
+  
+
+  
 </script>
- <!-- 회원 검색 keyword 조건 end -->
+
 </body>
 </html>

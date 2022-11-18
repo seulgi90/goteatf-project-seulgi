@@ -1,9 +1,9 @@
 package com.goteatfproject.appgot.dao;
 
-import com.goteatfproject.appgot.vo.Member;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import com.goteatfproject.appgot.vo.Member;
 
 @Mapper
 public interface MemberDao {
@@ -54,6 +54,12 @@ public interface MemberDao {
 
   // 관리자페이지 회원리스트 정보검색
   List<Member> searchMember(String keyword);
+
+  // 관리자페이지 비활성화 
+  int memberBlock(int no);
+
+  // 관리자페이지 활성화
+  int memberActive(int no);
 
 
 }

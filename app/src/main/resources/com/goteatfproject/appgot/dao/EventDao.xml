@@ -56,12 +56,7 @@
     (#{writer.no}, #{title}, #{content},  #{date},  #{location},    #{address},  now(), #{thumbnail} )
   </insert>
 
-
-
-
-
-  <!--페이징 목록-->
-
+    <!--페이징 목록 -->
   <select id="selectEventList" resultMap="eventMap" parameterType="hashmap">
     <![CDATA[
   select
@@ -78,14 +73,67 @@
   e.thumbnail
 
   from event e
-
+  
   join member m on e.mno = m.mno
    order by
       eno desc
       LIMIT #{pageStart}, #{perPageNum}
       ]]>
-
   </select>
+
+  <!--페이징 목록: 마이페이지 본인 작성 글 리스트 출력 사용-->
+  <select id="selectEventList2" resultMap="eventMap" parameterType="hashmap">
+    <![CDATA[
+  select
+  e.eno,
+  m.mno,
+  e.title,
+  e.cont,
+  e.date,
+  e.loc,
+  e.addr,
+  e.viewcnt,
+  e.pub,
+  e.createdate,
+  e.thumbnail
+
+  from event e
+  
+  join member m on e.mno = m.mno
+  where m.mno =#{memberNo}
+   order by
+      eno desc
+      LIMIT #{cri.pageStart}, #{cri.perPageNum}
+      ]]>
+  </select>
+  
+  <!--페이징 목록: 관리자페이지 리스트 출력 사용-->
+  <select id="selectEventList3" resultMap="eventMap" parameterType="hashmap">
+    <![CDATA[
+  select
+  e.eno,
+  m.mno,
+  m.nick,
+  e.title,
+  e.cont,
+  e.date,
+  e.loc,
+  e.addr,
+  e.viewcnt,
+  e.pub,
+  e.createdate,
+  e.thumbnail
+
+  from event e
+  
+  join member m on e.mno = m.mno
+  where e.pub = false
+   order by
+      eno desc
+      LIMIT #{pageStart}, #{perPageNum}
+      ]]>
+  </select>
+  
 
   <select id="findByNo" resultMap="eventMap">
     select
@@ -117,11 +165,6 @@
     delete from event
     where eno = #{value}
   </delete>
-
-
-
-
-
 
 
   <insert id="insertFiles" parameterType="event">
@@ -171,6 +214,12 @@
     delete from event_file
     where eno in (select eno from event where mno = #{value})
   </delete>
+  
+   <!--관리자페이지 이벤트게시글 비활성화 (1: 비활성화)-->
+  <update id="eventBlock" parameterType="event">
+    update event set pub = true
+    where eno = #{no}
+  </update>
 
 
 </mapper>

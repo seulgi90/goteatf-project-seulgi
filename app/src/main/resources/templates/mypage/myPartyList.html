@@ -45,8 +45,7 @@
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myProfile}">개인 정보 수정</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myPartyList}">파티게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myFeedList}">피드게시물 관리</a>
-      <a class="list-group-item list-group-item-action list-group-item-light p-3"
-         href="">참여내역</a>
+      <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myEventList}">이벤트게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3"
          href="">예약 내역</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3"
@@ -94,7 +93,7 @@
   <ul class="pagination justify-content-center">
     <li class="page-item disabled" th:if="${pageMaker.prev}">
       <a class="page-link"
-         th:href="@{list(pageMaker.startPage-1)}" aria-label="Previous">
+         th:href="@{myPartyList(pageMaker.startPage-1)}" aria-label="Previous">
         <span aria-hidden="true">이전페이지</span>
       </a>
     </li>
@@ -105,7 +104,7 @@
       </li>
     </th:block>
     <li class="page-item" th:if="${pageMaker.next && pageMaker.endPage >0}">
-      <a class="page-link" th:href="@{list(page=${pageMaker.endPage+1})}" aria-label="Next">
+      <a class="page-link" th:href="@{myPartyList(page=${pageMaker.endPage+1})}" aria-label="Next">
         <span aria-hidden="true">다음페이지</span>
       </a>
     </li>

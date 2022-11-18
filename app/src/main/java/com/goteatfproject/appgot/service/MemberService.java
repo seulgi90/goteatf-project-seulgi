@@ -1,7 +1,7 @@
 package com.goteatfproject.appgot.service;
 
-import com.goteatfproject.appgot.vo.Member;
 import java.util.List;
+import com.goteatfproject.appgot.vo.Member;
 
 public interface MemberService {
 
@@ -38,18 +38,22 @@ public interface MemberService {
 
   // 마이페이지 회원 정보 자기소개 수정
   boolean updateIntro(Member member) throws Exception;
-  
+
   // 관리자페이지 전체회원 limit 10;
   List<Member> MemberList() throws Exception;
-  
+
   // 관리자페이지 신규회원 limit 10;
   List<Member> NewMemberList() throws Exception;
-  
+
   // 관리자페이지 회원 상세정보
   Member getMemberDetail(int no) throws Exception;
-  
+
   // 관리자페이지 회원리스트 정보검색
   List<Member> getSearchMember(String keyword);
-  
+
+  boolean memberBlock(int no);
+
+  boolean memberActive(int no);
+
 
 }

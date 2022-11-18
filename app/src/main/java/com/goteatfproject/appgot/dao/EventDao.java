@@ -1,14 +1,11 @@
 package com.goteatfproject.appgot.dao;
 
+import java.util.List;
+import java.util.Map;
+import org.apache.ibatis.annotations.Mapper;
 import com.goteatfproject.appgot.vo.AttachedFile;
 import com.goteatfproject.appgot.vo.Criteria;
 import com.goteatfproject.appgot.vo.Event;
-import com.goteatfproject.appgot.vo.Party;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface EventDao {
@@ -35,5 +32,12 @@ public interface EventDao {
 
   int deleteFilesByMemberEvents(int memberNo);
 
+  // 마이페이지 본인 작성 글 리스트
+  List<Map<String, Object>> selectEventList2(Map<String, Object> map);
 
+  //관리자페이지 본인 작성 글 리스트
+  List<Map<String, Object>> selectEventList3(Criteria cri);
+
+  //관리자페이지 이벤트게시글 비활성화
+  int eventBlock(int no);
 }

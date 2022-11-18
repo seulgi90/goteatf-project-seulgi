@@ -100,4 +100,16 @@ public class DefaultFeedService implements FeedService {
   public List<Map<String, Object>> selectFeedListByNo(Map<String, Object> map) {
     return feedDao.selectFeedListByNo(map);
   }
+
+  // 마이페이지 피드게시글 인 작성 글 상세보기
+  @Override
+  public Feed getMyFeedListDetail(int no) throws Exception {
+    return feedDao.findByMyFeedListDetail(no);
+  }
+
+  //관리자페이지 피드게시글 비활성화
+  @Override
+  public boolean feedBlock(int no) {
+    return feedDao.feedBlock(no) > 0;
+  }
 }
