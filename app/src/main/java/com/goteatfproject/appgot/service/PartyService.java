@@ -43,6 +43,7 @@ public interface PartyService {
   List<Map<String, Object>> selectPartyListByNo(Map<String, Object> map);
 
   // 마이페이지 파티게시글 본인 작성 글 상세보기
+  // 관리자페이지 파티게시글 회원 작성 글 상세보기
   Party getMyPartyListDetail(int no) throws Exception;
 
   // 관리자페이지 파티게시글 비활성화

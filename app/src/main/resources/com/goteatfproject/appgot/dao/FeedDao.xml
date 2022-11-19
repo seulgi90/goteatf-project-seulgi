@@ -245,6 +245,7 @@
   </select>
   
   <!-- 마이페이지 피드게시글 본인 작성 글 상세보기 -->
+  <!-- 관리자페이지 피드게시글 회원 작성 글 상세보기 -->
   <select id="findByMyFeedListDetail" resultMap="feedMap">
     select
     f.fno,
@@ -258,7 +259,8 @@
     from
     feed f
     join member m on m.mno = f.mno
-
+    where
+    f.fno = #{value}
   </select>
   
    <!--관리자페이지 피드게시글 비활성화 (1: 비활성화)-->

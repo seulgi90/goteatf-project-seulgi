@@ -45,8 +45,10 @@ public interface FeedDao {
   // 마이페이지-피드게시글 관리
   List<Map<String, Object>> selectFeedListByNo(Map<String, Object> map);
 
+  // 마이페이지 피드게시글 본인 작성 글 상세보기
+  // 관리자페이지 피드게시글 회원 작성 글 상세보기
   Feed findByMyFeedListDetail(int no);
 
-  //관리자페이지 이벤트게시글 비활성화
+  // 관리자페이지 이벤트게시글 비활성화
   int feedBlock(int no);
 }

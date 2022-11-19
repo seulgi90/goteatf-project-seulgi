@@ -72,7 +72,7 @@ public class AdminController {
 
   // 관리자페이지 파티게시글 회원 작성 글 상세보기
   @GetMapping("/adminPartyListDetail")
-  public String myPartyListDetail(Model model, int no) throws Exception {
+  public String adminPartyListDetail(Model model, int no) throws Exception {
 
     model.addAttribute("party", partyService.getMyPartyListDetail(no));
 
@@ -119,6 +119,16 @@ public class AdminController {
     mv.setViewName("admin/adminFeedList");
 
     return mv;
+  }
+
+  // 관리자페이지 피드게시글 회원 작성 글 상세보기
+  @GetMapping("/adminFeedListDetail")
+  public String adminFeedListDetail(Model model, int no) throws Exception {
+
+    model.addAttribute("feed", feedService.getMyFeedListDetail(no));
+    System.out.println("model.getAttribute(\"feed\") = " + model.getAttribute("feed"));
+
+    return "admin/adminFeedListDetail";
   }
 
   // 관리자페이지 피드게시글 비활성화 선택

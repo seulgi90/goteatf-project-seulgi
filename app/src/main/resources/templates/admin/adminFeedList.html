@@ -67,7 +67,7 @@
         <tbody class="table-group-divider" id="checkedBlock">
         <tr th:each="adminFeedList : ${adminFeedLists}">
           <th scope="row"><input type="checkbox" name="selectBlock" th:value="${adminFeedList.no}" th:text="${adminFeedList.no}"></th>
-          <td><a href="" th:href="@{/admin/admidFeedListDetail(no=${adminFeedList.no})}" th:text="${adminFeedList.title}"></a></td>
+          <td><a href="" th:href="@{/admin/adminFeedListDetail(no=${adminFeedList.no})}" th:text="${adminFeedList.title}"></a></td>
           <td th:text="${adminFeedList.writer.nick}"></td>
           <td th:text="${adminFeedList.date}"></td>
         </tr>
