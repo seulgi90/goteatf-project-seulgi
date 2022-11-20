@@ -1,8 +1,5 @@
 package com.goteatfproject.appgot.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonFormat.Shape;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 import java.util.List;
 import lombok.Getter;
@@ -22,9 +19,6 @@ public class Party {
   private String gender;
   private int max;
 
-//  @DateTimeFormat(iso = ISO.DATE, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-//  @JsonProperty("time")
-//  @JsonFormat(shape= Shape.STRING, pattern="yyyy-MM-dd", timezone="Asia/Seoul")
   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
 //  @JsonProperty("time")
 //  @JsonFormat(shape= Shape.STRING, pattern="yyyy-MM-dd", timezone="Asia/Seoul")
@@ -45,11 +39,4 @@ public class Party {
 
   private Comment commentList;
 
-  public List<AttachedFile> getAttachedFiles() {
-    return attachedFiles;
-  }
-
-  public void setAttachedFiles(List<AttachedFile> attachedFiles) {
-    this.attachedFiles = attachedFiles;
-  }
 }

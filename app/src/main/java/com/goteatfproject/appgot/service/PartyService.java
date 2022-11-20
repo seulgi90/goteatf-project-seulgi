@@ -24,20 +24,11 @@ public interface PartyService {
   AttachedFile getAttachedFile(int fileNo) throws Exception;
   boolean deleteAttachedFile(int fileNo) throws Exception;
 
-
-
   // 관리자 페이지 이벤트+피드+파티 게시글 조회
   List<Board> listAll() throws Exception;
 
   // 관리자 페이지 이벤트+피드+파티 오늘 등록된 게시글 개수
   List<Board> newBoardCount() throws Exception;
-
-  // 댓글 테스트
-  public void insertComment(Comment comment) throws Exception;
-
-  public List<Comment> getCommentList(Comment comment) throws Exception;
-
-  boolean updateComment(Comment comment) throws Exception;
 
   // 마이페이지 파티게시글 본인 작성 글 리스트
   List<Map<String, Object>> selectPartyListByNo(Map<String, Object> map);
@@ -48,4 +39,19 @@ public interface PartyService {
 
   // 관리자페이지 파티게시글 비활성화
   boolean partyBlock(int no) throws Exception;
+
+  // 댓글 등록
+  public void insertComment(Comment comment) throws Exception;
+
+  // 댓글 리스트 출력
+  public List<Comment> getCommentList(Comment comment) throws Exception;
+
+  // 댓글 수정
+  boolean updateComment(Comment comment) throws Exception;
+
+  // 댓글 삭제
+  boolean deleteComment(int no) throws Exception;
+
+  //마이페이지 파티게시글 강제삭제
+  boolean allDelete(int no);
 }

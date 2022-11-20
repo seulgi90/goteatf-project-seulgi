@@ -49,6 +49,7 @@ public class DefaultMemberService implements MemberService {
   public Member profileByNick(String nick) throws Exception {
     return memberDao.profileByNick(nick);
   }
+  // 밑에는 피드의 사용 기능 마지막
 
   // 마이페이지 현재 패스워드 확인
   @Override
@@ -62,11 +63,17 @@ public class DefaultMemberService implements MemberService {
     return memberDao.update(member) > 0;
   }
 
+  //마이페이지 개인 정보 수정(새 패스워드 없을때) -- 1120 추가
+  @Override
+  public boolean update2(Member member) throws Exception {
+    return memberDao.update2(member) > 0;
+  }
+
   // 마이페이지 회원 삭제
   @Transactional
   @Override
   public boolean delete(int no) throws Exception {
-    return memberDao.delete(no) > 0; 
+    return memberDao.delete(no) > 0;
   }
 
   // 마이페이지 회원 정보 프로필 사진 수정
@@ -87,7 +94,7 @@ public class DefaultMemberService implements MemberService {
     return memberDao.findByMember();
   }
 
-  // 관리자페이지 신규회원 limit 10;
+  //관리자페이지 오늘 가입한 신규회원;
   @Override
   public List<Member> NewMemberList() throws Exception {
     return memberDao.findByNewMember();

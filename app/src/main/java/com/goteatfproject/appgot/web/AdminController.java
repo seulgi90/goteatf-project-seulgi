@@ -24,16 +24,12 @@ public class AdminController {
 
   @Autowired
   MemberService memberService;
-
   @Autowired
   PartyService partyService;
-
   @Autowired
   FeedService feedService;
-
   @Autowired
   EventService eventService;
-
 
   // 관리자페이지 - 메인
   @GetMapping("/main")
@@ -47,6 +43,7 @@ public class AdminController {
     model.addAttribute("newBoardCount", partyService.newBoardCount());
     return "admin/adminMain";
   }
+
 
   // 페이징 관리자페이지 파티게시글 관리
   @GetMapping("/adminPartyList")
@@ -96,7 +93,6 @@ public class AdminController {
       System.out.println(checkedValue[i]);
       partyService.partyBlock(checkedValue[i]);
     }
-
     return "비활성화 성공";
   }
 
@@ -138,7 +134,7 @@ public class AdminController {
     return "redirect:adminFeedList";
   }
 
-  // 관리자페이지 피드게시글 비활성화 선택
+  // 관리자페이지 피드게시글 비활성화 체크박스 선택
   @PostMapping("/feedBlocks")
   @ResponseBody
   public String feedBlocks(@RequestParam("checkedValue[]") int[] checkedValue) throws Exception {
@@ -173,6 +169,16 @@ public class AdminController {
     return mv;
   }
 
+  // 관리자페이지 이벤트게시글 상세보기
+  @GetMapping("/adminEventListDetail")
+  public String adminEventListDetail(Model model, int no) throws Exception {
+
+    model.addAttribute("event", eventService.getAdminEventListDetail(no));
+    System.out.println("model.getAttribute(\"event\") = " + model.getAttribute("event"));
+
+    return "admin/adminEventListDetail";
+  }
+
   // 관리자페이지 이벤트게시글 비활성화 선택
   @GetMapping("/eventBlock")
   public String eventBlock(int no) throws Exception {
@@ -193,7 +199,6 @@ public class AdminController {
 
     return "비활성화 성공";
   }
-
 
   // 관리자페이지 - 회원 관리 + 검색기능 추가(keyword 파라미터로 받음)
   @GetMapping("/adminMemberList")

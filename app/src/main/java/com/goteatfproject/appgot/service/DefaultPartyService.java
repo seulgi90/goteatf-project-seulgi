@@ -101,23 +101,6 @@ public class DefaultPartyService implements PartyService {
     return boardDao.newBoardCount();
   }
 
-  // 댓글 테스트
-  @Override
-  public void insertComment(Comment comment) throws Exception {
-    partyDao.insertComment(comment);
-  }
-
-  @Override
-  public List<Comment> getCommentList(Comment comment) throws Exception {
-    return partyDao.selectCommentList(comment);
-  }
-
-  @Override
-  public boolean updateComment(Comment comment) throws Exception {
-
-    return partyDao.updateComment(comment) != 0; // 넘어오는 값이 0이 아니면 true, 0이면 false
-  }
-
   // 마이페이지 파티게시글 본인 글 리스트
   @Override
   public List<Map<String, Object>> selectPartyListByNo(Map<String, Object> map) {
@@ -135,5 +118,35 @@ public class DefaultPartyService implements PartyService {
   @Override
   public boolean partyBlock(int no) throws Exception {
     return partyDao.partyBlock(no) > 0;
+  }
+
+  // 댓글 등록
+  @Override
+  public void insertComment(Comment comment) throws Exception {
+    partyDao.insertComment(comment);
+  }
+
+  // 댓글 리스트 출력
+  @Override
+  public List<Comment> getCommentList(Comment comment) throws Exception {
+    return partyDao.selectCommentList(comment);
+  }
+
+  // 댓글 수정
+  @Override
+  public boolean updateComment(Comment comment) throws Exception {
+    return partyDao.updateComment(comment) != 0; // 넘어오는 값이 0이 아니면 true, 0이면 false
+  }
+
+  // 댓글 삭제
+  @Override
+  public boolean deleteComment(int no) throws Exception {
+    return partyDao.deleteComment(no) > 0;
+  }
+
+  // 마이페이지 피드게시글 강제삭제 -- 1120 추가
+  @Override
+  public boolean allDelete(int no) {
+    return partyDao.allDelete(no) > 0;
   }
 }

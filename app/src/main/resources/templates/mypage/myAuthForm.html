@@ -10,9 +10,8 @@
     <!-- TODO 추가 - 2 같지만 수정 -->
     <!-- Core theme CSS (includes Bootstrap)-->
     <!-- TODO 추가 - 1 -->
-    <link href="/css/notice/noticeStyles.css" rel="stylesheet" />
-  </head>
-  <body>
+    <link href="/css/notice/noticeStyles.css" rel="stylesheet" />undefined
+  </head>undefined<body>
     <!-------------------------------구분선-------------------------->
     <div class="b-example-divider"></div>
     <!------------------------------header------------------------------>
@@ -50,47 +49,12 @@
           <div class="row">
             <div class="col-12 border">
               <!-- 개인 상세 정보 -->
-              <form action="update" id="updateForm" method="post">
-                <table class="table table-hover">
-                  <tr>
-                    <th>번호</th>
-                    <td>
-                      <input id="memberNo" name='no' type='number' data-th-value="${member.no}" readonly>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>아이디</th>
-                    <td>
-                      <input name='id' type='email' data-th-value="${member.id}" readonly>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>이름</th>
-                    <td>
-                      <input name='name' type='text' data-th-value="${member.name}">
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>닉네임</th>
-                    <td>
-                      <input name='nick' type='text' data-th-value="${member.nick}">
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>새 패스워드</th>
-                    <td>
-                      <input id="newPassword" name='password' type='password'>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>새 패스워드 확인</th>
-                    <td>
-                      <input id="newPasswordCheck" name='newPasswordCheck' type='password'>
-                    </td>
-                  </tr>
-                </table>
-                <button type="button" id="updateBtn">수정</button>
-                <button type="button" id="deleteBtn">회원 탈퇴</button>
+              <p>본인 확인을 위해 현재 사용하고 있는 비밀번호를 한 번 더 입력해주세요.</p>
+              <form action="currentPassword" id="currentPasswordForm" method="post">
+              <table>
+                <input type="password" id="password" name="password"/>
+              </table>
+                <button type="button" id="passwordCheckBtn">확인하기</button>
               </form>
             </div>
           </div>
@@ -107,43 +71,25 @@
     <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-      // 개인 정보 수정
-      // 현재 패스워드를 서버와 통신해서 일치여부 확인하는 변수
-
-      let passwordCheck = false;
-      $("#updateBtn").click(function() {
-        let newPassword = $("#newPassword").val(); // 새 패스워드
-        let newPasswordCheck = $("#newPasswordCheck").val(); // 새 패스워드 확인
-
-        // 새 패스워드와 새 패스워드 확인값이 일치하지 않고
-        if (newPassword != newPasswordCheck){
-          console.log('새 비밀번호 불일치');
+    $("#passwordCheckBtn").click(function(){
+    	let currentPassword = $("#password").val();
+    	$.ajax({
+    		type:"POST",
+    		url:"/my/currentPassword",
+    		data:{"password":currentPassword},
+    		success:function(result) {
+    			if (result != 0) {
+            console.log("비밀번호 일치");
+            window.location.href="/my/myProfile";
+          } else {
             Swal.fire({
-                icon: 'error',
-                title: '새 비밀번호 불일치',
-              });
-              console.log("새 비밀번호 불일치");
-        } else if (newPassword == newPasswordCheck){
-         document.getElementById('updateForm').submit();
-        }
-      });
-
-      
-      // 회원 탈퇴(비활성화)
-      $("#deleteBtn").click(function() {
-        let memberNo = $("#memberNo").val();
-          $.ajax({
-            type: "post",
-            url: "/my/delete",
-            data: {
-              "no": memberNo
-            }, // 파라미터 :  파라미터 값
-            success: function(result) {
-              console.log(result);
-              window.location.href = "/";
-            }
-          })
-      });
+              icon: 'error',
+              title: '현재 비밀번호가 일치하지 않습니다.',
+            });
+          }
+    		}
+    	});
+    });
     </script>
   </body>
 </html>

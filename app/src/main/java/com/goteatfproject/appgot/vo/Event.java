@@ -1,12 +1,11 @@
 package com.goteatfproject.appgot.vo;
 
+import java.util.Date;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import java.util.Date;
-import java.util.List;
 
 @Getter @Setter @ToString
 public class Event {

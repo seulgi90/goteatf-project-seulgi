@@ -41,13 +41,6 @@ public interface PartyDao {
 
   int deleteFilesByMemberParties(int memberNo);
 
-  // 댓글 테스트
-  public void insertComment(Comment comment);
-
-  public List<Comment> selectCommentList(Comment comment);
-
-  int updateComment(Comment comment);
-
   // 마이페이지 파티게시글 본인 작성 글 리스트
   List<Map<String, Object>> selectPartyListByNo(Map<String, Object> map);
 
@@ -57,4 +50,20 @@ public interface PartyDao {
 
   // 관리자페이지 파티게시글 비활성화
   int partyBlock(int no);
+
+  // 댓글 등록
+  public void insertComment(Comment comment);
+
+  // 댓글 리스트 출력
+  public List<Comment> selectCommentList(Comment comment);
+
+  // 댓글 수정
+  int updateComment(Comment comment);
+
+  // 댓글 삭제
+  int deleteComment(int no);
+
+  // 마이페이지 파티게시글 연쇄삭제
+  int allDelete(int no);
+
 }

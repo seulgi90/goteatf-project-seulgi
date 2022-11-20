@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.goteatfproject.appgot.dao.MemberDao">
 
   <!-- 자바 객체의 프로퍼티와 컬럼 이름을 연결한다. -->
@@ -11,20 +11,18 @@
     <result column="id" property="id"/>
     <result column="createddate" property="createdDate"/>
     <result column="nick" property="nick"/>
-    <result column="intro" property="intro"/>
-    <result column="thumbnail" property="thumbnail"/>
     <result column="birth" property="birth"/>
     <result column="addr" property="address"/>
     <result column="intro" property="intro"/>
+    <result column="thumbnail" property="thumbnail"/>
     <result column="outstate" property="outState"/>
   </resultMap>
-
 
   <insert id="insert" useGeneratedKeys="true" parameterType="member">
     insert into member (id, pwd, name, nick, birth, tel, gender, createddate, post,
     addr, subaddr, interest, intro, thumbnail)
     values(#{id}, sha2(#{password},256), #{name}, #{nick}, #{birth}, #{tel}, #{gender}, now(),
-    #{post}, #{address}, #{subAddr}, #{interest}, #{intro}, 'jj.png') <!-- jj.png 마이프로필 기본 이미지 -->
+    #{post}, #{address}, #{subAddr}, #{interest}, #{intro}, 'jj.png')
   </insert>
 
   <!-- 회원상세정보 -->
@@ -42,16 +40,16 @@
     where
     mno=#{value}
   </select>
-
+  
   <select id="findAll" resultMap="memberMap">
-    select
-    mno,
-    name,
-    id      <!-- TODO email -> id 수정  -->
-    from
-    member
-    order by
-    mno
+    select 
+      mno,
+      name,
+      id      <!-- TODO email -> id 수정  -->
+    from 
+      member
+    order by 
+      mno
   </select>
 
   <!--   로그인 +  탈퇴 ( outstate = 0 회원 활성화 / outstate = 1 회원 비활성화)-->
@@ -68,7 +66,6 @@
     and outstate=0
   </select>
 
-
   <!-- 마이페이지 개인 정보 수정 -->
   <update id="update" parameterType="Member">
     update member set
@@ -76,6 +73,17 @@
     id=#{id},
     nick=#{nick},
     pwd=sha2(#{password},256)
+    where
+    mno=#{no}
+  </update>
+  
+    <!-- 마이페이지 개인 정보 수정(새 패스워드 없을때) -->
+    <!-- 1120 추가 -->
+  <update id="update2" parameterType="Member">
+    update member set
+    name=#{name},
+    id=#{id},
+    nick=#{nick}
     where
     mno=#{no}
   </update>
@@ -97,7 +105,6 @@
   </update>
 
   <!--  밑에서부턴 피드에서 필요해서 사용하는 쿼리  -->
-
   <!-- 랜덤 유저 리스트 조회 (팔로우 박스) -->
   <select id="userList" resultMap="memberMap">
     select
@@ -119,7 +126,7 @@
     birth,
     gender,
     interest,
-    intro,
+    intro
     thumbnail
     from member
     where mno=#{mno}
@@ -140,7 +147,7 @@
     from member
     where nick=#{nick}
   </select>
-
+  <!--  밑에서부턴 피드에서 필요해서 사용하는 쿼리 마지막 -->
 
   <!-- 관리자페이지 전체회원 limit 10 -->
   <select id="findByMember" resultMap="memberMap">
@@ -155,17 +162,18 @@
     limit 10;
   </select>
 
-  <!-- 관리자페이지 신규회원 limit 10; -->
+  <!-- 관리자페이지 오늘 가입한 신규회원 -->
+   <!-- 1120 추가 -->
   <select id="findByNewMember" resultMap="memberMap">
     select
-    mno,
-    name,
-    id,
-    addr
+	    mno,
+	    name,
+	    id,
+	    addr
     from member
+    where createddate = curdate()
     order by
     mno desc
-    limit 10;
   </select>
 
   <!-- 관리자페이지 회원 상세정보 -->
@@ -222,27 +230,27 @@
     outdate = now()
     where mno=#{value};
   </update>
-  
+
   <!-- 관리자페이지 회원 비활성화 (1: 비활성화) -->
   <update id="memberBlock" parameterType="member">
     update
-      member
+    member
     set
-      outstate = true,
-      outdate = now()
-    where 
-      mno = #{no}
+    outstate = true,
+    outdate = now()
+    where
+    mno = #{no}
   </update>
-  
+
   <!-- 관리자페이지 회원 활성화 (0: 비활성화) -->
   <update id="memberActive" parameterType="member">
-    update 
-      member 
-    set 
-      outstate = false,
-      outdate = null
-    where 
-      mno = #{no}
+    update
+    member
+    set
+    outstate = false,
+    outdate = null
+    where
+    mno = #{no}
   </update>
 
 </mapper>

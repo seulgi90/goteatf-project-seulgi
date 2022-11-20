@@ -96,5 +96,11 @@ public class DefaultEventService implements EventService {
 
   }
 
+  // 관리자페이지 이벤트게시글 상세보기
+  @Override
+  public Event getAdminEventListDetail(int no) {
+    return eventDao.findByAdminEventListDetail(no);
+  }
+
 
 }

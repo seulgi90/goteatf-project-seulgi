@@ -44,7 +44,7 @@
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/}">사이트 바로가기</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminPartyList}">파티게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminFeedList}">피드게시물 관리</a>
-       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminEventList}">이벤트게시물 관리</a>
+      <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminEventList}">이벤트게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/admin/adminMemberList}">회원 관리</a>
     </div>
   </div>
@@ -55,24 +55,24 @@
 
       <!--  테이블 부트스트랩   -->
       <form action="partyBlocks" method="post">
-      <table class="table table-hover">
-        <thead>
-        <tr>
-          <th scope="col">번호</th>
-          <th scope="col">제목</th>
-          <th scope="col">닉네임</th>
-          <th scope="col">작성일</th>
-        </tr>
-        </thead>
-        <tbody class="table-group-divider" id="checkedBlock">
-        <tr th:each="adminPartyList : ${adminPartyLists}">
-          <th scope="row"><input type="checkbox" name="selectBlock" th:value="${adminPartyList.no}" th:text="${adminPartyList.no}"></th>
-          <td><a href="" th:href="@{/admin/adminPartyListDetail(no=${adminPartyList.no})}" th:text="${adminPartyList.title}"></a></td>
-          <td th:text="${adminPartyList.writer.nick}"></td>
-          <td th:text="${adminPartyList.createDate}"></td>
-        </tr>
-        </tbody>
-      </table>
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th scope="col">번호</th>
+            <th scope="col">제목</th>
+            <th scope="col">닉네임</th>
+            <th scope="col">작성일</th>
+          </tr>
+          </thead>
+          <tbody class="table-group-divider" id="checkedBlock">
+          <tr th:each="adminPartyList : ${adminPartyLists}">
+            <th scope="row"><input type="checkbox" name="selectBlock" th:value="${adminPartyList.no}" th:text="${adminPartyList.no}"></th>
+            <td><a href="" th:href="@{/admin/adminPartyListDetail(no=${adminPartyList.no})}" th:text="${adminPartyList.title}"></a></td>
+            <td th:text="${adminPartyList.writer.nick}"></td>
+            <td th:text="${adminPartyList.createDate}"></td>
+          </tr>
+          </tbody>
+        </table>
         <button type="button" value="비활성화" onclick="partyBlock()">비활성화</button>
       </form>
 
@@ -119,34 +119,34 @@
 
 <!-- 파티게시물 체크박스 비활성화 -->
 <script>
-let checkedValue = [];
+  let checkedValue = [];
 
-// 비활성화 버튼 클릭시 partyBlock() 함수 실행
-function partyBlock(){
+  // 비활성화 버튼 클릭시 partyBlock() 함수 실행
+  function partyBlock(){
     // $("#checkedBlock").find('input:checked') 체크박스의 checked 된 태그를 찾는다
-	  $("#checkedBlock").find('input:checked').each(function(index){
-	    // this = index (선택 된 태그)
-		  if($(this).is(":checked")==true){
-			  console.log($(this).val());
-			  checkedValue.push($(this).val());
-		  }
-		});
-	  
-	  console.log(checkedValue);
-	  partyBlockAjax();
-}
+    $("#checkedBlock").find('input:checked').each(function(index){
+      // this = index (선택 된 태그)
+      if($(this).is(":checked")==true){
+        console.log($(this).val());
+        checkedValue.push($(this).val());
+      }
+    });
 
-function partyBlockAjax() {
-	$.ajax({
-	 type: "POST",
-	 url: "/admin/partyBlocks",
-	 data: {"checkedValue": checkedValue},
-	 success: function(result) {
-		 console.log(result);
-		 window.location.href="/admin/adminPartyList"
-	 }
-	})
-}
+    console.log(checkedValue);
+    partyBlockAjax();
+  }
+
+  function partyBlockAjax() {
+    $.ajax({
+      type: "POST",
+      url: "/admin/partyBlocks",
+      data: {"checkedValue": checkedValue},
+      success: function(result) {
+        console.log(result);
+        window.location.href="/admin/adminPartyList"
+      }
+    })
+  }
 
 
 </script>

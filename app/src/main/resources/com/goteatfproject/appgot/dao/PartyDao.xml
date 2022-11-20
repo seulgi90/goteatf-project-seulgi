@@ -30,6 +30,7 @@
     <result column="title" property="title"/>
     <result column="cont" property="content"/>
     <result column="lit" property="limit"/>
+    <result column="max" property="max"/>
     <result column="loc" property="location"/>
     <result column="addr" property="address"/>
     <result column="viewcnt" property="viewCnt"/>
@@ -46,12 +47,11 @@
           <result column="nick" property="nick"/>
         </association>
 
-<!-- 댓글 테스트 -->
-          <association property="commentList" javaType="comment"> <!-- comment객체는 party객체의 setter commentList에 담아 -->
+    <association property="commentList" javaType="comment"> <!-- comment객체는 party객체의 setter commentList에 담아 -->
       <id column="prno" property="partyReplyNo"/>
     </association>
 
-    <!-- 조인 결과에서 같은 게시글에 대해 여러 개의 첨부 파일 데이터를 담을 경우 -->
+        <!-- 조인 결과에서 같은 게시글에 대해 여러 개의 첨부 파일 데이터를 담을 경우 -->
     <!-- AttachedFile객체는 Party객체의 attachedFiles 필드에 담아-->
   <collection property="attachedFiles" ofType="attachedFile">
     <id column="pfileno" property="no"/>
@@ -71,7 +71,7 @@
 
     </resultMap>
 
-     <resultMap type="comment" id="commentMap">
+  <resultMap type="comment" id="commentMap">
     <id column="prno" property="partyReplyNo"/>
     <result column="pno" property="partyNo"/>
     <result column="cont" property="commentCont"/>
@@ -81,9 +81,7 @@
       <id column="mno" property="no"/>
       <result column="nick" property="nick"/>
     </association>
-
   </resultMap>
-
 
 <!--  Member writer = new Member();-->
 <!--  writer.setNo(rs.getInt("mno"));-->
@@ -91,20 +89,18 @@
 <!--  작성자 번호를 가지고 작성자를 받아야 한다. + 리스트 포함-->
 <!--  board.setWriter(writer);-->
 
-
     <insert id="insert" parameterType="party"
         useGeneratedKeys="true" keyColumn="pno" keyProperty="no">
-<!--      insert into party(title,cont,mno)-->
-<!--      values(#{title},#{content},#{writer.no})-->
       insert into party(mno, meal, food, title, cont, gender, max, time, age,
       lit, loc, post, addr, viewcnt, createdate, thumbnail)
       values(#{writer.no}, #{meal}, #{food}, #{title}, #{content}, #{gender}, #{max},
-      #{time}, #{age}, #{limit}, #{location}, '', #{address}, 0, now(), 'defaultimage.jpg') <!-- #{thumbnail} 기본이미지 설정 -->
+      #{time}, #{age}, #{limit}, #{location}, '', #{address}, 0, now(), 'defaultimage.jpg')
+<!--      #{time}, #{age}, #{limit}, #{location}, '', #{address}, 0, now(), #{thumbnail}) TODO 변경1-->
     </insert>
 
   <!-- resultMap : 컬럼과 프로퍼티의 연결을 정의한 resultMap="id" -->
   <!-- resultType : 오리지널 클래스 이름-->
-  <!--  기존 리스트-->
+<!--  기존 리스트-->
     <select id="findAll" resultMap="partyMap">
     select
     p.pno,
@@ -126,7 +122,7 @@
     pno desc
   </select>
 
-  <!-- 파티게시물 출력 : 카테고리 추가 -->
+<!-- 파티게시판 출력 : 카테고리 추가 -->
   <select id="findAll2" resultMap="partyMap">
     select
     p.pno,
@@ -147,9 +143,10 @@
     party p
     join member m on m.mno = p.mno
     left outer join party_file pf on p.pno = pf.pno
+    where p.pub = false  <!-- 관리자페이지에서 비활성화 시 안보이게   -->
     <!--meal = all일 경우 if문 실행안되면서 전체 컬럼 값 출력 -->
     <if test="meal != 'all'">
-      where p.meal = #{meal}
+      and p.meal = #{meal}
     </if>
     <if test="food != null">
       and p.food = #{food}
@@ -160,7 +157,7 @@
     pno desc
   </select>
 
-  <!-- 페이징 / 비활성화 된 게시글 출력 불가(where p.pub = false) -->
+  <!-- 페이징: 관리자페이지 파티게시글 관리 -->
     <select id="selectPartyList" resultMap="partyMap" parameterType="hashmap">
       <![CDATA[
       select
@@ -184,9 +181,8 @@
       pno desc
       LIMIT #{pageStart}, #{perPageNum}
       ]]>
+<!--  TODO 변경2 where p.pub = false    -->
     </select>
-    
-
 
     <select id="findByNo" resultMap="partyMap">
       select
@@ -198,12 +194,14 @@
       p.food,
       p.cont,
       p.createdate,
-      m.nick,
-      m.mno,
+      p.lit,
+      p.max,
       p.age,
       p.gender,
       p.addr,
       p.loc,
+      m.nick,
+      m.mno,
       pf.pfileno,
       pf.path
       from
@@ -212,6 +210,7 @@
       left outer join party_file pf on p.pno = pf.pno
       where
       p.pno = #{value}
+<!-- TODO 변경3     -->
     </select>
 
     <update id="update" parameterType="party">
@@ -231,12 +230,10 @@
 
   <insert id="insertFiles" parameterType="party">
     insert into party_file(path, pno, filename, savename)
-    <!--      insert into party_file(path, pno)-->
     values
     <!--  여러 파일 들어가면 첨부파일 , 사용해서 구분-->
     <foreach collection="attachedFiles" item="file" separator=",">
       (#{file.filepath}, #{no}, #{file.fileName}, #{file.saveName})
-      <!--        (#{file.filepath}, #{no})-->
     </foreach>
   </insert>
 
@@ -277,41 +274,15 @@
       where pno in (select pno from party where mno = #{value})
     </delete>
 
-<!-- 댓글 작성 -->
-  <insert id="insertComment" parameterType="comment">
-    insert into party_reply (mno, pno, cont, date)
-    values (#{writer.no}, #{partyNo}, #{commentCont}, now())
-  </insert>
-<!-- 댓글 출력 -->
-  <select id="selectCommentList" resultMap="commentMap">
-    select
-    pr.prno,
-    pr.pno,
-    pr.cont,
-    pr.date,
-    pr.pub,
-    m.nick,
-    m.mno
-    from
-    party_reply pr
-    join member m on pr.mno = m.mno
-    where pno = #{partyNo}
-  </select>
+  <!--  <delete id="deleteByMember">-->
+  <!--    delete from party-->
+  <!--    where pno=#{value}-->
+  <!--  </delete>-->
 
-  <update id="updateComment" parameterType="comment">
-    update
-      party_reply
-    set
-      cont = #{commentCont}
-    where
-    prno = #{partyReplyNo}
-    and
-    mno = #{writer.no}
-  </update>
-
-      <!-- 마이페이지 파티 게시물 본인 글 조회 -->
-    <select id="selectPartyListByNo" resultMap="partyMap" parameterType="hashmap">
-      <![CDATA[
+  <!-- 마이페이지 파티 게시물 본인 글 조회 -->
+  <!-- and p.pub = false  : 관리자페이지에서 비활성화 시 안보이게  -->
+  <select id="selectPartyListByNo" resultMap="partyMap" parameterType="hashmap">
+    <![CDATA[
       select
       p.pno,
       p.title,
@@ -329,11 +300,12 @@
       party p
       join member m on m.mno = p.mno
       where p.mno=#{memberNo}
+        and p.pub = false  
       order by
       pno desc
       LIMIT #{cri.pageStart}, #{cri.perPageNum}
       ]]>
-    </select>
+  </select>
 
   <!-- 마이페이지 파티게시글 본인 작성 글 상세보기 -->
   <!-- 관리자페이지 파티게시글 회원 작성 글 상세보기 -->
@@ -367,6 +339,57 @@
     update party set pub = true
     where pno = #{no}
   </update>
+
+  <!-- 댓글 작성 -->
+  <insert id="insertComment" parameterType="comment">
+    insert into party_reply (mno, pno, cont, date)
+    values (#{writer.no}, #{partyNo}, #{commentCont}, now())
+  </insert>
+
+  <!-- 댓글 출력 -->
+  <select id="selectCommentList" resultMap="commentMap">
+    select
+    pr.prno,
+    pr.pno,
+    pr.cont,
+    pr.date,
+    pr.pub,
+    m.nick,
+    m.mno
+    from
+    party_reply pr
+    join member m on pr.mno = m.mno
+    where pno = #{partyNo}
+  </select>
+
+<!-- 댓글 수정 -->
+  <update id="updateComment" parameterType="comment">
+    update
+    party_reply
+    set
+    cont = #{commentCont}
+    where
+    prno = #{partyReplyNo}
+    and
+    mno = #{writer.no}
+  </update>
+
+<!-- 댓글 삭제 -->
+  <delete id="deleteComment">
+    delete from
+    party_reply
+    where
+    prno = #{partyReplyNo}
+  </delete>
+  
+ <!--  마이페이지 파티게시글 연쇄삭제 -->
+	<delete id="allDelete">
+		delete from party_reply where pno=#{no};
+		delete from party_file where pno=#{no};
+		delete from volunteer where vno=#{no};
+		delete from partytag where pno=#{no};
+		delete from party where pno=#{no};
+	</delete>
 
 </mapper>
 

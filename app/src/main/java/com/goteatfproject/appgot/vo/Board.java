@@ -1,6 +1,6 @@
 package com.goteatfproject.appgot.vo;
 
-import java.sql.Date;
+import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,6 +10,7 @@ import lombok.ToString;
 @ToString
 // 관리자페이지 파티, 피드, 이벤트 게시글을 담을 필드 설정
 public class Board {
+  int no; //  -- 추가: 1120
   String tableName;
   String title;
   String cont;

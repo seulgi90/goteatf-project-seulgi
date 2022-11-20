@@ -48,7 +48,6 @@ public class DefaultFeedService implements FeedService {
     return feedDao.simpleProfile(no);
   }
 
-
   @Override
   public List<Feed> randomlist() throws Exception {
     return feedDao.randomfindAll();
@@ -112,5 +111,11 @@ public class DefaultFeedService implements FeedService {
   @Override
   public boolean feedBlock(int no) {
     return feedDao.feedBlock(no) > 0;
+  }
+
+  // 마이페이지 피드게시글 강제삭제 -- 1120 추가
+  @Override
+  public boolean allDelete2(int no) {
+    return feedDao.allDelete2(no) > 0;
   }
 }

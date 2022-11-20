@@ -1,9 +1,5 @@
 package com.goteatfproject.appgot.web;
 
-import com.goteatfproject.appgot.service.EventService;
-import com.goteatfproject.appgot.service.VolunteerService;
-import com.goteatfproject.appgot.vo.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,11 +13,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import com.goteatfproject.appgot.service.PartyService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import com.goteatfproject.appgot.service.EventService;
+import com.goteatfproject.appgot.vo.AttachedFile;
+import com.goteatfproject.appgot.vo.Criteria;
+import com.goteatfproject.appgot.vo.Event;
+import com.goteatfproject.appgot.vo.Member;
+import com.goteatfproject.appgot.vo.PageMaker;
 
 @Controller
 @RequestMapping("/event/")
@@ -66,7 +70,7 @@ public class EventController {
   // 파티 리스트 게시물 등록 post
   @PostMapping("add")
   public String eventAdd(Event event, HttpSession session,
-                         @RequestParam("files") MultipartFile[] files) throws Exception {
+      @RequestParam("files") MultipartFile[] files) throws Exception {
 
     // thumbnail default 파일 설정 TODO 추가1
     event.setThumbnail("defaultimage.jpg");
@@ -140,10 +144,10 @@ public class EventController {
     return map;
   }
 
-  // 파티 게시물 수정
+  // 이벤트 게시물 수정
   @PostMapping("update")
   public String update(Event event, HttpSession session,
-                       Part[] files) throws Exception {
+      Part[] files) throws Exception {
 
     event.setAttachedFiles(saveAttachedFiles(files));
 
@@ -154,7 +158,23 @@ public class EventController {
     if (!eventService.update(event)) {
       throw new Exception("게시글을 변경할 수 없습니다.");
     }
-    return "redirect:list";
+    return "redirect:admin/main";
+
+  }
+
+  // 이벤트 게시물 수정
+  @PostMapping("update2")
+  public String update2(Event event, HttpSession session) throws Exception {
+
+
+    // detail.html : <input name="no" type="number" value="1" th:value="${party.no}" readonly hidden/>
+    // 위에 추가해야 party.getNo() 가져오기 가능 System.out.println("partyNo = " + party.getNo());
+    checkOwner(event.getNo(), session);
+
+    if (!eventService.update(event)) {
+      throw new Exception("게시글을 변경할 수 없습니다.");
+    }
+    return "redirect:admin/main";
 
   }
 
@@ -200,5 +220,7 @@ public class EventController {
     }
     return "redirect:detail?no=" + event.getNo();
   }
+
+
 
 }

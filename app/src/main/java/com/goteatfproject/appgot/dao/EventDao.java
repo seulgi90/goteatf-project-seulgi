@@ -40,4 +40,6 @@ public interface EventDao {
 
   //관리자페이지 이벤트게시글 비활성화
   int eventBlock(int no);
+
+  Event findByAdminEventListDetail(int no);
 }
