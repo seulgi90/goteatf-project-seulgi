@@ -150,31 +150,17 @@ public class EventController {
       Part[] files) throws Exception {
 
     event.setAttachedFiles(saveAttachedFiles(files));
+    System.out.println(files.length);   
+    System.out.println(event);   
 
     // detail.html : <input name="no" type="number" value="1" th:value="${party.no}" readonly hidden/>
     // 위에 추가해야 party.getNo() 가져오기 가능 System.out.println("partyNo = " + party.getNo());
-    checkOwner(event.getNo(), session);
+    //  checkOwner(event.getNo(), session);
 
     if (!eventService.update(event)) {
       throw new Exception("게시글을 변경할 수 없습니다.");
     }
-    return "redirect:admin/main";
-
-  }
-
-  // 이벤트 게시물 수정
-  @PostMapping("update2")
-  public String update2(Event event, HttpSession session) throws Exception {
-
-
-    // detail.html : <input name="no" type="number" value="1" th:value="${party.no}" readonly hidden/>
-    // 위에 추가해야 party.getNo() 가져오기 가능 System.out.println("partyNo = " + party.getNo());
-    checkOwner(event.getNo(), session);
-
-    if (!eventService.update(event)) {
-      throw new Exception("게시글을 변경할 수 없습니다.");
-    }
-    return "redirect:admin/main";
+    return "redirect:/admin/adminEventList";
 
   }
 
@@ -218,7 +204,7 @@ public class EventController {
     if (!eventService.deleteAttachedFile(no)) {
       throw new Exception("게시글 첨부파일을 삭제할 수 없습니다.");
     }
-    return "redirect:detail?no=" + event.getNo();
+    return "redirect:/admin/adminEventListDetail?no=" + event.getNo();
   }
 
 

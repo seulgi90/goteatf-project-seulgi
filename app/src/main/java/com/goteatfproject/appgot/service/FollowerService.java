@@ -1,7 +1,7 @@
 package com.goteatfproject.appgot.service;
 
-import com.goteatfproject.appgot.vo.Follower;
 import java.util.List;
+import com.goteatfproject.appgot.vo.Follower;
 
 public interface FollowerService {
 
@@ -14,5 +14,9 @@ public interface FollowerService {
   List<Follower> selectFollowList(int follow) throws Exception;
 
   List<Follower> selectFollowingList(int following) throws Exception;
+
+  //마이페이지 팔로워 강제 삭제
+  boolean allDelete3(int no);
+
 
 }

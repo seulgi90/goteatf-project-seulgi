@@ -57,13 +57,13 @@
   </div>
   <!-- Page content wrapper-->
   <!-- 상세보기 -->
-  <form action="/event/update2" method="POST" style="margin: 15px">
+  <form action="/event/update"method="post" enctype="multipart/form-data" style="margin: 15px">
     <h2 class="mt-4">이벤트게시물 상세정보</h2>
     <div class="container border rounded">
   
       <!--1줄-->
       <div class="row p-3">
-        <div class="col-2" name="no" th:text="'[이벤트 번호:' + ' '+  ${event.no} + ']'">
+        <div class="col-2" th:text="'[이벤트 번호:' + ' '+  ${event.no} + ']'">
       </div>
         <div class="col-2">
         </div>
@@ -81,6 +81,7 @@
       <!-- 2줄 -->
       <div class="row p-3">
         <div class="col"><input name='title' type='text'value='제목' th:value="${event.title}" size='93'>
+        <input type="hidden" name="no" data-th-value="${event.no}">
         </div>
       </div>
   
@@ -127,10 +128,26 @@
         <div class="col-7" th:text="'주소 : ' +'[' + ${event.address} + ']'">
         </div>
       </div>
+      <!------------ 파일첨부 ------------>
+  
+   <p>첨부파일</p>
+  
+     <ul>
+       <li data-th-each="file : ${event.attachedFiles}">
+         <a href=""
+            data-th-href="@{files/{path}(path=${file.filepath})}"
+            data-th-text="${file.filepath}">test.gif</a>
+         [<a href="fileDelete?no=1"
+             data-th-href="@{/event/fileDelete(no=${file.no})}">파일삭제</a>]
+       </li>
+     </ul>
+     파일 추가: <input name='files' type="file" multiple>
+  
+  <!------------ 파일첨부 end------------>
     </div>
     <br>
     <button type="submit" class="btn btn-outline-secondary">수정</button>
-    <button type="button" class="btn btn-outline-secondary"><a th:href="@{eventBlock(no=${event.no})}">비활성화</a></button>
+    <button type="button" class="btn btn-outline-secondary" style="border:none;"><a th:href="@{eventBlock(no=${event.no})}" class="btn btn-outline-secondary">비활성화</a></button>
     
   </form>
   <!---------------------------- 상세보기 end ------------------------------>

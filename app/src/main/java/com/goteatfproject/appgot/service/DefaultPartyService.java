@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.goteatfproject.appgot.dao.BoardDao;
 import com.goteatfproject.appgot.dao.PartyDao;
 import com.goteatfproject.appgot.vo.AttachedFile;
-import com.goteatfproject.appgot.vo.Board;
 import com.goteatfproject.appgot.vo.Comment;
 import com.goteatfproject.appgot.vo.Criteria;
 import com.goteatfproject.appgot.vo.Party;
@@ -88,19 +87,6 @@ public class DefaultPartyService implements PartyService {
     return partyDao.deleteFile(fileNo) > 0;
   }
 
-  // 관리자페이지 이벤트+피드+파티 게시글 조회
-  @Override
-  public List<Board> listAll() throws Exception {
-    System.out.println("newBoardDao = " + boardDao.findAll());
-    return boardDao.findAll();
-  }
-
-  // 관리자 페이지 이벤트+피드+파티 오늘 등록된 게시글 개수
-  @Override
-  public List<Board> newBoardCount() throws Exception {
-    return boardDao.newBoardCount();
-  }
-
   // 마이페이지 파티게시글 본인 글 리스트
   @Override
   public List<Map<String, Object>> selectPartyListByNo(Map<String, Object> map) {
@@ -149,4 +135,5 @@ public class DefaultPartyService implements PartyService {
   public boolean allDelete(int no) {
     return partyDao.allDelete(no) > 0;
   }
+
 }

@@ -255,6 +255,7 @@
     f.cont,
     f.date,
     f.thumbnail,
+    ff.feedfileno,
     ff.path
     from
     feed f

@@ -36,11 +36,8 @@
           <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myAuthForm}">개인 정보 수정</a>
           <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myPartyList}">파티게시물 관리</a>
           <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myFeedList}">피드게시물 관리</a>
-          <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myEventList}">이벤트게시물 관리</a>
           <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">예약 내역</a>
-          <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">팔로우 관리</a>
-          <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">1:1 문의 내역</a>
-          <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">주소지 관리</a>
+          <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myFollowList}">팔로우 관리</a>
         </div>
       </div>
       <!-- Page content wrapper-->
@@ -55,13 +52,13 @@
                   <tr>
                     <th>번호</th>
                     <td>
-                      <input id="memberNo" name='no' type='number' data-th-value="${member.no}" readonly>
+                      <input id="memberNo" name='no' type='number' data-th-value="${member.no}" readonly style="border:none;">
                     </td>
                   </tr>
                   <tr>
                     <th>아이디</th>
                     <td>
-                      <input name='id' type='email' data-th-value="${member.id}" readonly>
+                      <input name='id' type='email' data-th-value="${member.id}" readonly style="border:none;">
                     </td>
                   </tr>
                   <tr>
@@ -74,6 +71,30 @@
                     <th>닉네임</th>
                     <td>
                       <input name='nick' type='text' data-th-value="${member.nick}">
+                    </td>
+                  </tr>
+                   <tr>
+                    <th>연락처</th>
+                    <td>
+                      <input name='tel' type='text' data-th-value="${member.tel}">
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>기본주소</th>
+                    <td>
+                      <input name='address' type='text' data-th-value="${member.address}">
+                    </td>
+                  </tr>
+                   <tr>
+                    <th>상세주소</th>
+                    <td>
+                      <input name='address' type='text' data-th-value="${member.subAddr}">
+                    </td>
+                  </tr>
+                     <tr>
+                    <th>관심사</th>
+                    <td>
+                      <input name='address' type='text' data-th-value="${member.interest}">
                     </td>
                   </tr>
                   <tr>
@@ -89,8 +110,8 @@
                     </td>
                   </tr>
                 </table>
-                <button type="button" id="updateBtn">수정</button>
-                <button type="button" id="deleteBtn">회원 탈퇴</button>
+                <button type="button" class="btn btn-outline-secondary" id="updateBtn">수정</button>
+                <button type="button" class="btn btn-outline-secondary" id="deleteBtn">회원 탈퇴</button>
               </form>
             </div>
           </div>

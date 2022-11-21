@@ -58,7 +58,7 @@
       <!-- 전체회원 -->
       <div class="container">
         <div class="row">
-          <div class="col-5">
+          <div class="col-6">
             <table class="table">
               <button type="button" class="btn btn-primary position-relative" id="memberBtn">
                 전체회원
@@ -70,10 +70,10 @@
               </button>
               <thead>
               <tr>
-                <th scope="col">no</th>
-                <th scope="col">id</th>
-                <th scope="col">name</th>
-                <th scope="col">location</th>
+                <th scope="col">NO</th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Location</th>
               </tr>
               </thead>
               <tbody>
@@ -88,7 +88,7 @@
           </div>
 
           <!-- 신규회원 -->
-          <div class="col-5">
+          <div class="col-6">
             <table class="table">
               <button type="button" class="btn btn-primary position-relative" id="memberBtn2">
                 오늘 가입한 신규회원
@@ -100,10 +100,10 @@
               </button>
               <thead>
               <tr>
-                <th scope="col">no</th>
-                <th scope="col">id</th>
-                <th scope="col">name</th>
-                <th scope="col">location</th>
+                <th scope="col">NO</th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Location</th>
               </tr>
               </thead>
               <tbody>
@@ -122,21 +122,21 @@
       <!-- 파티 +  피드 + 이벤트 신규 게시글 limit:15 -->
       <div class="container">
         <div class="row">
-          <div class="col-5">
+          <div class="col-6">
             <table class="table">
               <button type="button" class="btn btn-primary position-relative">
                 전체 게시글
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                      th:each="boardCount : ${newBoardCount}"
-                      th:text="${boardCountStat.count}">
+                      th:each="board : ${boards}"
+                      th:text="${boardStat.count}">
             <span class="visually-hidden">unread messages</span>
                 </span>
               </button>
               <thead>
               <tr>
-                <th scope="col">tname</th>
-                <th scope="col">title</th>
-                <th scope="col">date</th>
+                <th scope="col">게시판</th>
+                <th scope="col">제목</th>
+                <th scope="col">작성일</th>
               </tr>
               </thead>
               <tbody>
@@ -152,7 +152,7 @@
           </div>
 
           <!-- 파티 +  피드 + 이벤트 오늘 등록된 신규 게시글  -->
-          <div class="col-5">
+          <div class="col-6">
             <table class="table">
               <button type="button" class="btn btn-primary position-relative">
                 오늘 등록된 게시글
@@ -164,9 +164,9 @@
               </button>
               <thead>
               <tr>
-                <th scope="col" style="">tname</th>
-                <th scope="col">title</th>
-                <th scope="col">date</th>
+                <th scope="col" style="">게시판</th>
+                <th scope="col">제목</th>
+                <th scope="col">작성일</th>
               </tr>
               </thead>
               <tbody>

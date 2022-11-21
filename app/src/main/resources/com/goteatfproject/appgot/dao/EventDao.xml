@@ -237,10 +237,13 @@
 	  e.viewcnt,
 	  e.pub,
 	  e.createdate,
-	  e.thumbnail
+	  e.thumbnail,
+	  ef.efileno,
+	  ef.path
   from 
     event e
   join member m on e.mno = m.mno
+  left outer join event_file ef on e.eno = ef.eno
   where 
     e.eno =#{no}
   </select>

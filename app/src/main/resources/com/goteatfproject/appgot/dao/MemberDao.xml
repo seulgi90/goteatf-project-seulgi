@@ -12,6 +12,7 @@
     <result column="createddate" property="createdDate"/>
     <result column="nick" property="nick"/>
     <result column="birth" property="birth"/>
+    <result column="tel" property="tel"/>
     <result column="addr" property="address"/>
     <result column="intro" property="intro"/>
     <result column="thumbnail" property="thumbnail"/>
@@ -32,7 +33,11 @@
     name,
     id,
     nick,
+    tel,
     intro,
+    addr,
+    subAddr,
+    interest,
     thumbnail,
     createddate
     from
@@ -72,6 +77,10 @@
     name=#{name},
     id=#{id},
     nick=#{nick},
+    tel=#{tel},
+    addr=#{address},
+    subAddr=#{subAddr},
+    interest=#{interest},
     pwd=sha2(#{password},256)
     where
     mno=#{no}
@@ -83,6 +92,10 @@
     update member set
     name=#{name},
     id=#{id},
+    tel=#{tel},
+    addr=#{address},
+    subAddr=#{subAddr},
+    interest=#{interest},
     nick=#{nick}
     where
     mno=#{no}
@@ -210,6 +223,7 @@
       where
       name like concat("%", #{keyword}, "%")
       or id like concat("%", #{keyword}, "%")
+      or mno like concat("%", #{keyword}, "%")
     </if>
     order by
     mno

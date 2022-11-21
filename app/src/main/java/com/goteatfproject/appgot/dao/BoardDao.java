@@ -1,9 +1,9 @@
 package com.goteatfproject.appgot.dao;
 
 
-import com.goteatfproject.appgot.vo.Board;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import com.goteatfproject.appgot.vo.Board;
 
 @Mapper
 public interface BoardDao {
@@ -11,4 +11,6 @@ public interface BoardDao {
   List<Board> findAll();
 
   List<Board> newBoardCount();
+
+  List<Board> findAll2(int no);
 }

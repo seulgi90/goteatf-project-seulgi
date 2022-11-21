@@ -1,11 +1,11 @@
 package com.goteatfproject.appgot.service;
 
 
-import com.goteatfproject.appgot.dao.FollowerDao;
-import com.goteatfproject.appgot.vo.Follower;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.goteatfproject.appgot.dao.FollowerDao;
+import com.goteatfproject.appgot.vo.Follower;
 
 @Service
 public class DefaultFollowerService implements FollowerService {
@@ -15,12 +15,12 @@ public class DefaultFollowerService implements FollowerService {
 
   @Override
   public void follow(Follower follower) {
-  followerDao.follow(follower);
+    followerDao.follow(follower);
   }
 
   @Override
   public void unfollow(Follower follower) {
-  followerDao.unfollow(follower);
+    followerDao.unfollow(follower);
   }
 
   @Override
@@ -39,6 +39,12 @@ public class DefaultFollowerService implements FollowerService {
   public List<Follower> selectFollowingList(int following) {
     List<Follower> selectfollowingList = followerDao.selectFollowingList(following);
     return selectfollowingList;
+  }
+
+  //마이페이지 팔로워 강제 삭제
+  @Override
+  public boolean allDelete3(int no) {
+    return followerDao.allDelete3(no) > 0;
   }
 
 }

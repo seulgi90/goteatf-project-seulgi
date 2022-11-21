@@ -3,7 +3,6 @@ package com.goteatfproject.appgot.service;
 import java.util.List;
 import java.util.Map;
 import com.goteatfproject.appgot.vo.AttachedFile;
-import com.goteatfproject.appgot.vo.Board;
 import com.goteatfproject.appgot.vo.Comment;
 import com.goteatfproject.appgot.vo.Criteria;
 import com.goteatfproject.appgot.vo.Party;
@@ -23,12 +22,6 @@ public interface PartyService {
   boolean delete(int no) throws Exception;
   AttachedFile getAttachedFile(int fileNo) throws Exception;
   boolean deleteAttachedFile(int fileNo) throws Exception;
-
-  // 관리자 페이지 이벤트+피드+파티 게시글 조회
-  List<Board> listAll() throws Exception;
-
-  // 관리자 페이지 이벤트+피드+파티 오늘 등록된 게시글 개수
-  List<Board> newBoardCount() throws Exception;
 
   // 마이페이지 파티게시글 본인 작성 글 리스트
   List<Map<String, Object>> selectPartyListByNo(Map<String, Object> map);
@@ -54,4 +47,5 @@ public interface PartyService {
 
   //마이페이지 파티게시글 강제삭제
   boolean allDelete(int no);
+
 }

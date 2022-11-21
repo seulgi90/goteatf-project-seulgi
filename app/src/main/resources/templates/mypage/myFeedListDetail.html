@@ -44,39 +44,43 @@
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myAuthForm}">개인 정보 수정</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myPartyList}">파티게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myFeedList}">피드게시물 관리</a>
-     <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myEventList}">이벤트게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3"
          href="">예약 내역</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3"
          href="">팔로우 관리</a>
-      <a class="list-group-item list-group-item-action list-group-item-light p-3"
-         href="">1:1 문의 내역</a>
-      <a class="list-group-item list-group-item-action list-group-item-light p-3"
-         href="">주소지 관리</a>
     </div>
   </div>
   <!-- Page content wrapper-->
   <!-- 상세보기 -->
   <div id="page-content-wrapper">
     <div class="container-fluid">
+    <form th:action="@{updateFeed}" method="post" enctype="multipart/form-data">
       <h2 class="mt-4">피드게시물 상세정보</h2>
 
       <div class="row">
         <div class="col-6 border">
             <div>
               <table class="table">
+                 <tr>
+                  <td>번호</td>
+                  <td th:text=${feed.no}>
+                  </td>
+                </tr> 
                 <tr>
                   <th th:text="${feed.writer.nick}">작성자 닉네임</th>
                   <td><img th:src="@{/feed/files/{path}(path=${feed.thumbnail})}" alt="" width="150" height="150"></td>
                 </tr>
                 <tr>
                   <td>제목</td>
-                  <td th:text="${feed.title}"></td>
+                  <td>
+                    <input name='title' type='text' th:value="${feed.title}" size="61">
+                    <input name='no' type='hidden' th:value="${feed.no}" size="61" readonly>
+                  </td>
                 </tr>
                 <br>
                 <tr>
                   <td>내용</td>
-                  <td th:text="${feed.content}"></td>
+                  <td><textarea id='content' name='content' th:text="${feed.content}" rows="10" cols="60"></textarea></td>
                 </tr>
                 <br>
                 <tr>
@@ -86,13 +90,15 @@
               </table>
             </div>
         </div>
-        <div class="col-6 border">
+        <div class="col-5 border">
             <div>
               <table>
                 <th>첨부 파일</th>
                 <tr>
                   <td th:each="file : ${feed.feedAttachedFiles}">
                     <img th:src="@{/feed/files/{path}(path=${file.filepath})}" alt="" height="500" width="500">
+                    <br>
+                    [<a href="fileDelete?no=1" data-th-href="@{/my/fileDelete(no=${file.no})}">파일삭제</a>]<br>
                   </td>
                 </tr>
               </table>
@@ -101,7 +107,7 @@
       </div>
       <br>
       <button type="submit" class="btn btn-outline-secondary">수정</button>
-      <button type="button" class="btn btn-outline-secondary"><a th:href="@{myFeedDelete(no=${feed.no})}">삭제</a></button>
+      <button type="button" class="btn btn-outline-secondary" style="border:none;"><a th:href="@{myFeedDelete(no=${feed.no})}" class="btn btn-outline-secondary">삭제</a></button>
 
       <!-- 테이블 부트스트랩 end   -->
     </div>

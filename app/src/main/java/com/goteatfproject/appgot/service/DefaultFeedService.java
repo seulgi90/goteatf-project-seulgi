@@ -70,10 +70,10 @@ public class DefaultFeedService implements FeedService {
     if (feedDao.update(feed) == 0) {
       return false;
     }
-
-    if (feed.getFeedAttachedFiles().size() > 0) {
-      feedDao.insertFiles(feed);
-    }
+    //
+    //    if (feed.getFeedAttachedFiles().size() > 0) {
+    //      feedDao.insertFiles(feed);
+    //    }
     return true;
   }
 

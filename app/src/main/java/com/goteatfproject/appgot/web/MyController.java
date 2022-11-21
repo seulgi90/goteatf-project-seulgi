@@ -17,11 +17,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import com.goteatfproject.appgot.service.BoardService;
 import com.goteatfproject.appgot.service.EventService;
 import com.goteatfproject.appgot.service.FeedService;
+import com.goteatfproject.appgot.service.FollowerService;
 import com.goteatfproject.appgot.service.MemberService;
 import com.goteatfproject.appgot.service.PartyService;
 import com.goteatfproject.appgot.vo.Criteria;
+import com.goteatfproject.appgot.vo.Feed;
+import com.goteatfproject.appgot.vo.FeedAttachedFile;
+import com.goteatfproject.appgot.vo.Follower;
 import com.goteatfproject.appgot.vo.Member;
 import com.goteatfproject.appgot.vo.PageMaker;
 
@@ -40,13 +45,13 @@ public class MyController {
   EventService eventService;
 
   @Autowired
-  ServletContext sc;
+  FollowerService followerService;
 
-  //  public MyController(PartyService partyService,FeedService feedService, MemberService memberService) {
-  //    this.partyService = partyService;
-  //    this.feedService = feedService;
-  //    this.memberService = memberService;
-  //  }
+  @Autowired
+  BoardService boardService;
+
+  @Autowired
+  ServletContext sc;
 
   // 마이페이지
   @GetMapping("/main")
@@ -54,6 +59,8 @@ public class MyController {
     Member loginMember = (Member) session.getAttribute("loginMember");
     if (loginMember != null) {
       model.addAttribute("member", memberService.get(loginMember.getNo()));
+      model.addAttribute("boards", boardService.myListAll(loginMember.getNo()));
+
       return "mypage/myMain";
     }
     return "/auth/login";
@@ -215,6 +222,25 @@ public class MyController {
     return mv;
   }
 
+  // 마이페이지 피드 게시물 수정
+  @PostMapping("/updateFeed")
+  public String updateFeed(Feed feed, HttpSession session) throws Exception {
+
+    checkOwner(feed.getNo(), session);
+
+    feedService.update(feed);
+
+    return "redirect:myFeedList";
+  }
+
+  private void checkOwner(int feedNo, HttpSession session) throws Exception {
+    Member loginMember = (Member) session.getAttribute("loginMember");
+
+    if (feedService.get(feedNo).getWriter().getNo() != loginMember.getNo()) {
+      throw new Exception("게시글 작성자가 아닙니다.");
+    }
+  }
+
   // 마이페이지 피드게시글 강제 삭제
   @GetMapping("/myFeedDelete")
   public String allDelete2(int no) throws Exception {
@@ -233,6 +259,34 @@ public class MyController {
       feedService.allDelete2(checkedValue[i]);
     }
     return "삭제 성공";
+  }
+
+  // 마이페이지 피드게시물 첨부파일 삭제
+  @GetMapping("/fileDelete")
+  public String fileDelete(int no, HttpSession session) throws Exception {
+
+    // 첨부파일 정보 가져오기
+    FeedAttachedFile feedAttachedFile = feedService.getFeedAttachedFile(no);
+
+    System.out.println("feedAttachedFile.getNo() = " + feedAttachedFile.getNo());
+    System.out.println("feedAttachedFile.getNo() = " + feedAttachedFile.getFilepath());
+    System.out.println("feedAttachedFile.getNo() = " + feedAttachedFile.getFeedNo());
+
+
+    // 게시글 작성자 일치여부
+    Member loginMember = (Member) session.getAttribute("loginMember");
+    Feed feed = feedService.get(feedAttachedFile.getFeedNo());
+    System.out.println("feed = " + feed);
+
+    // feedVO의 getWriter 통해서 member getNo 접근 != 로그인No 와 일치여부
+    if (feed.getWriter().getNo() != loginMember.getNo()) {
+      throw new Exception("게시글 작성자가 아닙니다.");
+    }
+    // 첨부파일 삭제
+    if (!feedService.deleteFeedAttachedFile(no)) {
+      throw new Exception("게시글 첨부파일을 삭제할 수 없습니다.");
+    }
+    return "redirect:myFeedListDetail?no=" + feed.getNo();
   }
 
   // 마이페이지- 이벤트게시글 관리
@@ -291,4 +345,39 @@ public class MyController {
   public String myAuthForm() throws Exception {
     return "mypage/myAuthForm";
   }
+
+  // 마이페이지 팔로우 관리
+  @GetMapping("/myFollowList")
+  public String myFollowList(Model model, HttpSession session) throws Exception {
+
+    Member loginMember = (Member) session.getAttribute("loginMember");
+
+    if(loginMember != null) {
+      List<Follower> followList = followerService.selectFollowList(loginMember.getNo());
+      model.addAttribute("follows", followList);
+      System.out.println("model.getAttribute(\"follows\") = " + model.getAttribute("follows"));
+    }
+    return "mypage/myFollowList";
+  }
+
+  // 마이페이지 팔로워 강제 삭제
+  @GetMapping("/myFollowDelete")
+  public String allDelete3(int no) throws Exception {
+    followerService.allDelete3(no);
+    return "redirect:myFeedList";
+  }
+
+  // 마이페이지 팔로워 강제삭제 체크박스 선택
+  @PostMapping("/followDeletes")
+  @ResponseBody
+  public String followDeletes(@RequestParam("checkedValue[]") int[] checkedValue) throws Exception {
+    int valueLength = checkedValue.length;
+
+    for(int i=0; i < valueLength; i++) {
+      System.out.println(checkedValue[i]);
+      followerService.allDelete3(checkedValue[i]);
+    }
+    return "삭제 성공";
+  }
+
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import com.goteatfproject.appgot.service.BoardService;
 import com.goteatfproject.appgot.service.EventService;
 import com.goteatfproject.appgot.service.FeedService;
 import com.goteatfproject.appgot.service.MemberService;
@@ -24,12 +25,18 @@ public class AdminController {
 
   @Autowired
   MemberService memberService;
+
   @Autowired
   PartyService partyService;
+
   @Autowired
   FeedService feedService;
+
   @Autowired
   EventService eventService;
+
+  @Autowired
+  BoardService boardService;
 
   // 관리자페이지 - 메인
   @GetMapping("/main")
@@ -39,8 +46,8 @@ public class AdminController {
     model.addAttribute("members", memberService.list());
     model.addAttribute("memberLists", memberService.MemberList());
     model.addAttribute("newMemberLists", memberService.NewMemberList());
-    model.addAttribute("boards", partyService.listAll());
-    model.addAttribute("newBoardCount", partyService.newBoardCount());
+    model.addAttribute("boards", boardService.listAll());
+    model.addAttribute("newBoardCount", boardService.newBoardCount());
     return "admin/adminMain";
   }
 

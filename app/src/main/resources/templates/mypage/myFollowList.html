@@ -45,73 +45,40 @@
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myAuthForm}">개인 정보 수정</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myPartyList}">파티게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myFeedList}">피드게시물 관리</a>
-      <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myEventList}">이벤트게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3"
          href="">예약 내역</a>
-      <a class="list-group-item list-group-item-action list-group-item-light p-3"
-         href="">팔로우 관리</a>
-      <a class="list-group-item list-group-item-action list-group-item-light p-3"
-         href="">1:1 문의 내역</a>
-      <a class="list-group-item list-group-item-action list-group-item-light p-3"
-         href="">주소지 관리</a>
+      <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myFollowList}">팔로우 관리</a>
     </div>
   </div>
   <!-- Page content wrapper-->
   <div id="page-content-wrapper">
     <div class="container-fluid">
-      <h2 class="mt-4">이벤트게시물 관리</h2>
+      <h2 class="mt-4">팔로우 관리</h2>
 
-      <!--  테이블 부트스트랩   -->
-      <table class="table table-hover">
-        <thead>
-        <tr>
-          <th scope="col">번호</th>
-          <th scope="col">제목</th>
-          <th scope="col">작성일</th>
-          <th scope="col">조회수</th>
-        </tr>
-        </thead>
-        <tbody class="table-group-divider">
-        <tr th:each="event : ${myEventList}">
-          <th scope="row" th:text="${event.no}"></th>
-          <td><a href="" th:href="@{/my/myEventListDetail(no=${event.no})}" th:text="${event.title}"></a></td>
-          <td th:text="${event.createDate}"></td>
-          <td th:text="${event.viewCnt}"></td>
-        </tr>
-        </tbody>
-      </table>
- 
+      <!--  테이블 부트스트랩  -->
+      <form action="followBlocks" method="post">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th scope="col">번호</th>
+            <th scope="col">닉네임</th>
+          </tr>
+          </thead>
+          <tbody class="table-group-divider" id="checkedBlock">
+          <tr th:each="follow : ${follows}">
+            <th scope="row"><input type="checkbox" name="selectBlock" th:value="${follow.following}" th:text="${follow.following}"></th>
+            <td><a href="" th:href="@{/feed/personal(nick=${follow.nick})}" th:text="${follow.nick}"></a></td>          
+          </tr>
+          </tbody>
+        </table>
+        <button type="button" class="btn btn-outline-secondary" value="삭제" onclick="followDelete()">팔로우 취소</button> 
+      </form>
+
       <!--  테이블 부트스트랩 end   -->
     </div>
   </div>
 </div>
 
-
-<!-- 페이징 -->
-
-<nav aria-label="Page navigation example">
-  <ul class="pagination justify-content-center">
-    <li class="page-item disabled" th:if="${pageMaker.prev}">
-      <a class="page-link"
-         th:href="@{myPartyList(pageMaker.startPage-1)}" aria-label="Previous">
-        <span aria-hidden="true">이전페이지</span>
-      </a>
-    </li>
-    <th:block th:each="pageNum: ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
-      <li class="page-item">
-<!--        <a class="page-link" th:href="@{list(page=${pageNum})}"><i th:text="${pageNum}"></i></a>-->
-        <a class="page-link" th:href="@{myPartyList(page=${pageNum})}"><i th:text="${pageNum}"></i></a>
-      </li>
-    </th:block>
-    <li class="page-item" th:if="${pageMaker.next && pageMaker.endPage >0}">
-      <a class="page-link" th:href="@{myPartyList(page=${pageMaker.endPage+1})}" aria-label="Next">
-        <span aria-hidden="true">다음페이지</span>
-      </a>
-    </li>
-  </ul>
-</nav>
-
-<!-- 페이징 end-->
 
 <!-------------------------------구분선-------------------------->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
@@ -121,7 +88,42 @@
 
 <!-- Core theme JS--> <!-- noticeList 왼쪽 사이드바 --> <!-- TODO 추가 - 6-->
 <script src="/js/notice/notice.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 
+<!-- 파티게시물 체크박스 삭제 -->
+<script>
+  let checkedValue = [];
+
+  // 삭제 버튼 클릭시 partyDelete() 함수 실행
+  function followDelete(){
+    // $("#checkedBlock").find('input:checked') 체크박스의 checked 된 태그를 찾는다
+    $("#checkedBlock").find('input:checked').each(function(index){
+      // this = index (선택 된 태그)
+      if($(this).is(":checked")==true){
+        console.log($(this).val());
+        checkedValue.push($(this).val());
+      }
+    });
+
+    console.log(checkedValue);
+    followDeleteAjax();
+  }
+
+  function followDeleteAjax() {
+    $.ajax({
+      type: "POST",
+      url: "/my/followDeletes",
+      data: {"checkedValue": checkedValue},
+      success: function(result) {
+        console.log(result);
+        window.location.href="/my/myFollowList"
+      }
+    })
+  }
+
+
+</script>
+<!-- 파티게시물 체크박스 삭제 end -->
 
 </body>
 </html>

@@ -19,4 +19,5 @@ public class Follower {
 
   private String thumbnail;
 
+
 }
