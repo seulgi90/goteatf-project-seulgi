@@ -8,6 +8,9 @@ public interface BoardService {
   // 관리자 페이지 이벤트+피드+파티 게시글 조회
   List<Board> listAll() throws Exception;
 
+  // 관리자 페이지 이벤트+피드+파티 게시글 조회
+  List<Board> boardCount() throws Exception;
+
   // 관리자 페이지 이벤트+피드+파티 오늘 등록된 게시글 개수
   List<Board> newBoardCount() throws Exception;
 

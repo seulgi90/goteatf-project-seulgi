@@ -31,4 +31,9 @@ public class DefaultBoardService implements BoardService {
   public List<Board> myListAll(int no) {
     return boardDao.findAll2(no);
   }
+
+  @Override
+  public List<Board> boardCount() throws Exception {
+    return boardDao.BoardCount();
+  }
 }

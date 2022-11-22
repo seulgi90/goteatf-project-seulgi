@@ -53,21 +53,30 @@
   <!-- Page content wrapper-->
   <div id="page-content-wrapper">
     <div class="container-fluid">
-      <h2 class="mt-4">팔로우 관리</h2>
+      <h2 class="mt-4 text-secondary">팔로우 관리</h2>
 
       <!--  테이블 부트스트랩  -->
       <form action="followBlocks" method="post">
         <table class="table table-hover">
           <thead>
-          <tr>
+          <tr class="text-secondary">
             <th scope="col">번호</th>
             <th scope="col">닉네임</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
           </tr>
           </thead>
           <tbody class="table-group-divider" id="checkedBlock">
           <tr th:each="follow : ${follows}">
             <th scope="row"><input type="checkbox" name="selectBlock" th:value="${follow.following}" th:text="${follow.following}"></th>
-            <td><a href="" th:href="@{/feed/personal(nick=${follow.nick})}" th:text="${follow.nick}"></a></td>          
+            <td><a href="" th:href="@{/feed/personal(nick=${follow.nick})}" th:text="${follow.nick}" class="text-dark"></a></td>          
           </tr>
           </tbody>
         </table>
@@ -90,11 +99,11 @@
 <script src="/js/notice/notice.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 
-<!-- 파티게시물 체크박스 삭제 -->
+<!-- 팔로우 체크박스 삭제 -->
 <script>
   let checkedValue = [];
 
-  // 삭제 버튼 클릭시 partyDelete() 함수 실행
+  // 삭제 버튼 클릭시 followDelete() 함수 실행
   function followDelete(){
     // $("#checkedBlock").find('input:checked') 체크박스의 checked 된 태그를 찾는다
     $("#checkedBlock").find('input:checked').each(function(index){
@@ -123,7 +132,7 @@
 
 
 </script>
-<!-- 파티게시물 체크박스 삭제 end -->
+<!-- 팔로우 체크박스 삭제 end -->
 
 </body>
 </html>

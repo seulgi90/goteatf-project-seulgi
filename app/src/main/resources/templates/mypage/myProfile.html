@@ -43,76 +43,95 @@
       <!-- Page content wrapper-->
       <div id="page-content-wrapper">
         <div class="container-fluid">
-          <h2 class="mt-4">개인 정보 수정</h2>
+          <h2 class="mt-4 text-secondary">개인 정보 수정</h2>
           <div class="row">
-            <div class="col-12 border">
+            <div class="col-12">
               <!-- 개인 상세 정보 -->
               <form action="update" id="updateForm" method="post">
-                <table class="table table-hover">
+                <table class="table table-hover"  style="width: 1000px; font-weight: 600" >
                   <tr>
-                    <th>번호</th>
                     <td>
-                      <input id="memberNo" name='no' type='number' data-th-value="${member.no}" readonly style="border:none;">
+                      <p>번호
+                        <input id="memberNo" class="form-control" name='no' type='number' data-th-value="${member.no}" readonly>
+                      </p>
                     </td>
                   </tr>
+                  
                   <tr>
-                    <th>아이디</th>
                     <td>
-                      <input name='id' type='email' data-th-value="${member.id}" readonly style="border:none;">
+                     <p>아이디
+                        <input name='id' class="form-control" type='email' data-th-value="${member.id}" readonly>
+                      </p>
                     </td>
                   </tr>
+                  
                   <tr>
-                    <th>이름</th>
                     <td>
-                      <input name='name' type='text' data-th-value="${member.name}">
+                      <p>이름
+                        <input class="form-control" name='name' type='text' data-th-value="${member.name}">
+                      </p>
                     </td>
                   </tr>
+                  
                   <tr>
-                    <th>닉네임</th>
                     <td>
-                      <input name='nick' type='text' data-th-value="${member.nick}">
+                    <p>닉네임
+                      <input class="form-control" name='nick' type='text' data-th-value="${member.nick}">
+                      </p>
                     </td>
                   </tr>
+                  
                    <tr>
-                    <th>연락처</th>
                     <td>
-                      <input name='tel' type='text' data-th-value="${member.tel}">
+	                    <p>연락처
+	                      <input class="form-control" name='tel' type='text' data-th-value="${member.tel}">
+	                    </p>
+                    </td>
+                    </tr>
+                  <tr>
+                    <td>
+                      <p>기본 주소
+                        <input class="form-control" name='address' type='text' data-th-value="${member.address}">
+                      </p>
+                    </td>
+                  </tr>
+                  
+                  <tr>
+                    <td>
+                      <p>상세 주소
+                      <input class="form-control" name='subAddr' type='text' data-th-value="${member.subAddr}">
+                      </p>
+                    </td>
+                  </tr>
+                  
+                  <tr>
+                    <td>
+                     <p>관심사
+                      <input class="form-control" name='interest' type='text' data-th-value="${member.interest}">
+                      </p>
                     </td>
                   </tr>
                   <tr>
-                    <th>기본주소</th>
                     <td>
-                      <input name='address' type='text' data-th-value="${member.address}">
+                    <p>새 비밀번호
+                      <input class="form-control" id="newPassword" name='password' type='password'placeholder="새 비밀번호를 입력해주세요.">
+                      </p>
                     </td>
                   </tr>
-                   <tr>
-                    <th>상세주소</th>
-                    <td>
-                      <input name='address' type='text' data-th-value="${member.subAddr}">
-                    </td>
-                  </tr>
-                     <tr>
-                    <th>관심사</th>
-                    <td>
-                      <input name='address' type='text' data-th-value="${member.interest}">
-                    </td>
-                  </tr>
+                  
                   <tr>
-                    <th>새 패스워드</th>
                     <td>
-                      <input id="newPassword" name='password' type='password'>
+	                    <p>새 비밀번호 확인
+	                      <input class="form-control" id="newPasswordCheck" name='newPasswordCheck' type='password' placeholder="새 비밀번호를 한번 더 입력해주세요.">
+	                    </p>
                     </td>
                   </tr>
-                  <tr>
-                    <th>새 패스워드 확인</th>
-                    <td>
-                      <input id="newPasswordCheck" name='newPasswordCheck' type='password'>
-                    </td>
-                  </tr>
+                  
                 </table>
                 <button type="button" class="btn btn-outline-secondary" id="updateBtn">수정</button>
                 <button type="button" class="btn btn-outline-secondary" id="deleteBtn">회원 탈퇴</button>
               </form>
+              <div class="line-2"></div>
             </div>
           </div>
           <!-- 테이블 부트스트랩 end -->
@@ -156,9 +175,7 @@
           $.ajax({
             type: "post",
             url: "/my/delete",
-            data: {
-              "no": memberNo
-            }, // 파라미터 :  파라미터 값
+            data: {"no": memberNo}, // 파라미터 :  파라미터 값
             success: function(result) {
               console.log(result);
               window.location.href = "/";

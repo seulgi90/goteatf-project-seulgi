@@ -52,13 +52,13 @@
   <!-- Page content wrapper-->
   <div id="page-content-wrapper">
     <div class="container-fluid">
-      <h2 class="mt-4">피드게시물 관리</h2>
+      <h2 class="mt-4 text-secondary">피드게시물 관리</h2>
 
       <!--  테이블 부트스트랩   -->
         <form action="feedDeletes" method="post">
         <table class="table table-hover">
           <thead>
-          <tr>
+          <tr class="text-secondary">
             <th scope="col">번호</th>
             <th scope="col">제목</th>
             <th scope="col">닉네임</th>
@@ -68,7 +68,7 @@
           <tbody class="table-group-divider" id="checkedDelete">
           <tr th:each="feed : ${myFeedList}">
             <th scope="row"><input type="checkbox" name="selectDelete" th:value="${feed.no}" th:text="${feed.no}"></th>
-            <td><a href="" th:href="@{/my/myFeedListDetail(no=${feed.no})}" th:text="${feed.title}"></a></td>
+            <td><a href="" th:href="@{/my/myFeedListDetail(no=${feed.no})}" th:text="${feed.title}" class="text-dark"></a></td>
             <td th:text="${feed.writer.nick}"></td>
             <td th:text="${feed.date}"></td>
           </tr>

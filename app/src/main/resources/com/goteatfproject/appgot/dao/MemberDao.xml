@@ -92,11 +92,11 @@
     update member set
     name=#{name},
     id=#{id},
+    nick=#{nick},
     tel=#{tel},
     addr=#{address},
     subAddr=#{subAddr},
-    interest=#{interest},
-    nick=#{nick}
+    interest=#{interest}
     where
     mno=#{no}
   </update>

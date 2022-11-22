@@ -47,6 +47,7 @@ public class AdminController {
     model.addAttribute("memberLists", memberService.MemberList());
     model.addAttribute("newMemberLists", memberService.NewMemberList());
     model.addAttribute("boards", boardService.listAll());
+    model.addAttribute("boardCount", boardService.boardCount());
     model.addAttribute("newBoardCount", boardService.newBoardCount());
     return "admin/adminMain";
   }
