@@ -1,9 +1,9 @@
 package com.goteatfproject.appgot.dao;
 
+import com.goteatfproject.appgot.vo.Member;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import com.goteatfproject.appgot.vo.Member;
 
 @Mapper
 public interface MemberDao {
@@ -62,4 +62,12 @@ public interface MemberDao {
 
   // 관리자페이지 활성화
   int memberActive(int no);
+
+  // 회원가입 아이디 중복체크
+  public int idCheck(String id);
+
+  // 회원가입 닉네임 중복체크
+  public int nickCheck(String nick);
+
+
 }

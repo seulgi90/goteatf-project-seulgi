@@ -1,16 +1,18 @@
 package com.goteatfproject.appgot.service;
 
-import java.util.List;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.goteatfproject.appgot.dao.BoardDao;
 import com.goteatfproject.appgot.dao.PartyDao;
 import com.goteatfproject.appgot.vo.AttachedFile;
+import com.goteatfproject.appgot.vo.Board;
 import com.goteatfproject.appgot.vo.Comment;
 import com.goteatfproject.appgot.vo.Criteria;
 import com.goteatfproject.appgot.vo.Party;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DefaultPartyService implements PartyService {
@@ -21,7 +23,6 @@ public class DefaultPartyService implements PartyService {
   @Autowired
   BoardDao boardDao;
 
-  @Override
   @Transactional
   public void add(Party party) throws Exception {
 
@@ -46,21 +47,41 @@ public class DefaultPartyService implements PartyService {
   }
 
   //페이징
-  @Override
   public List<Map<String, Object>> selectPartyList(Criteria cri) {
     return partyDao.selectPartyList(cri);
   }
 
   @Override
   public Party get(int no) throws Exception {
+    partyDao.updatePartyCount(no);
     return partyDao.findByNo(no);
   }
+  @Override
+  public Party get2(int no) throws Exception {
+    return partyDao.findByNo2(no);
+  }
 
+  // 마이페이지 파티게시글 수정
   @Transactional
   @Override
   public boolean update(Party party) throws Exception {
 
     if (partyDao.update(party) == 0) {
+      return false;
+    }
+
+    if (party.getAttachedFiles().size() > 0) {
+      partyDao.insertFiles(party);
+    }
+    return true;
+  }
+
+  // 파티게시판 파티게시글 수정
+  @Transactional
+  @Override
+  public boolean update2(Party party) throws Exception {
+
+    if (partyDao.update2(party) == 0) {
       return false;
     }
 
@@ -77,14 +98,25 @@ public class DefaultPartyService implements PartyService {
     return partyDao.delete(no) > 0;
   }
 
-  @Override
   public AttachedFile getAttachedFile(int fileNo) throws Exception {
     return partyDao.findFileByNo(fileNo);
   }
 
-  @Override
   public boolean deleteAttachedFile(int fileNo) throws Exception {
     return partyDao.deleteFile(fileNo) > 0;
+  }
+
+  // 관리자페이지 이벤트+피드+파티 게시글 조회
+  @Override
+  public List<Board> listAll() throws Exception {
+    System.out.println("newBoardDao = " + boardDao.findAll());
+    return boardDao.findAll();
+  }
+
+  // 관리자 페이지 이벤트+피드+파티 오늘 등록된 게시글 개수
+  @Override
+  public List<Board> newBoardCount() throws Exception {
+    return boardDao.newBoardCount();
   }
 
   // 마이페이지 파티게시글 본인 글 리스트
@@ -130,10 +162,25 @@ public class DefaultPartyService implements PartyService {
     return partyDao.deleteComment(no) > 0;
   }
 
-  // 마이페이지 피드게시글 강제삭제 -- 1120 추가
+  //메인페이지에서 뽑는 파티리스트
+  @Override
+  public List<Party> mainList() throws Exception {
+    return partyDao.findAllMain();
+  }
+
+  //메인페이지에서 뽑는 파티리스트(String 받기)
+  @Override
+  public List<Party> mainList(String meal, String food) throws Exception {
+    return partyDao.findAllMain(meal, food);
+  }
+
+  //마이페이지 파티게시글 연쇄삭제
   @Override
   public boolean allDelete(int no) {
     return partyDao.allDelete(no) > 0;
   }
 
+  public List<Party> searchList(String keywordAll) throws Exception {
+    return partyDao.findAllSearch(keywordAll);
+  }
 }

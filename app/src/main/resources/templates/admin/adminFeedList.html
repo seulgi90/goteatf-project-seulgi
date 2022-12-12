@@ -69,7 +69,8 @@
             <th scope="row"><input type="checkbox" name="selectBlock" th:value="${adminFeedList.no}" th:text="${adminFeedList.no}"></th>
             <td><a href="" th:href="@{/admin/adminFeedListDetail(no=${adminFeedList.no})}" th:text="${adminFeedList.title}"></a></td>
             <td th:text="${adminFeedList.writer.nick}"></td>
-            <td th:text="${adminFeedList.date}"></td>
+           <!--  <td th:text="${adminFeedList.date}"></td> -->
+            <td th:text="${#dates.format(adminFeedList.date, 'yyyy/MMM//dd')}"></td>
           </tr>
           </tbody>
         </table>

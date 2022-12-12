@@ -45,8 +45,7 @@
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myAuthForm}">개인 정보 수정</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myPartyList}">파티게시물 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myFeedList}">피드게시물 관리</a>
-      <a class="list-group-item list-group-item-action list-group-item-light p-3"
-         href="">예약 내역</a>
+      <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myReservationList}">예약 내역 관리</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/my/myFollowList}">팔로우 관리</a>
     </div>
   </div>
@@ -58,8 +57,8 @@
       <div class="line-2"></div>
       
       <!-- 마이페이지 메인화면 -->
-      <div class="row">
-        <div class="col-4" style="margin-left: 120px">
+      <div class="row" style="margin-left: 125px">
+        <div class="col-3">
 
           <!-- 프로필 사진 -->
           <form action="updateProfile" id="updateProfileForm" method="post" enctype="multipart/form-data">
@@ -70,10 +69,10 @@
                  <div class = "line-1"></div>
                 <tr>
                   <td>
-                    <center>
-                      <img th:src="@{/member/files/{path}(path=${member.thumbnail})}" rows='10' style="width: 55%; border-radius: 50%" >
-                    </center>
-                  </td>
+                   <center>
+                      <img th:src="@{/member/files/{path}(path=${member.thumbnail})}" height="200px" style="width: 100%; border-radius: 8%" >
+                  </center>
+                </td>
                 </tr>
                 <tr>
                   <td>
@@ -83,7 +82,7 @@
                 </tr>
               </table>
               <div class="line-1"></div>
-                <button type="submit" class="btn btn-outline-secondary" id="updateProfileBtn">수정</button>
+                <button type="submit" class="btn btn-outline-dark" style="background-color: #ffc107; border-color: white; border:none;" id="updateProfileBtn">수정</button>
             </div>
           </form>
         </div>
@@ -98,22 +97,23 @@
                 <th class="fs-4 text-secondary">자기 소개</th>
                 <tr>
                   <td>
-                    <textarea class="form-control" name='intro' type='text' th:text="${member.intro}" rows='10' style="width: 200%" placeholder="자기소개를 입력해주세요." autofocus></textarea>
+                    <textarea class="form-control" name='intro' type='text' th:text="${member.intro}" rows='10' style="width: 200%; border-radius: 20px" placeholder="자기소개를 입력해주세요." autofocus></textarea>
                   </td>
                 </tr>
               </table>
             </div>
+            <div class="line-2"></div>
             <div class="line-1"></div>
-            <button type="submit" class="btn btn-outline-secondary" id="updateIntroBtn">수정</button>
+            <button type="submit" class="btn btn-outline-dark" style="background-color: #ffc107; border-color: white; border:none;" id="updateIntroBtn">수정</button>
           </form>
         </div>
       </div>
       
       <br>
       <!-- 본인 작성 글 전체 리스트 -->
-      <div class="container" style="margin-left: 90px">
+      <div class="container" style="margin-left: 110px">
         <div class="row" style="width: 140%">
-          <div class="col-10">
+          <div class="col-6">
             <table class="table table-hover">
               <button type="button" class="btn btn-outline-secondary position-relative">
                 내가 작성한 전체 게시글
@@ -143,7 +143,8 @@
                 <td th:text="${board.tableName}"></td>
                 <td th:if="${board.tableName == 'party'}"><a href="" th:href="@{/my/myPartyListDetail(no=${board.no})}" th:text="${board.title}" class="text-dark"></a></td>
                 <td th:if="${board.tableName == 'feed'}"><a href="" th:href="@{/my/myFeedListDetail(no=${board.no})}" th:text="${board.title}" class="text-dark"></a></td>
-                <td th:text="${board.date}"></td>
+              <!--   <td th:text="${board.date}"></td> -->
+                <td th:text="${#dates.format(board.date, 'yyyy/MM/dd')}"></td>
               </tr>
               </tbody>
             </table>

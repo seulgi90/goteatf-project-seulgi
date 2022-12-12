@@ -91,7 +91,8 @@
         </div>
         <div class="col-2" th:text=" '조회수:' + ${event.viewCnt}">
         </div>
-        <div class="col-6" th:text=" '작성일:' + ${event.createDate}">
+        <!-- <div class="col-6" th:text=" '작성일:' + ${event.createDate}"> -->
+        <div class="col-6" th:text=" '작성일:' + ${#dates.format(event.createDate, 'yyyy/MM/dd')}">
         </div>
       
       </div>

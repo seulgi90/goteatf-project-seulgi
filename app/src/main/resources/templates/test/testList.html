@@ -1,0 +1,47 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>연습용 게시판 생성</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+        crossorigin="anonymous">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+  <link href="/css/style.css" rel="stylesheet">
+  
+  <style>
+  table, th, td {
+  border: 1px solid;
+  }
+  </style>
+</head>
+
+<!--여기부터 시작-->
+<body>
+<a href='form'>새글 작성</a>
+
+ <table>
+    <tr>
+      <th>번호</th>
+      <th>제목</th>
+	    <th>내용</th>
+	    <th>작성자</th>
+	    <th>등록일</th>
+    </tr>
+    <tr th:each="test : ${testList}">
+      <td th:text="${test.no}">번호</td>
+	    <!-- <td th:text="${test.title}">제목</td> -->
+	    <td><a th:href="@{/test/test-detail(no=${test.no})}" th:text="${test.title}"></a></td>
+	    <td th:text="${test.content}">내용</td>
+	    <td th:text="${test.writer}">작성자</td>
+	    <td th:text="${test.date}">등록일</td>
+  </tr>
+ </table>
+</body>
+</html>
+
+
+

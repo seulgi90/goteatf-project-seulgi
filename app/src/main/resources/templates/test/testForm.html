@@ -1,0 +1,51 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>연습용 게시판 생성</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+        crossorigin="anonymous">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+  <link href="/css/style.css" rel="stylesheet">
+  
+  <style>
+  table, th, td {
+  border: 1px solid;
+  }
+  </style>
+</head>
+
+<!--여기부터 시작-->
+<body>
+	<!-- <form action="URL"> -->
+	<form action="add" method="get">
+	<table>
+		<tr>
+			<th>번호</th>
+			<td><input type="text" name="no"></td>
+		</tr>
+		<tr>
+		 <th>제목</th>
+		 <td><input type="text" name="title"></td>
+		</tr>
+		<tr>
+		 <th>내용</th>
+		 <td><textarea name="content" cols="30" rows="5"></textarea></td>
+		</tr>
+		<tr>
+     <th>파일 첨부</th>
+     <td><input type="text" name="file"></td>
+    </tr>
+		
+	</table>
+    <button>등록</button>
+	</form>
+</body>
+</html>
+
+
+

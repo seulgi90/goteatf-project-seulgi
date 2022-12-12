@@ -74,7 +74,8 @@
                 <br>
                 <tr>
                   <td>작성일</td>
-                  <td th:text="${feed.date}"></td>
+                  <!-- <td th:text="${feed.date}"></td> -->
+                  <td th:text="${#dates.format(feed.date, 'yyyy/MMM/dd')}"></td>
                 </tr>
               </table>
             </div>

@@ -20,4 +20,10 @@ public class Feed {
 
   // 추가
   private List<FeedAttachedFile> feedAttachedFiles;
+  // 추가 - 라윤
+  private List<FeedLike> feedLikeList;
+
+  // 추가 - 라윤
+  private int likeCnt;
+  private String checkLike;
 }

@@ -1,7 +1,9 @@
 package com.goteatfproject.appgot.service;
 
-import java.util.List;
+import com.goteatfproject.appgot.vo.Criteria;
 import com.goteatfproject.appgot.vo.Member;
+import java.util.List;
+import java.util.Map;
 
 public interface MemberService {
 
@@ -44,16 +46,22 @@ public interface MemberService {
   // 관리자페이지 전체회원 limit 10;
   List<Member> MemberList() throws Exception;
 
-  // 관리자페이지 오늘 가입한 신규회원;
+  // 관리자페이지 신규회원 limit 10;
   List<Member> NewMemberList() throws Exception;
 
   // 관리자페이지 회원 상세정보
   Member getMemberDetail(int no) throws Exception;
 
   // 관리자페이지 회원리스트 정보검색
-  List<Member> getSearchMember(String keyword);
+  List<Member> getSearchMember(String keyword) throws Exception;
 
-  boolean memberBlock(int no);
+  boolean memberBlock(int no) throws Exception;
 
-  boolean memberActive(int no);
+  boolean memberActive(int no) throws Exception;
+
+  // 아이디 중복체크
+  public int idCheck(String id) throws Exception;
+
+  // 닉네임 중복체크
+  public int nickCheck(String nick) throws Exception;
 }

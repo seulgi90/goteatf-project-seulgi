@@ -1,11 +1,11 @@
 package com.goteatfproject.appgot.service;
 
+import com.goteatfproject.appgot.dao.MemberDao;
+import com.goteatfproject.appgot.vo.Member;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.goteatfproject.appgot.dao.MemberDao;
-import com.goteatfproject.appgot.vo.Member;
 
 @Service
 public class DefaultMemberService implements MemberService {
@@ -28,24 +28,20 @@ public class DefaultMemberService implements MemberService {
     return memberDao.findByEmailPassword(id, password);
   }
 
-  @Override
   public List<Member> list() throws Exception {
     return memberDao.findAll();
   }
 
   // 밑에는 피드의 사용 기능
 
-  @Override
   public List<Member> randomList() throws Exception {
     return memberDao.userList();
   }
 
-  @Override
   public Member profileByNo(int no) throws Exception {
     return memberDao.profileByNo(no);
   }
 
-  @Override
   public Member profileByNick(String nick) throws Exception {
     return memberDao.profileByNick(nick);
   }
@@ -94,7 +90,7 @@ public class DefaultMemberService implements MemberService {
     return memberDao.findByMember();
   }
 
-  //관리자페이지 오늘 가입한 신규회원;
+  // 관리자페이지 신규회원 limit 10;
   @Override
   public List<Member> NewMemberList() throws Exception {
     return memberDao.findByNewMember();
@@ -108,18 +104,34 @@ public class DefaultMemberService implements MemberService {
 
   // 관리자페이지 회원정보 검색
   @Override
-  public List<Member> getSearchMember(String keyword) {
+  public List<Member> getSearchMember(String keyword) throws Exception {
     return memberDao.searchMember(keyword);
   }
 
   @Override
-  public boolean memberBlock(int no) {
+  public boolean memberBlock(int no) throws Exception {
     return memberDao.memberBlock(no) > 0;
   }
 
   @Override
-  public boolean memberActive(int no) {
+  public boolean memberActive(int no) throws Exception {
     return memberDao.memberActive(no) > 0;
+  }
+
+  //아이디 중복체크 mapper 접근
+  @Override
+  public int idCheck(String id) throws Exception {
+    int cnt = memberDao.idCheck(id);
+    System.out.println("cnt: " + cnt);
+    return cnt;
+  }
+
+  // 닉네임 중복체크 mapper 접근
+  @Override
+  public int nickCheck(String nick) throws Exception {
+    int cntNick = memberDao.nickCheck(nick);
+    System.out.println("cntNick: " + cntNick);
+    return cntNick;
   }
 
 }

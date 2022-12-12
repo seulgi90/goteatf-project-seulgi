@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.goteatfproject.appgot.dao.MemberDao">
 
   <!-- 자바 객체의 프로퍼티와 컬럼 이름을 연결한다. -->
@@ -17,6 +17,7 @@
     <result column="intro" property="intro"/>
     <result column="thumbnail" property="thumbnail"/>
     <result column="outstate" property="outState"/>
+    <result column="post" property="post"/>
   </resultMap>
 
   <insert id="insert" useGeneratedKeys="true" parameterType="member">
@@ -39,22 +40,23 @@
     subAddr,
     interest,
     thumbnail,
-    createddate
+    createddate,
+    post
     from
     member
     where
     mno=#{value}
   </select>
-  
+
   <select id="findAll" resultMap="memberMap">
-    select 
-      mno,
-      name,
-      id      <!-- TODO email -> id 수정  -->
-    from 
-      member
-    order by 
-      mno
+    select
+    mno,
+    name,
+    id
+    from
+    member
+    order by
+    mno
   </select>
 
   <!--   로그인 +  탈퇴 ( outstate = 0 회원 활성화 / outstate = 1 회원 비활성화)-->
@@ -63,7 +65,8 @@
     mno,
     name,
     id,
-    createddate
+    createddate,
+    thumbnail
     from
     member
     where
@@ -71,13 +74,14 @@
     and outstate=0
   </select>
 
-  <!-- 마이페이지 개인 정보 수정 -->
+<!--  마이페이지 개인 정보 수정-->
   <update id="update" parameterType="Member">
     update member set
     name=#{name},
     id=#{id},
     nick=#{nick},
     tel=#{tel},
+    post=#{post},
     addr=#{address},
     subAddr=#{subAddr},
     interest=#{interest},
@@ -85,21 +89,23 @@
     where
     mno=#{no}
   </update>
-  
-    <!-- 마이페이지 개인 정보 수정(새 패스워드 없을때) -->
-    <!-- 1120 추가 -->
+
+<!--  마이페이지 개인 정보 수정(새 패스워드 없을때)-->
+<!--  1120 추가-->
   <update id="update2" parameterType="Member">
     update member set
     name=#{name},
     id=#{id},
     nick=#{nick},
     tel=#{tel},
+    post=#{post},
     addr=#{address},
     subAddr=#{subAddr},
     interest=#{interest}
     where
     mno=#{no}
   </update>
+
 
   <!-- 마이페이지 개인 정보 프로필 사진 수정  -->
   <update id="updateProfile" parameterType="Member">
@@ -139,7 +145,7 @@
     birth,
     gender,
     interest,
-    intro
+    intro,
     thumbnail
     from member
     where mno=#{mno}
@@ -172,17 +178,17 @@
     from member
     order by
     mno
-    limit 10;
+    limit 10
   </select>
 
   <!-- 관리자페이지 오늘 가입한 신규회원 -->
-   <!-- 1120 추가 -->
+  <!-- 1120 추가 -->
   <select id="findByNewMember" resultMap="memberMap">
     select
-	    mno,
-	    name,
-	    id,
-	    addr
+    mno,
+    name,
+    id,
+    addr
     from member
     where createddate = curdate()
     order by
@@ -206,7 +212,7 @@
     outstate,
     outdate
     from member
-    where mno=#{value};
+    where mno=#{value}
   </select>
 
   <!-- 관리자페이지 회원 검색기능 추가 -->
@@ -217,7 +223,7 @@
     createddate,
     outState,
     id
-    from  member
+    from member
     <!--  keyword=all 아니면 if문 실행 안됨  -->
     <if test="keyword != null">
       where
@@ -234,7 +240,7 @@
     select
     count(*)
     from member
-    where mno=#{no} and pwd=sha2(#{password},256);
+    where mno=#{no} and pwd=sha2(#{password},256)
   </select>
 
   <!--  마이페이지 개인 정보 수정 회원 탈퇴 -->
@@ -242,7 +248,7 @@
     update member set
     outstate = true,
     outdate = now()
-    where mno=#{value};
+    where mno=#{value}
   </update>
 
   <!-- 관리자페이지 회원 비활성화 (1: 비활성화) -->
@@ -266,5 +272,15 @@
     where
     mno = #{no}
   </update>
+
+  <!-- 아이디 중복체크 -->
+  <select id="idCheck" parameterType="String" resultType="int">
+    SELECT COUNT(id) FROM member WHERE id= #{id}
+  </select>
+
+<!--  닉네임 중복체크-->
+  <select id="nickCheck" parameterType="String" resultType="int">
+    SELECT COUNT(nick) FROM member WHERE nick= #{nick}
+  </select>
 
 </mapper>

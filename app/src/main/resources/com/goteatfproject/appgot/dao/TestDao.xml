@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.goteatfproject.appgot.dao.TestDao">
+
+  <!-- 자바 객체의 프로퍼티와 컬럼 이름을 연결한다 -->
+
+  <insert id="insert">
+	 insert into test(title, content, writer, date, no)
+	 values (#{title}, #{content}, #{writer}, #{date}, #{no})
+  </insert>
+  
+  
+  <select id="findAll" resultType="test">
+  select
+	  title,
+	  content,
+	  writer,
+	  date,
+	  no
+  from
+    test
+  </select>
+  
+  <select id="detail" resultType="test">
+    select
+	    title,
+	    content,
+	    writer,
+	    date,
+	    no
+    from 
+      test 
+    where no=#{no}
+  </select>
+  
+ <!-- insert/ delete / update 는 resultType 제공 안함=> 기본적으로 int형 반환 -->
+ <!--  update / delete 는 where 절 필수!! -->
+  <update id="update">
+  update
+   test
+  set
+   title =#{title},
+   content =#{content}
+  where no=#{no}
+  </update>
+  
+  <delete id="remove">
+  delete
+  from
+    test
+  where no=#{no}
+  </delete>
+
+
+</mapper>
