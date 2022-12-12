@@ -1,70 +1,57 @@
 # goteatf-project
-bitcamp got project
 
-## <GOf4 회의록>
+# # 프로젝트
+- 프로젝트명: Eat-F (Everyday - All day - Testy Food & Fun)
+- 프로젝트 팀명: Gang Of 4 (봉춘 / 핑크봉 / 킹라휸 / 슬키키)
+- 주제: 혼자 먹기 싫은 혼밥러를 위한 모임
+- 프로젝트 기간: 2022/10/26 ~ 11/25
 
-일시: 2022-11-04 금
+### # Use-case 작성
+- 비회원: 단순 조회
+- 회원: 파티 모집/ 파티 참여/ 소통
+- 관리자: 회원 및 게시물 관리 / 파티 주최
+![](https://velog.velcdn.com/images/seulgi90/post/52be8c16-e4b1-4bdf-adc6-6faa36d21f56/image.png)
 
-참석: 김라윤 장슬기 김봉경 신우섭
+### # 요구사항 정의
+![](https://velog.velcdn.com/images/seulgi90/post/75569f27-8adf-45f4-a34b-4e815cad40f2/image.png)
 
-———————
-회원 테이블 
+![](https://velog.velcdn.com/images/seulgi90/post/6905b905-002b-4e6b-90b4-912334e57fc0/image.png)
 
-등록일: 
- 
-- createdDate ->  createddate
+### # UI 프로토 타입 / 피그마
 
-———————
-파티모집 테이블
+![](https://velog.velcdn.com/images/seulgi90/post/bd7cb409-002b-484d-a6a6-62cb696a749a/image.png)
 
-인원제한 : 
+### # 데이터 모델링 / eXERD
 
-- limit -> lit
+![](https://velog.velcdn.com/images/seulgi90/post/b60c977b-236e-427a-af7b-2deb69654263/image.png)
 
-공개여부: 
 
-- public -> pub
+### # 메인화면
+![](https://velog.velcdn.com/images/seulgi90/post/06975976-a7b7-4cea-8591-cfa6d3a25ccd/image.png)
 
-내용: 
-- 데이터타입 변경_ varchar(200) -> MEDIUMTEXT
+### # 주요 기능
+- 파티 모집 및 참여하기 기능
+![](https://velog.velcdn.com/images/seulgi90/post/062e1445-ca53-4062-ba45-481c7433d3ac/image.png)
 
-———————
-파티원모집 테이블
+- 다양한 이벤트 참여 및 카카오톡 간편 결제 기능
+![](https://velog.velcdn.com/images/seulgi90/post/2d6e65cc-2d54-4ac1-906b-569a35bf1fe9/image.png)
 
-대표이미지: 
+- 팔로우 및 좋아요 기능
+![](https://velog.velcdn.com/images/seulgi90/post/26db505d-303a-4045-87ed-7d8503404058/image.png)
 
-- 파티에 테이블에 묶어서 저장 
-- 
-- 회원이 등록할 시 회원이 등록한 이미지로 연결
-- 
-- 등록 안 할 시: 이미지 한 장을 임의로 집어 넣겠다 - 관리자
+- 마이페이지: 로그인한 유저의 모든 게시물 관리 및 개인 정보 수정 기능
+![](https://velog.velcdn.com/images/seulgi90/post/cf108017-1af3-4033-abc0-2b657008e615/image.png)
 
-=> 불러오는 방법을 알아본 후 추후 확인 필요
+- 관리자페이지: 
+	- 전체 회원 관리(활성화 / 비활성화)/ 검색 기능
+    - 회원 게시물 비활성화 기능
+![](https://velog.velcdn.com/images/seulgi90/post/fcf1196c-9a81-4b7b-bdea-e02145e34d4e/image.png)
 
-———————
-팔로우 테이블
 
-- 팔로우: 마이페이지_팔로우 관리 게시판 연계 추후 확인 필요
+### # 주요 사용 기술 및 도구
+![](https://velog.velcdn.com/images/seulgi90/post/6bb723bc-82d2-49b9-8479-3c1f7e33b296/image.png)
 
-———————
-좋아요 테이블 
 
-- 테이블 삭제  -> 아이콘 + 카운팅 으로 변경
 
-———————
-피드 테이블
-
-- 좋아요 컬럼 삭제
-- 
-- 대표 이미지 컬럼 추가
-
-———————
-입장권구매
-
-- 결제취소 boolean : 기본값 0_ 취소안함 / 1_ 취소
-
-———————
--
-=> 데이터 타입 boolean : 기본값 0으로 수정
-
-=> 공개여부 boolean : 0_공개 / 1_ 비공개 
+### # 통합 및 테스트 / GitKraken
+![](https://velog.velcdn.com/images/seulgi90/post/ac02a433-dae2-4730-a518-3c06bb288fbc/image.png)
