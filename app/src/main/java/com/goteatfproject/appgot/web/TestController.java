@@ -21,7 +21,7 @@ public class TestController {
   public String testList(Model model) throws Exception {
     System.out.println("testCheckController 실행");
     testService.findAll();
-    System.out.println("testListController data확인:" + testService.findAll());
+    System.out.println("testListController data:" + testService.findAll());
     System.out.println("testListController dataSize확인:" + testService.findAll().size());
 
     model.addAttribute("testList", testService.findAll());
