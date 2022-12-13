@@ -27,8 +27,9 @@ public class TestService {
     test.setDate(date);
     System.out.println("포맷 지정 후: " + test);
 
-    // insert, delete, update = 결과값 int형
+    // insert, delete, 'update = 결과값 int형
     System.out.println("db:"+ testDao.insert(test));
+    System.out.println("insert db:"+ testDao.insert(test));
   }
 
   public List<Test> findAll() throws Exception {
