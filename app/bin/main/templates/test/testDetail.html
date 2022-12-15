@@ -1,0 +1,87 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>연습용 게시판 생성</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+        crossorigin="anonymous">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+  <link href="/css/style.css" rel="stylesheet">
+  
+  <style>
+  table, th, td {
+  border: 1px solid;
+  }
+  </style>
+</head>
+
+<!--여기부터 시작-->
+<body>
+<!-- js에서 필요한 form을 불러오기 위해서 id값 설정 -->
+	<form id="detailForm">
+	<table>
+    <tr>
+			<th>번호</th>
+			<td><input type="text" name="no" th:value="${testD.no}" readonly></td>
+		</tr>
+		<tr>
+		 <th>제목</th>
+		 <td><input type="text" name="title" th:value="${testD.title}"></td>
+		</tr>
+		<tr>
+		 <th>내용</th>
+		 <td><textarea name="content" cols="30" rows="5" th:text="${testD.content}"></textarea></td>
+		</tr>
+		<tr>
+		 <th>작성자</th>
+     <td th:text="${testD.writer}"></td>
+    </tr>
+    <tr>
+     <th>등록일</th>
+     <td th:text="${testD.date}"></td>
+    </tr>
+    <tr>
+     <th>첨부파일</th>
+     <td></td>
+    </tr> 
+	</table>
+	<!-- 버튼에 디폴트값인 submit을 차단하기 위해 button 타입으로 변경
+	버튼의 클릭이벤트를 주고 클릭되었을  때 함수를 호출한다 -->
+    <button type="button" onclick="update(this.form);">수정</button>
+    <button type="button" th:onclick="'remove(' + ${testD.no} + ');'">삭제</button>
+	</form>
+</body>
+
+<script>
+function update(form) {
+	console.log(form);
+	
+	form.action="update";
+	form.method="post";
+	form.submit();
+}
+
+/*  form 다른 방식으로 가져와서 연습 */
+/* no = name값 */
+function remove(no) {
+	  console.log(no);
+	  document.getElementById("detailForm");
+	  
+	  var detailForm = document.getElementById("detailForm");
+	  console.log(detailForm);
+	  
+	  detailForm.action="remove"; 
+	  detailForm.method="post";
+	  detailForm.submit();
+	  /* 작성 후 컨트롤러 작성  */
+	  
+	}
+</script>
+</html>
+
+
+

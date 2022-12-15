@@ -29,7 +29,7 @@ public class TestService {
 
     // insert, delete, 'update = 결과값 int형
     System.out.println("db:"+ testDao.insert(test));
-    System.out.println("db 확:"+ testDao.insert(test));
+    System.out.println("db 확인:"+ testDao.insert(test));
   }
 
   public List<Test> findAll() throws Exception {
