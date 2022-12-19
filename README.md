@@ -54,7 +54,7 @@
 
 
 
-### # 통합 및 테스트 / GitKraken
+### # 통합 및 테스트 // GitKraken
 ![](https://velog.velcdn.com/images/seulgi90/post/ac02a433-dae2-4730-a518-3c06bb288fbc/image.png)
 
 
