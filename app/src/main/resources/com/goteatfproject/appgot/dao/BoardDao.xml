@@ -32,7 +32,6 @@
   </select>
 
   <!-- 관리자페이지 파티, 피드, 이벤트 게시글의 전체 게시글 전체 조회 카운-->
-  <!-- 1122  -->
   <select id="BoardCount" resultMap="boardMap">
     select
     pno no,
