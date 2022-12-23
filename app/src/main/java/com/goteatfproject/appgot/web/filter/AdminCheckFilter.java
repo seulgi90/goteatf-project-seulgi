@@ -27,7 +27,7 @@ public class AdminCheckFilter implements Filter {
     HttpServletRequest httpRequest = (HttpServletRequest) request;
     HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-    // System.out.println("AdminCheckFilter.doFilter() 실행!");
+    System.out.println("AdminCheckFilter.doFilter() 실행!");
     if (httpRequest.getServletPath().startsWith("/admin")) {
       Member loginMember = (Member) httpRequest.getSession().getAttribute("loginMember");
       if (loginMember == null || // 로그인이 안됐거나

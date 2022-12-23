@@ -1,7 +1,5 @@
 package com.goteatfproject.appgot.web;
 
-import com.goteatfproject.appgot.vo.AttachedFile;
-import com.goteatfproject.appgot.vo.Party;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,12 +28,14 @@ import com.goteatfproject.appgot.service.FeedService;
 import com.goteatfproject.appgot.service.FollowerService;
 import com.goteatfproject.appgot.service.MemberService;
 import com.goteatfproject.appgot.service.PartyService;
+import com.goteatfproject.appgot.vo.AttachedFile;
 import com.goteatfproject.appgot.vo.Criteria;
 import com.goteatfproject.appgot.vo.Feed;
 import com.goteatfproject.appgot.vo.FeedAttachedFile;
 import com.goteatfproject.appgot.vo.Follower;
 import com.goteatfproject.appgot.vo.Member;
 import com.goteatfproject.appgot.vo.PageMaker;
+import com.goteatfproject.appgot.vo.Party;
 
 @Controller
 @RequestMapping("/my")
@@ -115,6 +115,7 @@ public class MyController {
   public String updateProfile(@RequestParam("files") MultipartFile files, HttpSession session)
       throws Exception {
     Member member = (Member) session.getAttribute("loginMember");
+
     if (!files.isEmpty()) {
       String dirPath = sc.getRealPath("/member/files");
       String filename = UUID.randomUUID().toString();
@@ -155,7 +156,7 @@ public class MyController {
         memberService.delete(no);
         session.invalidate();
         return "1";
-//        return "회원 탈퇴 완료";
+        //        return "회원 탈퇴 완료";
       }
     }
     return "0";
