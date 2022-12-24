@@ -86,6 +86,12 @@ public class MyController {
     return "redirect:/auth/login";
   }
 
+  //마이페이지 개인정보수정 페이지 패스워드 체크 페이지
+  @GetMapping("/myAuthForm")
+  public String myAuthForm() throws Exception {
+    return "mypage/myAuthForm";
+  }
+
   // 마이페이지 개인 정보 수정 현재 패스워드 체크
   @PostMapping("/currentPassword")
   @ResponseBody
@@ -111,14 +117,26 @@ public class MyController {
   }
 
   // 마이페이지 메인 프로필 사진 수정
+  // @RequestParam 생략할 수 있는 경우 클라이언트에서 보내는 파라미터 변수이름과 값을 받을 변수의 이름이 같을경우
+  // 스프링에서 제공하는 MultiPartFile 타입으로 첨부파일을 받는다
   @PostMapping("/updateProfile")
   public String updateProfile(@RequestParam("files") MultipartFile files, HttpSession session)
       throws Exception {
     Member member = (Member) session.getAttribute("loginMember");
 
     if (!files.isEmpty()) {
+
+      // sc.getRealPath("/"); : 이름이 지정된 응용 프로그램 /이 있을 때까지 경로를 제공
+      // 임시 폴더에 저장된 파일을 옮길 폴더 경로 알아내기
       String dirPath = sc.getRealPath("/member/files");
+
+      // 파일명은 원래의 이름 대신 UUID로 생성한 이름(회원들간 파일명 중복방지)
       String filename = UUID.randomUUID().toString();
+
+      // 현재 어느 폴더에 저장하는건지 알아내기위함
+      System.out.println(dirPath + "/" + filename); 
+
+      // transferTo(); 메서드에 의해 지정한 위치에 생성한 이름으로 첨부파일을 저장
       files.transferTo(new File(dirPath + "/" + filename));
 
       member.setThumbnail(filename);
@@ -349,12 +367,6 @@ public class MyController {
       System.out.println("model.getAttribute(\"feed\") = " + model.getAttribute("feed"));
     }
     return "mypage/myFeedListDetail";
-  }
-
-  // 마이페이지 개인정보수정 페이지 패스워드 체크 페이지
-  @GetMapping("/myAuthForm")
-  public String myAuthForm() throws Exception {
-    return "mypage/myAuthForm";
   }
 
   // 마이페이지 팔로우 관리
