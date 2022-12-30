@@ -358,7 +358,7 @@ public class MyController {
 
   //마이페이지 피드게시글 본인 작성 글 상세보기
   @GetMapping("/myFeedListDetail")
-  public String mFeedListDetail(Model model, HttpSession session, int no) throws Exception {
+  public String myFeedListDetail(Model model, HttpSession session, int no) throws Exception {
 
     Member loginMember = (Member) session.getAttribute("loginMember");
 
